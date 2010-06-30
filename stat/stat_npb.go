@@ -15,8 +15,7 @@ func CRP_PDF(α float64)  func(x []int64) float64 {
 			
 			if counts[x[i]] == 0 {
 				p *= α/(sum+α);
-			}
-			else {
+			} else {
 				p *= float64(x[i])/(sum+α);
 			}
 			
@@ -41,8 +40,7 @@ func CRP_LnPDF(α float64) func(x []int64) float64 {
 			
 			if counts[x[i]] == 0 {
 				p += log(α)-log(sum+α);
-			}
-			else {
+			} else {
 				p += log(float64(x[i]))-log(sum+α);
 			}
 			
