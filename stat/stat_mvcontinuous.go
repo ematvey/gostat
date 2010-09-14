@@ -32,9 +32,12 @@ func NextMVNormal(μ []float64, Σ [][]float64) []float64 {
 	for i:=0; i<n; i++ {
 		x.Set(i, 0, NextNormal(0, 1));
 	}
-	C, _ := MakeDenseMatrixStacked(Σ).Cholesky();
-	Cx, _ := C.TimesDense(x)
-	μCx, _ := MakeDenseMatrix(μ, n, 1).PlusDense(Cx)
+	C, err := MakeDenseMatrixStacked(Σ).Cholesky();
+	Cx, err := C.TimesDense(x)
+	μCx, err := MakeDenseMatrix(μ, n, 1).PlusDense(Cx)
+	if err != nil {
+		panic(err)
+	}
 	return μCx.Array()
 }
 
@@ -167,9 +170,10 @@ func Dirichlet_PDF(α []float64) func(θ []float64) float64 {
 				return 0
 			}
 			l *= pow(θ[i], α[i]-1);
-			l *= Γ(α[i]);
+			l /= Γ(α[i]);
+			totalα += α[i]
 		}
-		l /= Γ(totalα);
+		l *= Γ(totalα);
 		return l;
 	}
 }
@@ -179,15 +183,16 @@ func Dirichlet_LnPDF(α []float64) func(x []float64) float64 {
 			return negInf
 		}
 		l := fZero;
-		totalα := float64(0.0);
+		totalα := float64(0);
 		for i := 0; i < len(x); i++ {
 			if x[i] < 0 || x[i] > 1 {
 				return negInf
 			}
 			l += (α[i] - 1) * log(x[i]);
-			l += LnΓ(α[i]);
+			l -= LnΓ(α[i]);
+			totalα += α[i]
 		}
-		l -= LnΓ(totalα);
+		l += LnΓ(totalα);
 		return l;
 	}
 }

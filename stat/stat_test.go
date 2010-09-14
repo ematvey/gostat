@@ -5,6 +5,19 @@ import (
 	"fmt";
 )
 
+func TestDir(t *testing.T) {
+	α := []float64{4,5,6}
+	dgen := Dirichlet(α)
+	counts := [3]int{0,0,0}
+	const total = 150000
+	for i:=0;i<total;i++ {
+		θ := dgen()
+		v := NextChoice(θ)
+		counts[v]++
+	}
+	fmt.Printf("%v\n", counts)
+}
+
 func TestGen(t *testing.T) {
 	fmt.Printf("NextUniform => %f\n", NextUniform());
 	fmt.Printf("NextExp => %f\n", NextExp(1.5));

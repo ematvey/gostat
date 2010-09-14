@@ -220,5 +220,3 @@ func F(d1 int64, d2 int64) func() float64 {
 	}
 }
 
-//f
-//mv norm, inv wishart
