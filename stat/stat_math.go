@@ -78,3 +78,46 @@ func B(x float64, y float64) float64 {
 func LnB(x float64, y float64) float64 {
 	return LnΓ(x)+LnΓ(y)-LnΓ(x+y)
 }
+
+/*
+
+	public static double logGammaP(int p, double x) {
+		double r = p*(p-1)*.25*Math.log(Math.PI);
+		
+		for (int j=1; j<=p; j++) {
+			r += logGamma(x+.5*(1-j));
+		}
+		
+		return r;
+	}
+	public static double logGammaPRatio(int p, double numerator, double denominator) {
+		double r = 0;
+
+		for (int j=1; j<=p; j++) {
+			r += logGamma(numerator+.5*(1-j));
+			r -= logGamma(denominator+.5*(1-j));
+		}
+		
+		return r;
+	}
+*/
+
+func LnΓp(p int, x float64) (r float64) {
+	pf := float64(p)
+	r = pf*(pf-1)*.25*math.Log(math.Pi)
+	for j:=float64(1); j<=pf; j++ {
+		r += LnΓ(x+.5*(1-j))
+	}
+	return
+}
+
+//LnΓp(x)/LnΓp(y)
+func LnΓpRatio(p int, x, y float64) (r float64) {
+	pf := float64(p)
+	for j:=float64(1); j<=pf; j++ {
+		r += LnΓ(x+.5*(1-j))
+		r -= LnΓ(y+.5*(1-j))
+	}
+	return
+}
+
