@@ -1,6 +1,9 @@
 package stat
 
-import "rand"
+import (
+	"rand"
+	"math"
+)
 
 func Range_PMF(n int64) func(i int64) float64 {
 	return func(i int64) float64 {
@@ -45,7 +48,28 @@ func Choice(θ []float64) func() int64 {
 		return NextChoice(θ);
 	}
 }
-
+func NextLogChoice(lws []float64) int64{
+	return LogChoice(lws)()
+}
+func LogChoice(lws []float64) func() int64 {
+	max := lws[0]
+	for _, lw := range lws[1:len(lws)] {
+		if lw > max {
+			max = lw
+		}
+	}
+	ws := make([]float64, len(lws))
+	var sum float64
+	for i, lw := range lws {
+		ws[i] = math.Exp(lw - max)
+		sum += ws[i]
+	}
+	norm := 1 / sum
+	for i := range ws {
+		ws[i] *= norm
+	}
+	return Choice(ws)
+}
 func Multinomial_PMF(θ []float64, n int64) func(x []int64) float64 {
 	return func(x []int64) float64 {
 		if len(x) != len(θ) {
