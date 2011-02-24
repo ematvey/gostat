@@ -7,48 +7,48 @@ import (
 
 func Range_PMF(n int64) func(i int64) float64 {
 	return func(i int64) float64 {
-		return fOne/float64(n);
+		return fOne / float64(n)
 	}
 }
 func LnRange_PMF(n int64) func(i int64) float64 {
 	return func(i int64) float64 {
-		return -log(float64(n));
+		return -log(float64(n))
 	}
 }
 func NextRange(n int64) int64 {
-	return rand.Int63n(n);
+	return rand.Int63n(n)
 }
 func Range(n int64) func() int64 {
 	return func() int64 {
-		return NextRange(n);
+		return NextRange(n)
 	}
 }
 
 func Choice_PMF(θ []float64) func(i int64) float64 {
 	return func(i int64) float64 {
-		return θ[i];
+		return θ[i]
 	}
 }
 func Choice_LnPMF(θ []float64) func(i int64) float64 {
 	return func(i int64) float64 {
-		return log(θ[i]);
+		return log(θ[i])
 	}
 }
 func NextChoice(θ []float64) int64 {
-	u := NextUniform();
-	i := 0;
-	sum := θ[0];
-	for ; sum<u && i<len(θ)-1; i++ {
-		sum += θ[i+1];
+	u := NextUniform()
+	i := 0
+	sum := θ[0]
+	for ; sum < u && i < len(θ)-1; i++ {
+		sum += θ[i+1]
 	}
-	return int64(i);
+	return int64(i)
 }
 func Choice(θ []float64) func() int64 {
 	return func() int64 {
-		return NextChoice(θ);
+		return NextChoice(θ)
 	}
 }
-func NextLogChoice(lws []float64) int64{
+func NextLogChoice(lws []float64) int64 {
 	return LogChoice(lws)()
 }
 func LogChoice(lws []float64) func() int64 {
@@ -75,50 +75,50 @@ func Multinomial_PMF(θ []float64, n int64) func(x []int64) float64 {
 		if len(x) != len(θ) {
 			return 0
 		}
-		l := fOne;
-		totalx := iZero;
+		l := fOne
+		totalx := iZero
 		for i := 0; i < len(x); i++ {
-			l *= pow(θ[i], float64(x[i]));
-			l /= Γ(float64(x[i]+1));
-			totalx += x[i];
+			l *= pow(θ[i], float64(x[i]))
+			l /= Γ(float64(x[i] + 1))
+			totalx += x[i]
 		}
 		if totalx != n {
-			return 0;
+			return 0
 		}
-		l *= Γ(float64(totalx+1));
-		return l;
+		l *= Γ(float64(totalx + 1))
+		return l
 	}
 }
 func Multinomial_LnPMF(θ []float64, n int64) func(x []int64) float64 {
-	return func(x []int64) float64 {		
+	return func(x []int64) float64 {
 		if len(x) != len(θ) {
 			return negInf
 		}
-		l := fZero;
-		totalx := iZero;
+		l := fZero
+		totalx := iZero
 		for i := 0; i < len(x); i++ {
-			l += log(θ[i])*float64(x[i]);
-			l -= LnΓ(float64(x[i]+1));
-			totalx += x[i];
+			l += log(θ[i]) * float64(x[i])
+			l -= LnΓ(float64(x[i] + 1))
+			totalx += x[i]
 		}
 		if totalx != n {
-			return negInf;
+			return negInf
 		}
-		l += LnΓ(float64(totalx+1));
-		return l;
+		l += LnΓ(float64(totalx + 1))
+		return l
 	}
 }
 func NextMultinomial(θ []float64, n int64) []int64 {
-	x := make([]int64, len(θ));
-	chooser := Choice(θ);
-	for i:=iZero; i<n; i++ {
-		x[chooser()]++;
+	x := make([]int64, len(θ))
+	chooser := Choice(θ)
+	for i := iZero; i < n; i++ {
+		x[chooser()]++
 	}
-	return x;
+	return x
 }
 func Multinomial(θ []float64, n int64) func() []int64 {
 	return func() []int64 {
-		return NextMultinomial(θ, n);
+		return NextMultinomial(θ, n)
 	}
 }
 
@@ -127,7 +127,7 @@ func Bernoulli_PMF(ρ float64) func(i int64) float64 {
 		if x == 1 {
 			return ρ
 		}
-		return 1 - ρ;
+		return 1 - ρ
 	}
 }
 func Bernoulli_LnPMF(ρ float64) func(i int64) float64 {
@@ -135,16 +135,16 @@ func Bernoulli_LnPMF(ρ float64) func(i int64) float64 {
 		if x == 1 {
 			return log(ρ)
 		}
-		return log(1 - ρ);
+		return log(1 - ρ)
 	}
 }
 func NextBernoulli(ρ float64) int64 {
 	if NextUniform() < ρ {
 		return 1
 	}
-	return 0;
+	return 0
 }
-func Bernoulli(ρ float64) func() int64	{ return func() int64 { return NextBernoulli(ρ) } }
+func Bernoulli(ρ float64) func() int64 { return func() int64 { return NextBernoulli(ρ) } }
 
 func Geometric_PMF(ρ float64) func(i int64) float64 {
 	return func(n int64) float64 { return ρ * pow(ρ, float64(n)) }
@@ -157,29 +157,29 @@ func NextGeometric(ρ float64) int64 {
 	if NextBernoulli(ρ) == 1 {
 		return 1 + NextGeometric(ρ)
 	}
-	return 0;
+	return 0
 }
-func Geometric(ρ float64) func() int64	{ return func() int64 { return NextGeometric(ρ) } }
+func Geometric(ρ float64) func() int64 { return func() int64 { return NextGeometric(ρ) } }
 
 func Binomial_PMF(ρ float64, n int64) func(i int64) float64 {
 	return func(i int64) float64 {
-		p := pow(ρ, float64(i)) * pow(1-ρ, float64(n-i));
-		p *= Γ(float64(n)) / (Γ(float64(i)) * Γ(float64(n-i)));
-		return p;
+		p := pow(ρ, float64(i)) * pow(1-ρ, float64(n-i))
+		p *= Γ(float64(n)) / (Γ(float64(i)) * Γ(float64(n-i)))
+		return p
 	}
 }
 func Binomial_LnPMF(ρ float64, n int64) func(i int64) float64 {
 	return func(i int64) float64 {
-		p := log(ρ)*float64(i) + log(1-ρ)*float64(n-i);
-		p += LnΓ(float64(n)) - LnΓ(float64(i)) - LnΓ(float64(n-i));
-		return p;
+		p := log(ρ)*float64(i) + log(1-ρ)*float64(n-i)
+		p += LnΓ(float64(n)) - LnΓ(float64(i)) - LnΓ(float64(n-i))
+		return p
 	}
 }
 func NextBinomial(ρ float64, n int64) (result int64) {
 	for i := int64(0); i <= n; i++ {
 		result += NextBernoulli(ρ)
 	}
-	return;
+	return
 }
 func Binomial(ρ float64, n int64) func() int64 {
 	return func() int64 { return NextBinomial(ρ, n) }
@@ -187,51 +187,51 @@ func Binomial(ρ float64, n int64) func() int64 {
 
 func Poisson_PMF(λ float64) func(i int64) float64 {
 	return func(i int64) float64 {
-		p := NextExp(-λ)*pow(λ, float64(i))/Γ(float64(i)+1);
-		return p;
+		p := NextExp(-λ) * pow(λ, float64(i)) / Γ(float64(i)+1)
+		return p
 	}
 }
 func Poisson_LnPMF(λ float64) func(i int64) float64 {
 	return func(i int64) float64 {
-		p := -λ+log(λ)*float64(i)-LnΓ(float64(i)+1);
-		return p;
+		p := -λ + log(λ)*float64(i) - LnΓ(float64(i)+1)
+		return p
 	}
 }
 func NextPoisson(λ float64) int64 {
 	// this can be improved upon
-	i := iZero;
-	t := exp(-λ);
-	p := fOne;
-	for ; p>t; p*=NextUniform() {
-		i++;
+	i := iZero
+	t := exp(-λ)
+	p := fOne
+	for ; p > t; p *= NextUniform() {
+		i++
 	}
-	return i;
+	return i
 }
 func Poisson(λ float64) func() int64 {
 	return func() int64 {
-		return NextPoisson(λ);
+		return NextPoisson(λ)
 	}
 }
 
 func NegativeBinomial_PMF(ρ float64, r int64) func(i int64) float64 {
 	return func(k int64) float64 {
-		return float64(Choose(k+r-1, r-1))*pow(ρ, float64(r))*pow(1-ρ, float64(k));
+		return float64(Choose(k+r-1, r-1)) * pow(ρ, float64(r)) * pow(1-ρ, float64(k))
 	}
 }
 func NegativeBinomial_LnPMF(ρ float64, r int64) func(i int64) float64 {
 	return func(k int64) float64 {
-		return LnChoose(k+r-1, r-1)+log(ρ)*float64(r)+log(1-ρ)*float64(k);
+		return LnChoose(k+r-1, r-1) + log(ρ)*float64(r) + log(1-ρ)*float64(k)
 	}
 }
 //NegativeBinomial(ρ, r) => number of NextBernoulli(ρ) failures before r successes
 func NextNegativeBinomial(ρ float64, r int64) int64 {
-	k := iZero;
-	for ; r>=0; {
-		i := NextBernoulli(ρ);
-		r -= i;
-		k += (1-i);
+	k := iZero
+	for r >= 0 {
+		i := NextBernoulli(ρ)
+		r -= i
+		k += (1 - i)
 	}
-	return k;
+	return k
 }
 func NegativeBinomial(ρ float64, r int64) func() int64 {
 	return func() int64 {
