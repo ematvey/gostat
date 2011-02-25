@@ -62,14 +62,17 @@ var lanczos_coef []float64 = []float64{
 var Γ = math.Gamma
 
 var sqrt2pi = math.Sqrt(2 * math.Pi)
+var logsqrt2pi = log(math.Sqrt(2 * math.Pi))
 
-func LnΓ(x float64) float64 {
-	tmp := (x-0.5)*log(x+4.5) - (x + 4.5)
-	ser := 1.0 +
+func LnΓ(x float64) (res float64) {
+	res = (x - 0.5) * log(x+4.5) - (x + 4.5)
+	res += logsqrt2pi
+	res += log(1.0 +
 		76.1800917300/(x+0) - 86.5053203300/(x+1) +
 		24.0140982200/(x+2) - 1.23173951600/(x+3) +
-		0.00120858003/(x+4) - 0.00000536382/(x+5)
-	return tmp + log(ser*sqrt2pi)
+		0.00120858003/(x+4) - 0.00000536382/(x+5))
+
+	return
 }
 
 func B(x float64, y float64) float64 {
