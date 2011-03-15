@@ -41,6 +41,9 @@ func NextChoice(θ []float64) int64 {
 	for ; sum < u && i < len(θ)-1; i++ {
 		sum += θ[i+1]
 	}
+	if u >= sum {
+		return int64(len(θ))
+	}
 	return int64(i)
 }
 func Choice(θ []float64) func() int64 {

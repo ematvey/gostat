@@ -20,6 +20,15 @@ func XTestDir(t *testing.T) {
 	fmt.Printf("%v\n", counts)
 }
 
+func TestNullWeights(t *testing.T) {
+	n := int64(10)
+	weights := make([]float64, n)
+	m := NextChoice(weights)
+	if n != m {
+		t.Error()
+	}
+}
+
 func TestLnGamma(t *testing.T) {
 	acc := 0.0000001
 	check := func(x, y float64) bool {
