@@ -109,7 +109,7 @@ func Gamma(α float64, λ float64) func() float64 {
 
 func Normal_PDF(μ float64, σ float64) func(x float64) float64 {
 	normal_normalizer := 0.3989422804014327 / σ
-	return func(x float64) float64 { return normal_normalizer * NextExp(-1*(x-μ)*(x-μ)/(2*σ*σ)) }
+	return func(x float64) float64 { return normal_normalizer * exp(-1*(x-μ)*(x-μ)/(2*σ*σ)) }
 }
 func Normal_LnPDF(μ float64, σ float64) func(x float64) float64 {
 	ln_normal_normalizer := -0.91893853320467267 - log(σ)
