@@ -1,3 +1,4 @@
+//Extended set of distributions.
 package stat
 
 import (
