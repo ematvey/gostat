@@ -188,18 +188,25 @@ func Binomial(ρ float64, n int64) func() int64 {
 	return func() int64 { return NextBinomial(ρ, n) }
 }
 
+func Poisson_LnPMF(λ float64) (foo func(i int64) float64) {
+	pmf := Poisson_PMF(λ)
+	return func(i int64) (p float64) {
+		return log(pmf(i))
+		//p = -λ +log(λ)*float64(i)
+		//x := log(Γ(float64(i)+1))
+		//_ = x
+		//p -= LnΓ(float64(i)+1)
+		//return p
+	}
+}
+
 func Poisson_PMF(λ float64) func(i int64) float64 {
 	return func(i int64) float64 {
 		p := NextExp(-λ) * pow(λ, float64(i)) / Γ(float64(i)+1)
 		return p
 	}
 }
-func Poisson_LnPMF(λ float64) func(i int64) float64 {
-	return func(i int64) float64 {
-		p := -λ + log(λ)*float64(i) - LnΓ(float64(i)+1)
-		return p
-	}
-}
+
 func NextPoisson(λ float64) int64 {
 	// this can be improved upon
 	i := iZero
