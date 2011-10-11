@@ -1,8 +1,128 @@
 package stat
 
 import (
+	"math"
 	. "gomatrix.googlecode.com/hg/matrix"
 )
+
+func MatrixNormal_PDF(M, Omega, Sigma *DenseMatrix) func(A *DenseMatrix) float64 {
+	var n float64 = float64(M.Rows())
+	var p float64 = float64(Omega.Rows())
+	if M.Cols() != int(p) {
+		panic("M.Cols != Omega.Rows")
+	}
+	if Omega.Cols() != int(p) {
+		panic("Omega.Cols != Omega.Rows")
+	}
+	if Sigma.Rows() != int(n) {
+		panic("Sigma.Rows != M.Rows")	
+	}
+	if Sigma.Cols() != int(n) {
+		panic("Sigma.Cols != M.Rows")	
+	}
+	norm := math.Pow(2 * math.Pi, -0.5 * n * p)
+	norm *= math.Pow(Omega.Det(), -0.5 * n)
+	norm *= math.Pow(Sigma.Det(), -0.5 * p)
+
+	return func(X *DenseMatrix) (p float64) {
+		p = norm
+
+		sinv, err := Sigma.Inverse()
+		if err != nil {
+			panic(err)
+		}
+		oinv, err := Omega.Inverse()
+		if err != nil {
+			panic(err)
+		}
+		diff, err := X.MinusDense(M)
+		if err != nil {
+			panic(err)
+		}
+		inner := oinv
+		
+		inner, err = inner.TimesDense(diff.Transpose())
+		if err != nil { panic(err) }
+
+		inner, err = inner.TimesDense(sinv)
+		if err != nil { panic(err) }
+
+		inner, err = inner.TimesDense(diff)
+		if err != nil { panic(err) }
+
+		innerTrace := inner.Trace()
+
+		p *= math.Exp(-0.5 * innerTrace)
+
+		return
+	}
+}
+func MatrixNormal_LnPDF(M, Omega, Sigma *DenseMatrix) func(A *DenseMatrix) float64 {
+	var n float64 = float64(M.Rows())
+	var p float64 = float64(Omega.Rows())
+	if M.Cols() != int(p) {
+		panic("M.Cols != Omega.Rows")
+	}
+	if Omega.Cols() != int(p) {
+		panic("Omega.Cols != Omega.Rows")
+	}
+	if Sigma.Rows() != int(n) {
+		panic("Sigma.Rows != M.Rows")	
+	}
+	if Sigma.Cols() != int(n) {
+		panic("Sigma.Cols != M.Rows")	
+	}
+
+	sinv, err := Sigma.Inverse()
+	if err != nil {
+		panic(err)
+	}
+	oinv, err := Omega.Inverse()
+	if err != nil {
+		panic(err)
+	}
+	
+	norm := (2 * math.Pi) * (-0.5 * n * p)
+	norm += Omega.Det() * (-0.5 * n)
+	norm += Sigma.Det() * (-0.5 * p)
+
+	return func(X *DenseMatrix) (lp float64) {
+		lp = norm
+		diff, err := X.MinusDense(M)
+		if err != nil {
+			panic(err)
+		}
+		inner := oinv
+		
+		inner, err = inner.TimesDense(diff.Transpose())
+		if err != nil { panic(err) }
+
+		inner, err = inner.TimesDense(sinv)
+		if err != nil { panic(err) }
+
+		inner, err = inner.TimesDense(diff)
+		if err != nil { panic(err) }
+
+		innerTrace := inner.Trace()
+
+		lp += -0.5 * innerTrace
+
+		return
+	}
+}
+func MatrixNormal(M, Omega, Sigma *DenseMatrix) func() (X *DenseMatrix) {
+	Mv := Vectorize(M)
+	Cov := Kronecker(Omega, Sigma)
+	normal := MVNormal(Mv.Array(), Cov.Arrays())
+	return func() (X *DenseMatrix) {
+		Xv := MakeDenseMatrix(normal(), Mv.Rows(), Mv.Cols())
+		X = Unvectorize(Xv, M.Rows(), M.Cols())
+		return
+	}
+}
+func NextMatrixNormal(M, Omega, Sigma *DenseMatrix) (X *DenseMatrix) {
+	return MatrixNormal(M, Omega, Sigma)()
+}
 
 func MVNormal_PDF(m []float64, S [][]float64) func(x []float64) float64 {
 	p := len(m)
