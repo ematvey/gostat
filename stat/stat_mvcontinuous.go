@@ -7,8 +7,8 @@ import (
 
 func MatrixNormal_PDF(M, Omega, Sigma *DenseMatrix) func(A *DenseMatrix) float64 {
 	var n float64 = float64(M.Rows())
-	var p float64 = float64(Omega.Rows())
-	if M.Cols() != int(p) {
+	var p float64 = float64(M.Cols())
+	if Omega.Rows() != int(p) {
 		panic("M.Cols != Omega.Rows")
 	}
 	if Omega.Cols() != int(p) {
@@ -59,8 +59,8 @@ func MatrixNormal_PDF(M, Omega, Sigma *DenseMatrix) func(A *DenseMatrix) float64
 }
 func MatrixNormal_LnPDF(M, Omega, Sigma *DenseMatrix) func(A *DenseMatrix) float64 {
 	var n float64 = float64(M.Rows())
-	var p float64 = float64(Omega.Rows())
-	if M.Cols() != int(p) {
+	var p float64 = float64(M.Cols())
+	if Omega.Rows() != int(p) {
 		panic("M.Cols != Omega.Rows")
 	}
 	if Omega.Cols() != int(p) {
@@ -111,11 +111,25 @@ func MatrixNormal_LnPDF(M, Omega, Sigma *DenseMatrix) func(A *DenseMatrix) float
 	}
 }
 func MatrixNormal(M, Omega, Sigma *DenseMatrix) func() (X *DenseMatrix) {
+	var n float64 = float64(M.Rows())
+	var p float64 = float64(M.Cols())
+	if Omega.Rows() != int(p) {
+		panic("M.Cols != Omega.Rows")
+	}
+	if Omega.Cols() != int(p) {
+		panic("Omega.Cols != Omega.Rows")
+	}
+	if Sigma.Rows() != int(n) {
+		panic("Sigma.Rows != M.Rows")	
+	}
+	if Sigma.Cols() != int(n) {
+		panic("Sigma.Cols != M.Rows")	
+	}
 	Mv := Vectorize(M)
 	Cov := Kronecker(Omega, Sigma)
-	normal := MVNormal(Mv.Array(), Cov.Arrays())
+	normal := MVNormal(Mv, Cov)
 	return func() (X *DenseMatrix) {
-		Xv := MakeDenseMatrix(normal(), Mv.Rows(), Mv.Cols())
+		Xv := normal()
 		X = Unvectorize(Xv, M.Rows(), M.Cols())
 		return
 	}
@@ -124,12 +138,10 @@ func NextMatrixNormal(M, Omega, Sigma *DenseMatrix) (X *DenseMatrix) {
 	return MatrixNormal(M, Omega, Sigma)()
 }
 
-func MVNormal_PDF(m []float64, S [][]float64) func(x []float64) float64 {
-	p := len(m)
-	μ := MakeDenseMatrix(m, p, 1)
+func MVNormal_PDF(μ *DenseMatrix, Σ *DenseMatrix) func(x *DenseMatrix) float64 {
+	p := μ.Rows()
 	backμ := μ.DenseMatrix()
 	backμ.Scale(-1)
-	Σ := MakeDenseMatrixStacked(S)
 
 	Σdet := Σ.Det()
 	ΣdetRt := sqrt(Σdet)
@@ -137,8 +149,8 @@ func MVNormal_PDF(m []float64, S [][]float64) func(x []float64) float64 {
 
 	normalization := pow(2*π, -float64(p)/2) / ΣdetRt
 
-	return func(x []float64) float64 {
-		δ, _ := MakeDenseMatrix(x, p, 1).PlusDense(backμ)
+	return func(x *DenseMatrix) float64 {
+		δ, _ := x.PlusDense(backμ)
 		tmp := δ.Transpose()
 		tmp, _ = tmp.TimesDense(Σinv)
 		tmp, _ = tmp.TimesDense(δ)
@@ -146,135 +158,127 @@ func MVNormal_PDF(m []float64, S [][]float64) func(x []float64) float64 {
 		return normalization * exp(-f/2)
 	}
 }
-func NextMVNormal(μ []float64, Σ [][]float64) []float64 {
-	n := len(μ)
+func NextMVNormal(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
+	n := μ.Rows()
 	x := Zeros(n, 1)
 	for i := 0; i < n; i++ {
 		x.Set(i, 0, NextNormal(0, 1))
 	}
-	C, err := MakeDenseMatrixStacked(Σ).Cholesky()
+	C, err := Σ.Cholesky()
 	Cx, err := C.TimesDense(x)
-	μCx, err := MakeDenseMatrix(μ, n, 1).PlusDense(Cx)
+	μCx, err := μ.PlusDense(Cx)
 	if err != nil {
 		panic(err)
 	}
-	return μCx.Array()
+	return μCx
 }
 
-func MVNormal(μ []float64, Σ [][]float64) func() []float64 {
-	C, _ := MakeDenseMatrixStacked(Σ).Cholesky()
-	n := len(μ)
-	M := MakeDenseMatrix(μ, n, 1)
-	return func() []float64 {
+func MVNormal(μ *DenseMatrix, Σ *DenseMatrix) func() *DenseMatrix {
+	C, _ := Σ.Cholesky()
+	n := μ.Rows()
+	return func() *DenseMatrix {
 		x := Zeros(n, 1)
 		for i := 0; i < n; i++ {
 			x.Set(i, 0, NextNormal(0, 1))
 		}
 		Cx, _ := C.TimesDense(x)
-		MCx, _ := M.PlusDense(Cx)
-		return MCx.Array()
+		MCx, _ := μ.PlusDense(Cx)
+		return MCx
 	}
 }
 
-func Wishart_PDF(n int, V [][]float64) func(W [][]float64) float64 {
-	Vm := MakeDenseMatrixStacked(V)
-	p := Vm.Rows()
-	Vdet := Vm.Det()
-	Vinv, _ := Vm.Inverse()
+func Wishart_PDF(n int, V *DenseMatrix) func(W *DenseMatrix) float64 {
+	p := V.Rows()
+	Vdet := V.Det()
+	Vinv, _ := V.Inverse()
 	normalization := pow(2, -0.5*float64(n*p)) *
 		pow(Vdet, -0.5*float64(n)) /
 		Γ(0.5*float64(n))
-	return func(W [][]float64) float64 {
-		Wm := MakeDenseMatrixStacked(W)
-		VinvWm, _ := Vinv.Times(Wm)
-		return normalization * pow(Wm.Det(), 0.5*float64(n-p-1)) *
-			exp(-0.5*VinvWm.Trace())
+	return func(W *DenseMatrix) float64 {
+		VinvW, _ := Vinv.Times(W)
+		return normalization * pow(W.Det(), 0.5*float64(n-p-1)) *
+			exp(-0.5*VinvW.Trace())
 	}
 }
-func Wishart_LnPDF(n int, V [][]float64) func(W [][]float64) float64 {
-	Vm := MakeDenseMatrixStacked(V)
-	p := Vm.Rows()
-	Vdet := Vm.Det()
-	Vinv, _ := Vm.Inverse()
+func Wishart_LnPDF(n int, V *DenseMatrix) func(W *DenseMatrix) float64 {
+	
+	p := V.Rows()
+	Vdet := V.Det()
+	Vinv, _ := V.Inverse()
 	normalization := log(2)*(-0.5*float64(n*p)) +
 		log(Vdet)*(-0.5*float64(n)) -
 		LnΓ(0.5*float64(n))
-	return func(W [][]float64) float64 {
-		Wm := MakeDenseMatrixStacked(W)
-		VinvWm, _ := Vinv.Times(Wm)
+	return func(W *DenseMatrix) float64 {
+		VinvW, _ := Vinv.Times(W)
 		return normalization +
-			log(Wm.Det())*0.5*float64(n-p-1) -
-			0.5*VinvWm.Trace()
+			log(W.Det())*0.5*float64(n-p-1) -
+			0.5*VinvW.Trace()
 	}
 }
-func NextWishart(n int, V [][]float64) [][]float64 {
+func NextWishart(n int, V *DenseMatrix) *DenseMatrix {
 	return Wishart(n, V)()
 }
-func Wishart(n int, V [][]float64) func() [][]float64 {
-	p := len(V)
-	zeros := make([]float64, p)
+func Wishart(n int, V *DenseMatrix) func() *DenseMatrix {
+	p := V.Rows()
+	zeros := Zeros(p, 1)
 	rowGen := MVNormal(zeros, V)
-	return func() [][]float64 {
+	return func() *DenseMatrix {
 		x := make([][]float64, n)
 		for i := 0; i < n; i++ {
-			x[i] = rowGen()
+			x[i] = rowGen().Array()
 		}
 		X := MakeDenseMatrixStacked(x)
 		S, _ := X.Transpose().TimesDense(X)
-		return S.Arrays()
+		return S
 	}
 }
 
-func InverseWishart_PDF(n int, V [][]float64) func(B [][]float64) float64 {
-	p := len(V)
-	Ψ := MakeDenseMatrixStacked(V)
+func InverseWishart_PDF(n int, Ψ *DenseMatrix) func(B *DenseMatrix) float64 {
+	p := Ψ.Rows()
 	Ψdet := Ψ.Det()
 	normalization := pow(Ψdet, -0.5*float64(n)) *
 		pow(2, -0.5*float64(n*p)) /
 		Γ(float64(n)/2)
-	return func(B [][]float64) float64 {
-		Bm := MakeDenseMatrixStacked(B)
-		Bdet := Bm.Det()
-		Binv, _ := Bm.Inverse()
+	return func(B *DenseMatrix) float64 {
+		Bdet := B.Det()
+		Binv, _ := B.Inverse()
 		ΨBinv, _ := Ψ.Times(Binv)
 		return normalization *
 			pow(Bdet, -.5*float64(n+p+1)) *
 			exp(-0.5*ΨBinv.Trace())
 	}
 }
-func InverseWishart_LnPDF(n int, V [][]float64) func(W [][]float64) float64 {
-	p := len(V)
-	Ψ := MakeDenseMatrixStacked(V)
+func InverseWishart_LnPDF(n int, Ψ *DenseMatrix) func(W *DenseMatrix) float64 {
+	p := Ψ.Rows()
 	Ψdet := Ψ.Det()
 	normalization := log(Ψdet)*-0.5*float64(n) +
 		log(2)*-0.5*float64(n*p) -
 		LnΓ(float64(n)/2)
-	return func(B [][]float64) float64 {
-		Bm := MakeDenseMatrixStacked(B)
-		Bdet := Bm.Det()
-		Binv, _ := Bm.Inverse()
+	return func(B *DenseMatrix) float64 {
+		Bdet := B.Det()
+		Binv, _ := B.Inverse()
 		ΨBinv, _ := Ψ.Times(Binv)
 		return normalization +
 			log(Bdet)*-.5*float64(n+p+1) +
 			-0.5*ΨBinv.Trace()
 	}
 }
-func NextInverseWishart(n int, V [][]float64) [][]float64 {
+func NextInverseWishart(n int, V *DenseMatrix) *DenseMatrix {
 	return InverseWishart(n, V)()
 }
-func InverseWishart(n int, V [][]float64) func() [][]float64 {
-	p := len(V)
-	zeros := make([]float64, p)
+func InverseWishart(n int, V *DenseMatrix) func() *DenseMatrix {
+	p := V.Rows()
+	zeros := Zeros(p, 1)
 	rowGen := MVNormal(zeros, V)
-	return func() [][]float64 {
+	return func() *DenseMatrix {
 		x := make([][]float64, n)
 		for i := 0; i < n; i++ {
-			x[i] = rowGen()
+			x[i] = rowGen().Array()
 		}
 		X := MakeDenseMatrixStacked(x)
 		S, _ := X.Transpose().TimesDense(X)
 		Sinv, _ := S.Inverse()
-		return Sinv.Arrays()
+		return Sinv
 	}
 }
 
