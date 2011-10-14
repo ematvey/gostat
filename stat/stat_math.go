@@ -60,6 +60,7 @@ var lanczos_coef []float64 = []float64{
 
 //The Gamma function
 var Γ = math.Gamma
+var GammaF = math.Gamma
 
 var sqrt2pi = math.Sqrt(2 * math.Pi)
 var logsqrt2pi = log(math.Sqrt(2 * math.Pi))
@@ -105,7 +106,17 @@ func LnB(x float64, y float64) float64 {
 	}
 */
 
-func LnΓp(p int, x float64) (r float64) {
+func GammaP(p int, x float64) (r float64) {
+	pf := float64(p)
+	r = math.Pow(math.Pi, 0.25 * pf * (pf - 1))
+	for j := float64(1); j <= pf; j++ {
+		r *= GammaF(x + .5*(1-j))
+	}
+	return
+}
+
+var LnΓp = LnGammaP
+func LnGammaP(p int, x float64) (r float64) {
 	pf := float64(p)
 	r = pf * (pf - 1) * .25 * math.Log(math.Pi)
 	for j := float64(1); j <= pf; j++ {
@@ -114,8 +125,18 @@ func LnΓp(p int, x float64) (r float64) {
 	return
 }
 
+func GammaPRatio(p int, x, y float64) (r float64) {
+	pf := float64(p)
+	for j := float64(1); j <= pf; j++ {
+		r *= GammaF(x + .5*(1-j))
+		r /= GammaF(y + .5*(1-j))
+	}
+	return
+}
+
 //LnΓp(x)/LnΓp(y)
-func LnΓpRatio(p int, x, y float64) (r float64) {
+var LnΓpRatio = LnGammaPRatio
+func LnGammaPRatio(p int, x, y float64) (r float64) {
 	pf := float64(p)
 	for j := float64(1); j <= pf; j++ {
 		r += LnΓ(x + .5*(1-j))

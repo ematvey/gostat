@@ -5,6 +5,7 @@ import (
 	"math"
 	"testing"
 	"fmt"
+	"gomatrix.googlecode.com/hg/matrix"
 )
 
 func XTestDir(t *testing.T) {
@@ -35,7 +36,7 @@ func TestLnGamma(t *testing.T) {
 		if false {
 			return x == y
 		}
-		return math.Fabs(x-y) < acc
+		return math.Abs(x-y) < acc
 	}
 	for i := 0; i < 100; i++ {
 		x := NextGamma(10, 10)
@@ -82,7 +83,7 @@ func XTestGen(t *testing.T) {
 	fmt.Printf("NextStudentsT => %f\n", NextStudentsT(7))
 	fmt.Printf("NextF => %f\n", NextF(7, 3))
 	fmt.Printf("NextWishart => %v\n",
-		NextWishart(100, [][]float64{[]float64{1, 0}, []float64{0, 1}}))
+		NextWishart(100, matrix.MakeDenseMatrixStacked([][]float64{[]float64{1, 0}, []float64{0, 1}})))
 	fmt.Printf("NextInverseWishart => %v\n",
-		NextInverseWishart(100, [][]float64{[]float64{1, 0}, []float64{0, 1}}))
+		NextInverseWishart(100, matrix.MakeDenseMatrixStacked([][]float64{[]float64{1, 0}, []float64{0, 1}})))
 }
