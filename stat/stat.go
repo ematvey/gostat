@@ -2,7 +2,7 @@
 package stat
 
 import (
-	"rand"
+	"math/rand"
 	"time"
 )
 

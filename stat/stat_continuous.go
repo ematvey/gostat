@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"rand"
-  "math"
+	"math"
+	"math/rand"
 )
 
 func Uniform_PDF() func(x float64) float64 {
@@ -122,8 +122,8 @@ func Normal(μ float64, σ float64) func() float64 {
 }
 
 // Cumulative Distribution Function for the Normal distribution
-func Normal_CDF(μ float64, σ float64) func (x float64) float64 {
-  return func(x float64) float64 { return ((1.0/2.0) * (1 + math.Erf((x-μ) / (σ*math.Sqrt2)))) }
+func Normal_CDF(μ float64, σ float64) func(x float64) float64 {
+	return func(x float64) float64 { return ((1.0 / 2.0) * (1 + math.Erf((x-μ)/(σ*math.Sqrt2)))) }
 }
 
 func Beta_PDF(α float64, β float64) func(x float64) float64 {

@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"rand"
 	"math"
+	"math/rand"
 )
 
 func Range_PMF(n int64) func(i int64) float64 {
@@ -167,14 +167,14 @@ func Geometric(ρ float64) func() int64 { return func() int64 { return NextGeome
 func Binomial_PMF(ρ float64, n int64) func(i int64) float64 {
 	return func(i int64) float64 {
 		p := pow(ρ, float64(i)) * pow(1-ρ, float64(n-i))
-		p *= Γ(float64(n)) / (Γ(float64(i)) * Γ(float64(n-i)))
+		p *= Γ(float64(n+1)) / (Γ(float64(i+1)) * Γ(float64(n-i+1)))
 		return p
 	}
 }
 func Binomial_LnPMF(ρ float64, n int64) func(i int64) float64 {
 	return func(i int64) float64 {
 		p := log(ρ)*float64(i) + log(1-ρ)*float64(n-i)
-		p += LnΓ(float64(n)) - LnΓ(float64(i)) - LnΓ(float64(n-i))
+		p += LnΓ(float64(n+1)) - LnΓ(float64(i+1)) - LnΓ(float64(n-i+1))
 		return p
 	}
 }
