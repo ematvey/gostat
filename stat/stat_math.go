@@ -76,9 +76,26 @@ func LnΓ(x float64) (res float64) {
 	return
 }
 
+//Upper incomplete Gamma function
+func IΓ(s, x float64) float64 { 
+	if s < 0 {
+		return 1
+	}
+	return (s-1) * IΓ(s-1, x) + math.Pow(x, s-1) * math.Exp(-x)
+}
+
+
+
+
 func B(x float64, y float64) float64 {
 	return Γ(x) * Γ(y) / Γ(x+y)
 }
+
+//Non regularized incomplete Beta function
+func IB(a, b, x float64) float64 { 
+	return Beta_CDF_At(a, b, x) * math.Exp(LnΓ(a) + LnΓ(b) - LnΓ(a + b))
+}
+
 func LnB(x float64, y float64) float64 {
 	return LnΓ(x) + LnΓ(y) - LnΓ(x+y)
 }

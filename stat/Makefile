@@ -9,5 +9,7 @@ GOFILES=\
 	stat_npb.go\
 	stat_math.go\
 	stat_util.go\
+	betainv.go\
+	discreteCDFs.go\
 
 include $(GOROOT)/src/Make.pkg
