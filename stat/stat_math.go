@@ -81,11 +81,8 @@ func IΓ(s, x float64) float64 {
 	if s < 0 {
 		return 1
 	}
-	return (s-1) * IΓ(s-1, x) + math.Pow(x, s-1) * math.Exp(-x)
+	return (s-1) * IΓ(s-1, x) + pow(x, s-1) * exp(-x)
 }
-
-
-
 
 func B(x float64, y float64) float64 {
 	return Γ(x) * Γ(y) / Γ(x+y)
