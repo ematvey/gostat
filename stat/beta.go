@@ -1,16 +1,4 @@
-// Beta CDF and its inverse
-// 
-// References:
-//
-// Roger W. Abernathy and Robert P. Smith. "Applying Series Expansion
-// to the Inverse Beta Distribution to Find Percentiles of the
-// F-Distribution," ACM Transactions on Mathematical Software, volume
-// 19, number 4, December 1993, pages 474-480.
-//
-// G.W. Hill and A.W. Davis. "Generalized asymptotic expansions of a
-// Cornish-Fisher type," Annals of Mathematical Statistics, volume 39,
-// number 8, August 1968, pages 1264-1273.
-
+// Beta distribution
 
 package stat
 
@@ -94,6 +82,38 @@ func betaContinuedFraction(α, β, x float64) float64 {
 	panic(fmt.Sprintf("betaContinuedFraction(): α or β too big, or maxIter too small"))
 	return -1.00
 }
+
+func Beta_PDF(α float64, β float64) func(x float64) float64 {
+	dα := []float64{α, β}
+	dirPDF := Dirichlet_PDF(dα)
+	return func(x float64) float64 {
+		if 0 > x || x > 1 {
+			return 0
+		}
+		dx := []float64{x, 1 - x}
+		return dirPDF(dx)
+	}
+}
+func Beta_LnPDF(α float64, β float64) func(x float64) float64 {
+	dα := []float64{α, β}
+	dirLnPDF := Dirichlet_LnPDF(dα)
+	return func(x float64) float64 {
+		if 0 > x || x > 1 {
+			return negInf
+		}
+		dx := []float64{x, 1 - x}
+		return dirLnPDF(dx)
+	}
+}
+func NextBeta(α float64, β float64) float64 {
+	dα := []float64{α, β}
+	return NextDirichlet(dα)[0]
+}
+func Beta(α float64, β float64) func() float64 {
+	return func() float64 { return NextBeta(α, β) }
+}
+
+
 func Beta_CDF(α float64, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		//func Beta_CDF(α , β , x float64) float64 {
@@ -139,6 +159,18 @@ func Beta_PDF_At(α, β, x float64) float64 {
 }
 
 // BetaInv_CDF_For() evaluates inverse CDF of Beta distribution(α, β) for probability p
+// 
+// References:
+//
+// Roger W. Abernathy and Robert P. Smith. "Applying Series Expansion
+// to the Inverse Beta Distribution to Find Percentiles of the
+// F-Distribution," ACM Transactions on Mathematical Software, volume
+// 19, number 4, December 1993, pages 474-480.
+//
+// G.W. Hill and A.W. Davis. "Generalized asymptotic expansions of a
+// Cornish-Fisher type," Annals of Mathematical Statistics, volume 39,
+// number 8, August 1968, pages 1264-1273.
+
 func BetaInv_CDF_For(α float64, β float64, p float64) float64 {
 	var res float64
 	switch {
