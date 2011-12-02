@@ -9,7 +9,9 @@ GOFILES=\
 	stat_npb.go\
 	stat_math.go\
 	stat_util.go\
-	betainv.go\
+	beta.go\
+	normal.go\
 	discreteCDFs.go\
+	bayes/binomial.go\
 
 include $(GOROOT)/src/Make.pkg

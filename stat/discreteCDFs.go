@@ -1,5 +1,6 @@
 package stat
 import "math"
+
 func Binomial_CDF_trivial(ρ float64, n int64) func(k int64) float64 {  // trivial (but working) implementation, redo with Incomplete Beta
 	return func(k int64) float64 {
 		var p float64 = 0
