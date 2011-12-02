@@ -3,7 +3,7 @@ package stat
 import (
 	"time"
 	"math"
-	"math/rand"
+//	"math/rand"
 	"testing"
 	"fmt"
 )
@@ -254,7 +254,7 @@ func TestIncompleteGamma(t *testing.T) {
 	if !check(x, y, acc){
 		t.Error()
 	}
-//FAILED 
+//FAILED, non-integer s
 */
 
 	x = IΓ(18, 3.96545)
@@ -268,19 +268,17 @@ func TestIncompleteGamma(t *testing.T) {
 }
 // test for Poisson
 func TestPoisson(t *testing.T) {
-	var x, y, acc, λ, z, m float64
-	z = 6
-	m = 24
-	var k, tests, count int64
-	acc = 1e-2
-	tests = 100
+	var x, y, acc, λ float64
+	var k int64
+	acc = 1e-5
 	check := func(x, y, acc float64) bool {
+		var r float64
 		if x/y > 1.00 {
-			z = y/x
+			r = y/x
 		} else {
-			z = x/y
+			r = x/y
 		}
-		if 1-z > acc  {
+		if 1-r > acc  {
 			return false
 		}
 		return true
@@ -291,25 +289,29 @@ func TestPoisson(t *testing.T) {
 
 	pmf := Poisson_PMF(λ)
 	x = pmf(k)
-	y = 0.301489
+	y = 0.3014899390220975
 
 	if !check(x, y, acc){
 		t.Error()
+		fmt.Println("k: ", k, "λ: ", λ, "prob: ", x, "err: ", 1-x/y)
+
 	}
 
 	fmt.Println("")
 	fmt.Println("test for Poisson_CDF")
-	fmt.Println("# of tests: ", tests)
 	fmt.Println("")
 
+/*
 	for count = 0; count < tests;  {
 		λ=z*rand.Float64()
 		cdf:=Poisson_CDF(λ)
-		k=(int64)(m*λ)
+		k=int64(math.Ceiling(m*λ))
 		x=cdf(k)
 		y=1.00  // in this distance, CDF should be close to 1.00
 		if !check(x, y, acc){
 			t.Error()
+			fmt.Println("k: ", k, "λ: ", λ, "prob: ", x, "err: ", 1-x/y)
+
 		}
 		count++
 	}
@@ -323,9 +325,33 @@ func TestPoisson(t *testing.T) {
 	if !check(x, y, acc){
 		t.Error()
 	}
+*/
+
+	λ = 0.15164076846159652
+	k = 1
+	cdf:=Poisson_CDF(λ)
+	x=cdf(k)
+	y=0.989601355904656
+	if !check(x, y, acc){
+		t.Error()
+		fmt.Println("k: ", k, "λ: ", λ, "prob: ", x, "err: ", 1-x/y)
+	}
+
+	//test for LnPoisson_CDF
+	λ = 10.0
+	k = 5
+	cdf3:=Poisson_CDF(λ)
+	cdf4:=LnPoisson_CDF(λ)
+	x = math.Log(cdf3(k))
+	y = cdf4(k)
+	if !check(x, y, acc){
+		t.Error()
+	}
+
+
 }
 
-	// test for NegativeBinomial_CDF
+// test for NegativeBinomial_CDF
 func TestNegativeBinomial_CDF(t *testing.T) {
 	fmt.Println("")
 	fmt.Println("test for NegativeBinomial_CDF")
@@ -358,3 +384,54 @@ func TestNegativeBinomial_CDF(t *testing.T) {
 		t.Error()
 	}
 }
+
+// test for BetaInv_CDF_For(α, β, p)
+func TestBetaInv_CDF_For(t *testing.T) {
+	fmt.Println("")
+	fmt.Println("test for BetaInv_CDF_For(α, β, p)")
+	fmt.Println("")
+	var x, y, z, acc, α, β, p float64
+	acc = 1e-2
+
+	check := func(x, y, acc float64) bool {
+		if x/y > 1.00 {
+			z = y/x
+		} else {
+			z = x/y
+		}
+		if 1-z > acc  {
+			return false
+		}
+		return true
+	}
+
+	α=10.001
+	β=5.0001
+	p=0.01
+	x=BetaInv_CDF_For(α, β, p)
+	y=0.3726
+	fmt.Println(x, " == ", y)
+
+	if !check(x, y, acc){
+		t.Error()
+	}
+
+	p=0.5
+	x=BetaInv_CDF_For(α, β, p)
+	y=0.6742
+	fmt.Println(x, " == ", y)
+
+	if !check(x, y, acc){
+		t.Error()
+	}
+
+	p=0.99
+	x=BetaInv_CDF_For(α, β, p)
+	y=0.8981
+	fmt.Println(x, " == ", y)
+
+	if !check(x, y, acc){
+		t.Error()
+	}
+}
+

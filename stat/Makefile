@@ -12,6 +12,5 @@ GOFILES=\
 	beta.go\
 	normal.go\
 	discreteCDFs.go\
-	bayes/binomial.go\
 
 include $(GOROOT)/src/Make.pkg

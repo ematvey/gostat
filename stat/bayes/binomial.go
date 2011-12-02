@@ -1,12 +1,13 @@
 // Bayesian inference about the parameter p of binomial distribution.
 // Bolstad 2007 (2e): Chapter 8, p. 141 and further.
 
-package stat
-
+package bayes
 import (
 	"fmt"
 	"math"
+	s "gostat.googlecode.com/hg/stat"
 )
+
 
 // Quantile, Flat prior 
 func BinomFlatPriQtl(k, n int64, p float64) float64 {
@@ -21,7 +22,7 @@ func BinomFlatPriQtl(k, n int64, p float64) float64 {
 	if α<=0||β<=0 {
 		panic(fmt.Sprintf("The parameters of the prior must be greater than zero"))
 	}
-	return	BetaInv_CDF_For(α, β, p)
+	return	s.BetaInv_CDF_For(α, β, p)
 }
 
 // Quantile, Beta prior
@@ -32,7 +33,7 @@ func BinomBetaPriQtl(k, n int64, α, β, p float64) float64 {
 	if α<=0||β<=0 {
 		panic(fmt.Sprintf("The parameters of the prior must be greater than zero"))
 	}
-	return	BetaInv_CDF_For(α+float64(k), β+float64(n-k), p)
+	return	s.BetaInv_CDF_For(α+float64(k), β+float64(n-k), p)
 }
 
 // Quantile, Jeffrey's prior
@@ -43,7 +44,7 @@ func BinomJeffPriQtl(k, n int64, p float64) float64 {
 	if k>n {
 		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
 	}
-	return	BetaInv_CDF_For(α+float64(k), β+float64(n-k), p)
+	return	s.BetaInv_CDF_For(α+float64(k), β+float64(n-k), p)
 }
 
 // Equivalent sample size of the prior
@@ -119,8 +120,8 @@ func BinomBetaPriCrI(α,  β, alpha float64, n, k int64)  (float64, float64) {
 	*/
 
 	var low, upp float64
-	low =  BetaInv_CDF_For(alpha/2.0,α+float64(k),β+float64(n-k))
-	upp =  BetaInv_CDF_For(1.0-alpha/2.0,α+float64(k),β+float64(n-k))
+	low =  s.BetaInv_CDF_For(alpha/2.0,α+float64(k),β+float64(n-k))
+	upp =  s.BetaInv_CDF_For(1.0-alpha/2.0,α+float64(k),β+float64(n-k))
 	return low, upp
 }
 
@@ -145,10 +146,10 @@ func BinomBetaPriCrIApprox(α,  β, alpha float64, n, k int64) (float64, float64
 
 	post_mean = post_α/(post_α+post_β)
 	post_var = (post_α*post_β)/((post_α+post_β)*(post_α+post_β)*(post_α+post_β+1.0))
-	z = ZInv_CDF_For(alpha/2)
+	z = s.ZInv_CDF_For(alpha/2)
 
-	low =  post_mean - z * sqrt(post_var)
-	upp =  post_mean + z * sqrt(post_var)
+	low =  post_mean - z * math.Sqrt(post_var)
+	upp =  post_mean + z * math.Sqrt(post_var)
 	return low, upp
 }
 

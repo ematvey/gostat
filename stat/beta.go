@@ -5,6 +5,7 @@ package stat
 import (
 	"fmt"
 	"math"
+	"go-fn.googlecode.com/hg/fn"
 )
 
 func bisect(x, p, a, b, xtol, ptol float64) float64 {
@@ -170,7 +171,7 @@ func Beta_PDF_At(α, β, x float64) float64 {
 // G.W. Hill and A.W. Davis. "Generalized asymptotic expansions of a
 // Cornish-Fisher type," Annals of Mathematical Statistics, volume 39,
 // number 8, August 1968, pages 1264-1273.
-
+/*
 func BetaInv_CDF_For(α float64, β float64, p float64) float64 {
 	var res float64
 	switch {
@@ -199,19 +200,20 @@ func BetaInv_CDF_For(α float64, β float64, p float64) float64 {
 func cdf_beta_Pinv(α float64, β float64, p float64) float64 {
 	var x, mean, lg_ab, lg_a, lg_b, lx, lambda, dP, phi, step, step0, step1 float64
 	var n int64 = 0
-	const tol = 1.4901161193847656e-08
+//	const tol = 1.4901161193847656e-08
+	const tol = 5
 
 	mean = α / (α + β)
 	if p < 0.1 {
-		/* small x */
+		 // small x 
 
 		lg_ab = LnΓ(α + β)
 		lg_a = LnΓ(α)
 		lg_b = LnΓ(β)
 		lx = (math.Log(α) + lg_a + lg_b - lg_ab + math.Log(p)) / α
 		if lx <= 0 {
-			x = math.Exp(lx)             /* first approximation */
-			x *= math.Pow(1-x, -(β-1)/α) /* second approximation */
+			x = math.Exp(lx)              // first approximation 
+			x *= math.Pow(1-x, -(β-1)/α)  // second approximation 
 		} else {
 			x = mean
 		}
@@ -220,11 +222,11 @@ func cdf_beta_Pinv(α float64, β float64, p float64) float64 {
 			x = mean
 		}
 	} else {
-		/* Use expected value as first guess */
+		 // Use expected value as first guess 
 		x = mean
 	}
 
-	/* Do bisection to get closer */
+	 // Do bisection to get closer 
 	x = bisect(x, p, α, β, 0.01, 0.01)
 
 	step0 = 999999
@@ -264,5 +266,36 @@ end:
 		}
 	}
 	return x
+}
+*/
+
+// Inverse of the cumulative beta probability density function for a given probability.
+//
+// p: Probability associated with the beta distribution.</param>
+// α: Parameter of the distribution.</param>
+// β: Parameter of the distribution.</param>
+// A: Optional lower bound to the interval of x.</param>
+// B: Optional upper bound to the interval of x.</param>
+func BetaInv_CDF_For(α, β, p float64) float64 {
+    var x float64 = 0
+    var a float64 = 0
+    var b float64= 1
+    var A float64 = 0
+    var B float64= 1
+    var precision float64 = 1e-9
+
+    for (b - a) > precision {
+        x = (a + b) / 2
+        if fn.BetaIncReg(α, β, x) > p {
+           b = x
+        } else {
+            a = x
+        }
+    }
+
+    if B > 0 && A > 0 {
+        x = x * (B - A) + A
+    }
+    return x
 }
 
