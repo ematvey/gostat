@@ -1,9 +1,9 @@
 package stat
 
 import (
-	"time"
+//	"time"    // disabled temporarily due to time.Nanoseconds bug: when solved, search for "Nanoseconds" and enable those blocks again
 	"math"
-//	"math/rand"
+	"math/rand"
 	"testing"
 	"fmt"
 )
@@ -29,7 +29,7 @@ func TestNullWeights(t *testing.T) {
 		t.Error()
 	}
 }
-
+/*  commented out temporaraily due to time.Nanoseconds() bug
 func TestLnGamma(t *testing.T) {
 	acc := 0.0000001
 	check := func(x, y float64) bool {
@@ -63,7 +63,7 @@ func TestLnGamma(t *testing.T) {
 	duration1 := float64(time.Nanoseconds()-start) / 1e9
 	fmt.Printf("Mine was %f\nTheirs was %f\n", duration1, duration2)
 }
-
+*/
 func XTestGen(t *testing.T) {
 	fmt.Printf("NextUniform => %f\n", NextUniform())
 	fmt.Printf("NextExp => %f\n", NextExp(1.5))
@@ -390,8 +390,10 @@ func TestBetaInv_CDF_For(t *testing.T) {
 	fmt.Println("")
 	fmt.Println("test for BetaInv_CDF_For(α, β, p)")
 	fmt.Println("")
-	var x, y, z, acc, α, β, p float64
-	acc = 1e-2
+	var x, y, z, acc, err, α, β, p float64
+	var count, tests int64
+
+	acc = 1e-4
 
 	check := func(x, y, acc float64) bool {
 		if x/y > 1.00 {
@@ -432,6 +434,24 @@ func TestBetaInv_CDF_For(t *testing.T) {
 
 	if !check(x, y, acc){
 		t.Error()
+	}
+
+	for count = 0; count < tests;  {
+		α=6*rand.Float64()+0.3
+		β=6*rand.Float64()+0.3
+		x=rand.Float64()
+		p=Beta_CDF_At(α, β, x)
+		inv_cdf:=BetaInv_CDF_For(α, β, p)
+		err=math.Abs(inv_cdf - x)
+		if math.Abs(inv_cdf) < 2.0 && p < 1.00 {
+
+
+			count++
+			if !check(inv_cdf, x, acc){
+				t.Error()
+				fmt.Println("α =",α , "  β =", β, "  p =", p, "  x =", x, "  err=", err, "  inv_cdf=",  inv_cdf)
+			}
+		}
 	}
 }
 
