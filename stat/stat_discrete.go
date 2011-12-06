@@ -164,30 +164,6 @@ func NextGeometric(ρ float64) int64 {
 }
 func Geometric(ρ float64) func() int64 { return func() int64 { return NextGeometric(ρ) } }
 
-func Binomial_PMF(ρ float64, n int64) func(i int64) float64 {
-	return func(i int64) float64 {
-		p := pow(ρ, float64(i)) * pow(1-ρ, float64(n-i))
-		p *= Γ(float64(n+1)) / (Γ(float64(i+1)) * Γ(float64(n-i+1)))
-		return p
-	}
-}
-func Binomial_LnPMF(ρ float64, n int64) func(i int64) float64 {
-	return func(i int64) float64 {
-		p := log(ρ)*float64(i) + log(1-ρ)*float64(n-i)
-		p += LnΓ(float64(n+1)) - LnΓ(float64(i+1)) - LnΓ(float64(n-i+1))
-		return p
-	}
-}
-func NextBinomial(ρ float64, n int64) (result int64) {
-	for i := int64(0); i <= n; i++ {
-		result += NextBernoulli(ρ)
-	}
-	return
-}
-func Binomial(ρ float64, n int64) func() int64 {
-	return func() int64 { return NextBinomial(ρ, n) }
-}
-
 /*
 func Poisson_LnPMF(λ float64) (foo func(i int64) float64) {
 	pmf := Poisson_PMF(λ)

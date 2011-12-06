@@ -3,11 +3,12 @@ package stat
 
 import (
 	"math/rand"
-	"time"
+//	"time"
 )
 
 var Seed func(int64) = rand.Seed
 
 func TimeSeed() {
-	Seed(time.Nanoseconds())
+//	Seed(time.Nanoseconds())
+	Seed(6512921561986797)
 }

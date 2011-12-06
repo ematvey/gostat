@@ -11,6 +11,7 @@ GOFILES=\
 	stat_util.go\
 	beta.go\
 	normal.go\
+	binomial.go\
 	discreteCDFs.go\
 
 include $(GOROOT)/src/Make.pkg
