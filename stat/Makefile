@@ -10,8 +10,10 @@ GOFILES=\
 	stat_math.go\
 	stat_util.go\
 	beta.go\
+	f.go\
 	normal.go\
 	binomial.go\
+	binom_cl.go\
 	discreteCDFs.go\
 
 include $(GOROOT)/src/Make.pkg

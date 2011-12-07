@@ -455,3 +455,59 @@ func TestBetaInv_CDF_For(t *testing.T) {
 	}
 }
 
+// test for FInv_CDF_For
+func TestFInv_CDF_For(t *testing.T) {
+	fmt.Println("")
+	fmt.Println("test for FInv_CDF_For")
+	fmt.Println("")
+	var acc, df1, df2, x, y, z, p float64
+	acc = 1e-4
+
+	check := func(x, y, acc float64) bool {
+		if x/y > 1.00 {
+			z = y/x
+		} else {
+			z = x/y
+		}
+		if 1-z > acc  {
+			return false
+		}
+		return true
+	}
+	df1=3
+	df2=3
+	x=0.46
+	cdf:=F_CDF(df1, df2)
+	p=cdf(x)
+	y = FInv_CDF_For(df1, df2, p)
+
+	if !check(x, y, acc){
+		t.Error()
+	}
+
+fmt.Println(FInv_CDF_For(3, 3, 0.1), " = 0.19")
+fmt.Println(FInv_CDF_For(3, 3, 0.27002231), " = 0.46")
+}
+
+
+/*
+// test for Binomial p confidence interval
+func TestBinomP_CI(t *testing.T) {
+	fmt.Println("")
+	fmt.Println("test for Binomial p confidence interval")
+	fmt.Println("")
+	var n int64
+	var k, nn, p, alpha, low, high, low2, high2 float64
+	n=30
+	nn=float64(n)
+	p=0.1
+	k=nn*p
+
+	alpha=0.1
+	low2=0.04
+	high2=0.21
+	low, high =  Binom_p_ConfI(n, p, alpha) 
+	fmt.Println(low, " = ", low2, "\t", high, " = ",  high2)
+}
+*/
+

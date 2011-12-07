@@ -158,23 +158,4 @@ func StudentsT(ν float64) func() float64 {
 	}
 }
 
-func F_PDF(d1 float64, d2 float64) func(x float64) float64 {
-	normalization := 1 / B(d1/2, d2/2)
-	return func(x float64) float64 {
-		return normalization * sqrt(pow(d1*x, d1)*pow(d2, d2)/pow(d1*x+d2, d1+d2)) / x
-	}
-}
-func F_LnPDF(d1 float64, d2 float64) func(x float64) float64 {
-	normalization := -LnB(d1/2, d2/2)
-	return func(x float64) float64 {
-		return normalization + log(d1*x)*d1/2 + log(d2)*d2/2 - log(d1*x+d2)*(d1+d2)/2 - log(x)
-	}
-}
-func NextF(d1 int64, d2 int64) float64 {
-	return (NextXsquare(d1) * float64(d2)) / (NextXsquare(d2) * float64(d1))
-}
-func F(d1 int64, d2 int64) func() float64 {
-	return func() float64 {
-		return NextF(d1, d2)
-	}
-}
+

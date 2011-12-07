@@ -114,7 +114,24 @@ func Beta(α float64, β float64) func() float64 {
 	return func() float64 { return NextBeta(α, β) }
 }
 
+// Value of PDF of Beta distribution(α, β) at x
+func Beta_PDF_At(α, β, x float64) float64 {
+	var res float64
 
+		switch {
+		case x == 0:
+			res = 0.0
+		case x == 1.0:
+			res = 1.0
+		default:
+	pdf := Beta_PDF(α, β)
+	res = pdf(x)
+
+		}
+	return res
+}
+
+// CDF of Beta-distribution
 func Beta_CDF(α float64, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		//func Beta_CDF(α , β , x float64) float64 {
@@ -135,7 +152,7 @@ func Beta_CDF(α float64, β float64) func(x float64) float64 {
 	}
 }
 
-// Beta_CDF_At() evaluates CDF of Beta distribution(α, β) at value x
+// Value of CDF of Beta distribution(α, β) at x
 func Beta_CDF_At(α, β, x float64) float64 {
 	var res float64
 	cdf := Beta_CDF(α, β)
@@ -143,21 +160,6 @@ func Beta_CDF_At(α, β, x float64) float64 {
 	return res
 }
 
-func Beta_PDF_At(α, β, x float64) float64 {
-	var res float64
-
-		switch {
-		case x == 0:
-			res = 0.0
-		case x == 1.0:
-			res = 1.0
-		default:
-	pdf := Beta_PDF(α, β)
-	res = pdf(x)
-
-		}
-	return res
-}
 
 // BetaInv_CDF_For() evaluates inverse CDF of Beta distribution(α, β) for probability p
 // 
@@ -271,18 +273,31 @@ end:
 
 // Inverse of the cumulative beta probability density function for a given probability.
 //
-// p: Probability associated with the beta distribution.</param>
-// α: Parameter of the distribution.</param>
-// β: Parameter of the distribution.</param>
-// A: Optional lower bound to the interval of x.</param>
-// B: Optional upper bound to the interval of x.</param>
-func BetaInv_CDF_For(α, β, p float64) float64 {
+// p: Probability associated with the beta distribution
+// α: Parameter of the distribution
+// β: Parameter of the distribution
+// A: Optional lower bound to the interval of x
+// B: Optional upper bound to the interval of x
+func BetaInv_CDF(α, β float64)  func(p float64) float64 {
+	return func(p float64) float64 {
     var x float64 = 0
     var a float64 = 0
     var b float64= 1
     var A float64 = 0
     var B float64= 1
     var precision float64 = 1e-9
+	if p < 0.0 {
+		panic(fmt.Sprintf("p < 0"))
+	}
+	if p > 1.0 {
+		panic(fmt.Sprintf("p > 1.0"))
+	}
+	if α < 0.0 {
+		panic(fmt.Sprintf("α < 0.0"))
+	}
+	if β < 0.0 {
+		panic(fmt.Sprintf("β < 0.0"))
+	}
 
     for (b - a) > precision {
         x = (a + b) / 2
@@ -297,5 +312,11 @@ func BetaInv_CDF_For(α, β, p float64) float64 {
         x = x * (B - A) + A
     }
     return x
+	}
+}
+
+func BetaInv_CDF_For(α, β, p float64) float64 {
+	cdf:=BetaInv_CDF(α, β)
+	return cdf(p)
 }
 

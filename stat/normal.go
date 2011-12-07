@@ -92,7 +92,7 @@ func Normal_CDF(μ, σ float64) func(x float64) float64 {
 	return func(x float64) float64 { return ((1.0 / 2.0) * (1 + math.Erf((x-μ)/(σ*math.Sqrt2)))) }
 }
 
-// Inverse CDF of Normal distribution for probability p
+// Inverse CDF of Normal distribution for probability p //// ??? only *sigma? from GSL
 func NormalInv_CDF_For(p, sigma float64) float64 {
 	return sigma * ZInv_CDF_For(p)
 }
