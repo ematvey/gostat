@@ -1,7 +1,7 @@
 package stat
 
 import (
-//	"time"    // disabled temporarily due to time.Nanoseconds bug: when solved, search for "Nanoseconds" and enable those blocks again
+	"time"
 	"math"
 	"math/rand"
 	"testing"
@@ -29,7 +29,7 @@ func TestNullWeights(t *testing.T) {
 		t.Error()
 	}
 }
-/*  commented out temporaraily due to time.Nanoseconds() bug
+
 func TestLnGamma(t *testing.T) {
 	acc := 0.0000001
 	check := func(x, y float64) bool {
@@ -48,22 +48,22 @@ func TestLnGamma(t *testing.T) {
 	}
 	var start int64
 	Seed(10)
-	start = time.Nanoseconds()
+	start = time.Now()
 	for i := 0; i < 1e6; i++ {
 		x := NextGamma(10, 10)
 		math.Lgamma(x)
 	}
-	duration2 := float64(time.Nanoseconds()-start) / 1e9
+	duration2 := float64(time.Now()-start) / 1e9
 	Seed(10)
-	start = time.Nanoseconds()
+	start = time.Now()
 	for i := 0; i < 1e6; i++ {
 		x := NextGamma(10, 10)
 		LnΓ(x)
 	}
-	duration1 := float64(time.Nanoseconds()-start) / 1e9
+	duration1 := float64(time.Now()-start) / 1e9
 	fmt.Printf("Mine was %f\nTheirs was %f\n", duration1, duration2)
 }
-*/
+
 func XTestGen(t *testing.T) {
 	fmt.Printf("NextUniform => %f\n", NextUniform())
 	fmt.Printf("NextExp => %f\n", NextExp(1.5))
@@ -491,7 +491,7 @@ fmt.Println(FInv_CDF_For(3, 3, 0.27002231), " = 0.46")
 
 
 /*
-// test for Binomial p confidence interval
+// test for Binomial p confidence interval  // failed due to some unknown bug
 func TestBinomP_CI(t *testing.T) {
 	fmt.Println("")
 	fmt.Println("test for Binomial p confidence interval")
