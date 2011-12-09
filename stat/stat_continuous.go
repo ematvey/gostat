@@ -54,6 +54,7 @@ func Gamma_PDF(α float64, λ float64) func(x float64) float64 {
 		return expPart(x) * pow(λ*x, α-1) / Γ(α)
 	}
 }
+
 func Gamma_LnPDF(α float64, λ float64) func(x float64) float64 {
 	expPart := Exp_LnPDF(λ)
 	return func(x float64) float64 {
@@ -135,6 +136,9 @@ func Xsquare(n int64) func() float64 {
 		return NextXsquare(n)
 	}
 }
+
+//Quantile function of the chi-square distribution
+// ChiSqInv  return = gaminv (x, n / 2, 2)
 
 func StudentsT_PDF(ν float64) func(x float64) float64 {
 	normalization := Γ((ν+1)/2) / (sqrt(ν*π) * Γ(ν/2))

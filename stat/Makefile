@@ -14,6 +14,7 @@ GOFILES=\
 	normal.go\
 	binomial.go\
 	binom_cl.go\
+	igamma.go\
 	discreteCDFs.go\
 
 include $(GOROOT)/src/Make.pkg
