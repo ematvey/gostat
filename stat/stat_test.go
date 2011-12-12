@@ -8,6 +8,8 @@ import (
 	"fmt"
 )
 
+var Seed func(int64) = rand.Seed
+
 func XTestDir(t *testing.T) {
 	α := []float64{4, 5, 6}
 	dgen := Dirichlet(α)
@@ -46,21 +48,25 @@ func TestLnGamma(t *testing.T) {
 			t.Error(fmt.Sprintf("For %v: %v vs %v", x, g1, g2))
 		}
 	}
-	var start int64
+	//var start int64
 	Seed(10)
-	start = time.Now()
+	start := time.Now()
 	for i := 0; i < 1e6; i++ {
 		x := NextGamma(10, 10)
 		math.Lgamma(x)
 	}
-	duration2 := float64(time.Now()-start) / 1e9
+	now:=time.Now()
+	duration2 := float64(now.Sub(start)) / 1e9
+
+	//duration2 := float64(time.Now()-start) / 1e9
 	Seed(10)
 	start = time.Now()
 	for i := 0; i < 1e6; i++ {
 		x := NextGamma(10, 10)
 		LnΓ(x)
 	}
-	duration1 := float64(time.Now()-start) / 1e9
+	now=time.Now()
+	duration1 := float64(now.Sub(start)) / 1e9
 	fmt.Printf("Mine was %f\nTheirs was %f\n", duration1, duration2)
 }
 
@@ -455,10 +461,10 @@ func TestBetaInv_CDF_For(t *testing.T) {
 	}
 }
 
-// test for FInv_CDF_For
-func TestFInv_CDF_For(t *testing.T) {
+// test for F_InvCDF_For
+func TestF_InvCDF_For(t *testing.T) {
 	fmt.Println("")
-	fmt.Println("test for FInv_CDF_For")
+	fmt.Println("test for F_InvCDF_For")
 	fmt.Println("")
 	var acc, df1, df2, x, y, z, p float64
 	acc = 1e-4
@@ -479,14 +485,14 @@ func TestFInv_CDF_For(t *testing.T) {
 	x=0.46
 	cdf:=F_CDF(df1, df2)
 	p=cdf(x)
-	y = FInv_CDF_For(df1, df2, p)
+	y = F_InvCDF_For(df1, df2, p)
 
 	if !check(x, y, acc){
 		t.Error()
 	}
 
-fmt.Println(FInv_CDF_For(3, 3, 0.1), " = 0.19")
-fmt.Println(FInv_CDF_For(3, 3, 0.27002231), " = 0.46")
+fmt.Println(F_InvCDF_For(3, 3, 0.1), " = 0.19")
+fmt.Println(F_InvCDF_For(3, 3, 0.27002231), " = 0.46")
 }
 
 

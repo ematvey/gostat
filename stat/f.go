@@ -42,8 +42,8 @@ func F_CDF_At(df1, df2, x float64) float64 {
 	return cdf(x)
 }
 
-// Inverse CDF of F-distribution
-func FInv_CDF(df1, df2 float64) func(p float64) float64 {
+// Inverse CDF (Quantile) function of F-distribution
+func F_InvCDF(df1, df2 float64) func(p float64) float64 {
 	return func(p float64) float64 {
 	if p < 0.0 {
 		panic(fmt.Sprintf("p < 0"))
@@ -62,9 +62,9 @@ func FInv_CDF(df1, df2 float64) func(p float64) float64 {
 	}
 }
 
-// Inverse CDF of F-distribution for probability p
-func FInv_CDF_For(df1, df2, p float64) float64 {
-	cdf:=FInv_CDF(df1, df2)
+// Value of the inverse CDF of F-distribution for probability p
+func F_InvCDF_For(df1, df2, p float64) float64 {
+	cdf:=F_InvCDF(df1, df2)
 	return cdf(p)
 }
 
