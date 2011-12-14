@@ -1,5 +1,9 @@
 package stat
 
+import (
+	. "go-fn.googlecode.com/hg/fn"
+)
+
 func Dirichlet_PDF(α []float64) func(θ []float64) float64 {
 	return func(θ []float64) float64 {
 		if len(θ) != len(α) {

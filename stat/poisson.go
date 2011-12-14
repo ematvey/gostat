@@ -4,6 +4,7 @@ package stat
 
 import (
 	"math"
+	. "go-fn.googlecode.com/hg/fn"
 )
 
 /*

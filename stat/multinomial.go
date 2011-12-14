@@ -1,5 +1,9 @@
 package stat
 
+import (
+	. "go-fn.googlecode.com/hg/fn"
+)
+
 func Multinomial_PMF(θ []float64, n int64) func(x []int64) float64 {
 	return func(x []int64) float64 {
 		if len(x) != len(θ) {

@@ -4,7 +4,7 @@ package stat
 import (
 	"fmt"
 	"math"
-	"go-fn.googlecode.com/hg/fn"
+	. "go-fn.googlecode.com/hg/fn"
 )
 
 // Probability density function
@@ -55,27 +55,27 @@ func NextGamma(α float64, λ float64) float64 {
 	}
 
 	//Tadikamalla ACM '73
-	A := α - 1
-	B := 0.5 + 0.5*sqrt(4*α-3)
-	C := A * (1 + B) / B
-	D := (B - 1) / (A * B)
-	S := A / B
-	P := 1.0 / (2 - exp(-S))
+	a := α - 1
+	b := 0.5 + 0.5*sqrt(4*α-3)
+	c := a * (1 + b) / b
+	d := (b - 1) / (a * b)
+	s := a / b
+	p := 1.0 / (2 - exp(-s))
 	var x, y float64
 	for i := 1; ; i++ {
 		u := NextUniform()
-		if u > P {
-			var E float64
-			for E = -log((1 - u) / (1 - P)); E > S; E = E - A/B {
+		if u > p {
+			var e float64
+			for e = -log((1 - u) / (1 - p)); e > s; e = e - a/b {
 			}
-			x = A - B*E
-			y = A - x
+			x = a - b*e
+			y = a - x
 		} else {
-			x = A - B*log(u/P)
-			y = x - A
+			x = a - b*log(u/p)
+			y = x - a
 		}
 		u2 := NextUniform()
-		if log(u2) <= A*log(D*x)-x+y/B+C {
+		if log(u2) <= a*log(d*x)-x+y/b+c {
 			break
 		}
 	}
@@ -95,7 +95,7 @@ func Gamma_CDF(k float64, θ float64) func(x float64) float64 {
 		if x < 0 {
 			return 0
 		}
-		return fn.Iγ(k, x/θ) / fn.Γ(k)
+		return Iγ(k, x/θ) / Γ(k)
 	}
 }
 

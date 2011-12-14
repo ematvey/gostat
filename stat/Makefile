@@ -22,9 +22,7 @@ GOFILES=\
 	 normal.go \
 	 poisson.go \
 	 range.go \
-	 stat_math.go \
 	 stat_npb.go \
-	 stat_test.go \
 	 stat_util.go \
 	 t.go \
 	 uniform.go \

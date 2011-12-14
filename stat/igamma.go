@@ -4,7 +4,7 @@ package stat
 
 import (
 	"math"
-	"go-fn.googlecode.com/hg/fn"
+	. "go-fn.googlecode.com/hg/fn"
 )
 
 // Inverse Gamma distribution: probability density function
@@ -31,7 +31,7 @@ func InvGamma_PDF_At(a, b float64) func(x float64) float64 {
 // Inverse Gamma distribution: cumulative distribution function
 func InvGamma_CDF(a, b float64) func(x float64) float64 {
 	return func(x float64) float64 {
-		return 1 - fn.IΓ(a, b*1.0/x)
+		return 1 - IΓ(a, b*1.0/x)
 	}
 }
 

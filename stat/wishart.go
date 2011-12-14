@@ -2,6 +2,7 @@ package stat
 
 import (
 	m "gomatrix.googlecode.com/hg/matrix"
+	. "go-fn.googlecode.com/hg/fn"
 )
 
 func Wishart_PDF(n int, V *m.DenseMatrix) func(W *m.DenseMatrix) float64 {

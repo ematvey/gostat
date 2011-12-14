@@ -3,7 +3,7 @@
 package stat
 
 import (
-	"go-fn.googlecode.com/hg/fn"
+	. "go-fn.googlecode.com/hg/fn"
 )
 
 func Xsquare_PDF(n int64) func(x float64) float64 {
@@ -40,7 +40,7 @@ func Xsquare(n int64) func() float64 {
 //Cumulative density function of the Chi-Squared distribution
 func Xsquare_CDF(n int64) func(p float64) float64 {
 	return func(p float64) float64 {
-		return fn.Γr(float64(n)/2, p/2)
+		return Γr(float64(n)/2, p/2)
 	}
 }
 

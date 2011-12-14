@@ -3,7 +3,7 @@ package stat
 
 import (
 	"fmt"
-	"go-fn.googlecode.com/hg/fn"
+	. "go-fn.googlecode.com/hg/fn"
 )
 
 func F_PDF(d1 float64, d2 float64) func(x float64) float64 {
@@ -31,7 +31,7 @@ func F(d1 int64, d2 int64) func() float64 {
 func F_CDF(df1, df2 float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		y := df1 * x / (df1*x + df2)
-		return fn.BetaIncReg(df1/2.0, df2/2.0, y)
+		return BetaIncReg(df1/2.0, df2/2.0, y)
 	}
 }
 

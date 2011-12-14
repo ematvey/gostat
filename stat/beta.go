@@ -5,7 +5,7 @@ package stat
 import (
 	"fmt"
 	"math"
-	"go-fn.googlecode.com/hg/fn"
+	. "go-fn.googlecode.com/hg/fn"
 )
 
 func bisect(x, p, a, b, xtol, ptol float64) float64 {
@@ -301,7 +301,7 @@ func BetaInv_CDF(α, β float64)  func(p float64) float64 {
 
     for (b - a) > precision {
         x = (a + b) / 2
-        if fn.BetaIncReg(α, β, x) > p {
+        if BetaIncReg(α, β, x) > p {
            b = x
         } else {
             a = x

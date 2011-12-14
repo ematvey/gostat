@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	mx "gomatrix.googlecode.com/hg/matrix"
+	. "go-fn.googlecode.com/hg/fn"
 )
 
 func checkMatrixT(M, Omega, Sigma *mx.DenseMatrix, n int) {

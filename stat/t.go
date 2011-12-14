@@ -1,5 +1,9 @@
 package stat
 
+import (
+	. "go-fn.googlecode.com/hg/fn"
+)
+
 func StudentsT_PDF(ν float64) func(x float64) float64 {
 	normalization := Γ((ν+1)/2) / (sqrt(ν*π) * Γ(ν/2))
 	return func(x float64) float64 {

@@ -1,5 +1,9 @@
 package stat
 
+import (
+	. "go-fn.googlecode.com/hg/fn"
+)
+
 // Probability Mass Function for the Binomial distribution
 func Binomial_PMF(ρ float64, n int64) func(i int64) float64 {
 	return func(i int64) float64 {

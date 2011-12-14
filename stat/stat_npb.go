@@ -1,5 +1,9 @@
 package stat
 
+import (
+	. "go-fn.googlecode.com/hg/fn"
+)
+
 func CRP_PMF(α float64) func(x []int64) float64 {
 	return func(x []int64) float64 {
 		n := int64(len(x))

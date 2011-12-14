@@ -2,6 +2,10 @@
 
 package stat
 
+import (
+	. "go-fn.googlecode.com/hg/fn"
+)
+
 func NegativeBinomial_PMF(ρ float64, r int64) func(i int64) float64 {
 	return func(k int64) float64 {
 		return float64(Choose(k+r-1, r-1)) * pow(ρ, float64(r)) * pow(1-ρ, float64(k))

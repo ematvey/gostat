@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"testing"
 	"fmt"
+	. "go-fn.googlecode.com/hg/fn"
 )
 
 var Seed func(int64) = rand.Seed
