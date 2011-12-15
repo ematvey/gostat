@@ -90,8 +90,7 @@ func Gamma(α float64, λ float64) func() float64 {
 	return func() float64 { return NextGamma(α, λ) }
 }
 
-
-// Cumulative distribution function, analytic solution
+// Cumulative distribution function, analytic solution, did not pass some tests!
 func Gamma_CDF(k float64, θ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if k < 0 || θ < 0 {
@@ -103,6 +102,39 @@ func Gamma_CDF(k float64, θ float64) func(x float64) float64 {
 		return Iγ(k, x/θ) / Γ(k)
 	}
 }
+
+// Cumulative distribution function, for integer k only
+func Gamma_CDFint(k int64, θ float64) func(x float64) float64 {
+	return func(x float64) float64 {
+		if k < 0 || θ < 0 {
+			panic(fmt.Sprintf("k < 0 || θ < 0"))
+		}
+		if x < 0 {
+			return 0
+		}
+		return Iγint(k, x/θ) / Γ(float64(k))
+	}
+}
+
+/*
+// Cumulative distribution function, using gamma incomplete integral  DOES NOT WORK !!!
+func Gamma_CDF(k float64, θ float64) func(x float64) float64 {
+	return func(x float64) float64 {
+		if k < 0 || θ < 0 {
+			panic(fmt.Sprintf("k < 0 || θ < 0"))
+		}
+		if x < 0 {
+			return 0
+		}
+		return IGam(θ, k*x)
+	}
+}
+*/
+
+
+
+
+
 
 // Value of the probability density function at x
 func Gamma_PDF_At(k, θ, x float64)  float64 {

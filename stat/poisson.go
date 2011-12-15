@@ -89,7 +89,7 @@ func Poisson_CDF(λ float64) func(k int64) float64 {
 
 func Poisson_CDF_a(λ float64) func(k int64) float64 {	// analytic solution, less precision
 	return func(k int64) float64 {
-		p:=math.Exp(math.Log(IΓ(((float64)(k+1)), λ)) - (LnFact(k)))
+		p:=math.Exp(math.Log(IΓint(k+1, λ)) - (LnFact(k)))
 		return p
 	}
 }
