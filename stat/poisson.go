@@ -54,6 +54,11 @@ func Poisson_PMF(λ float64) func(k int64) float64 {
 	}
 }
 
+func Poisson_PMF_At(λ float64, k int64) float64 {
+	pmf := Poisson_PMF(λ)
+	return pmf(k)
+}
+
 func NextPoisson(λ float64) int64 {
 	// this can be improved upon
 	i := iZero
@@ -70,7 +75,7 @@ func Poisson(λ float64) func() int64 {
 	}
 }
 
-func Poisson_CDF_trivial(λ float64) func(k int64) float64 {  // trivial (not working due to bug in Poisson_PMF(λ) implementation, redo with Incomplete Gamma
+func Poisson_CDF(λ float64) func(k int64) float64 {  
 	return func(k int64) float64 {
 		var p float64 = 0
 		var i int64
@@ -81,14 +86,20 @@ func Poisson_CDF_trivial(λ float64) func(k int64) float64 {  // trivial (not wo
 		return p
 	}
 }
-func Poisson_CDF(λ float64) func(k int64) float64 { 
+
+func Poisson_CDF_a(λ float64) func(k int64) float64 {	// analytic solution, less precision
 	return func(k int64) float64 {
 		p:=math.Exp(math.Log(IΓ(((float64)(k+1)), λ)) - (LnFact(k)))
 		return p
 	}
 }
 
-func LnPoisson_CDF(λ float64) func(k int64) float64 { 
+func Poisson_CDF_At(λ float64, k int64) float64 {
+	cdf := Poisson_CDF(λ)
+	return cdf(k)
+}
+
+func LnPoisson_CDF_a (λ float64) func(k int64) float64 { 	// analytic solution, less precision
 	return func(k int64) float64 {
 		k1:=(float64)(k+1)
 		return log(IΓ(k1, λ)) - LnFact(k)

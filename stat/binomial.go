@@ -13,6 +13,12 @@ func Binomial_PMF(ρ float64, n int64) func(i int64) float64 {
 	}
 }
 
+func Binomial_PMF_At(ρ float64, n, k int64) float64 {
+	pmf := Binomial_PMF(ρ, n)
+	return pmf(k)
+}
+
+
 // Natural logarithm of Probability Mass Function for the Binomial distribution
 func Binomial_LnPMF(ρ float64, n int64) func(i int64) float64 {
 	return func(i int64) float64 {
@@ -52,6 +58,11 @@ func Binomial_CDF(ρ float64, n int64) func(k int64) float64 {
 		p:= Beta_CDF_At((float64)(n-k), (float64)(k+1), 1-ρ)
 		return p
 	}
+}
+
+func Binomial_CDF_At(ρ float64, n, k int64) float64 {
+	cdf := Binomial_CDF(ρ, n)
+	return cdf(k)
 }
 
 

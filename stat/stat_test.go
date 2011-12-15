@@ -308,31 +308,6 @@ func TestPoisson(t *testing.T) {
 	fmt.Println("test for Poisson_CDF")
 	fmt.Println("")
 
-/*
-	for count = 0; count < tests;  {
-		λ=z*rand.Float64()
-		cdf:=Poisson_CDF(λ)
-		k=int64(math.Ceiling(m*λ))
-		x=cdf(k)
-		y=1.00  // in this distance, CDF should be close to 1.00
-		if !check(x, y, acc){
-			t.Error()
-			fmt.Println("k: ", k, "λ: ", λ, "prob: ", x, "err: ", 1-x/y)
-
-		}
-		count++
-	}
-
-	λ = 10.0
-	k = 5
-	cdf3:=Poisson_CDF(λ)
-	cdf4:=LnPoisson_CDF(λ)
-	x = math.Log(cdf3(k))
-	y = cdf4(k)
-	if !check(x, y, acc){
-		t.Error()
-	}
-*/
 
 	λ = 0.15164076846159652
 	k = 1
@@ -342,17 +317,6 @@ func TestPoisson(t *testing.T) {
 	if !check(x, y, acc){
 		t.Error()
 		fmt.Println("k: ", k, "λ: ", λ, "prob: ", x, "err: ", 1-x/y)
-	}
-
-	//test for LnPoisson_CDF
-	λ = 10.0
-	k = 5
-	cdf3:=Poisson_CDF(λ)
-	cdf4:=LnPoisson_CDF(λ)
-	x = math.Log(cdf3(k))
-	y = cdf4(k)
-	if !check(x, y, acc){
-		t.Error()
 	}
 
 

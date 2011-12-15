@@ -1,4 +1,6 @@
 // Gamma distribution
+// k > 0		shape parameter
+// θ (Theta) > 0	scale parameter
 
 package stat
 import (
@@ -7,6 +9,7 @@ import (
 	. "go-fn.googlecode.com/hg/fn"
 )
 
+/* did not pass test, so commented out
 // Probability density function
 func Gamma_PDF(α float64, λ float64) func(x float64) float64 {
 	expPart := Exp_PDF(λ)
@@ -17,9 +20,10 @@ func Gamma_PDF(α float64, λ float64) func(x float64) float64 {
 		return expPart(x) * pow(λ*x, α-1) / Γ(α)
 	}
 }
+*/
 
-// Another algorithm for Gamma PDF
-func Gamma_PDF_2(k float64, θ float64) func(x float64) float64 {
+// Probability density function
+func Gamma_PDF(k float64, θ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if x < 0 {
 			return 0
@@ -86,7 +90,8 @@ func Gamma(α float64, λ float64) func() float64 {
 	return func() float64 { return NextGamma(α, λ) }
 }
 
-// Cumulative distribution function
+
+// Cumulative distribution function, analytic solution
 func Gamma_CDF(k float64, θ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if k < 0 || θ < 0 {
@@ -100,13 +105,13 @@ func Gamma_CDF(k float64, θ float64) func(x float64) float64 {
 }
 
 // Value of the probability density function at x
-func Gamma_PDF_At(k , θ, x float64)  float64 {
+func Gamma_PDF_At(k, θ, x float64)  float64 {
 	pdf := Gamma_PDF(k , θ)
 	return pdf(x)
 }
 
 // Value of the cumulative distribution function at x
-func Gamma_CDF_At(k , θ, x float64)  float64 {
+func Gamma_CDF_At(k, θ, x float64)  float64 {
 	cdf := Gamma_CDF(k , θ)
 	return cdf(x)
 }

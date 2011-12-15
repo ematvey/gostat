@@ -116,19 +116,8 @@ func Beta(α float64, β float64) func() float64 {
 
 // Value of PDF of Beta distribution(α, β) at x
 func Beta_PDF_At(α, β, x float64) float64 {
-	var res float64
-
-		switch {
-		case x == 0:
-			res = 0.0
-		case x == 1.0:
-			res = 1.0
-		default:
 	pdf := Beta_PDF(α, β)
-	res = pdf(x)
-
-		}
-	return res
+	return pdf(x)
 }
 
 // CDF of Beta-distribution
