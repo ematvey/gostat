@@ -9,5 +9,5 @@ import (
 var Seed func(int64) = rand.Seed
 
 func TimeSeed() {
-	Seed(time.Nanoseconds())
+	Seed(time.Now().Unix())
 }

@@ -1,9 +1,9 @@
 package stat
 
 import (
+	mx "code.google.com/p/gomatrix/matrix"
 	"fmt"
 	"math"
-	mx "gomatrix.googlecode.com/hg/matrix"
 )
 
 func checkMatrixT(M, Omega, Sigma *mx.DenseMatrix, n int) {
@@ -16,10 +16,10 @@ func checkMatrixT(M, Omega, Sigma *mx.DenseMatrix, n int) {
 		panic("Omega is not square")
 	}
 	if Sigma.Rows() != m {
-		panic(fmt.Sprintf("Sigma.Cols != M.Cols, %d != %d", Sigma.Cols(), m))	
+		panic(fmt.Sprintf("Sigma.Cols != M.Cols, %d != %d", Sigma.Cols(), m))
 	}
 	if Sigma.Cols() != Sigma.Rows() {
-		panic("Sigma is not square")	
+		panic("Sigma is not square")
 	}
 	if n <= 0 {
 		panic("n <= 0")
@@ -37,27 +37,33 @@ func MatrixT_PDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatrix)
 
 	var norm float64 = 1
 
-	norm *= GammaPRatio(p, 0.5 * (nf + mf + pf - 1), 0.5 * (nf + pf - 1))
-	norm *= math.Pow(math.Pi, -0.5 * mf * pf)
-	norm *= math.Pow(Omega.Det(), -0.5 * mf)
-	norm *= math.Pow(Sigma.Det(), -0.5 * pf)
-	
+	norm *= GammaPRatio(p, 0.5*(nf+mf+pf-1), 0.5*(nf+pf-1))
+	norm *= math.Pow(math.Pi, -0.5*mf*pf)
+	norm *= math.Pow(Omega.Det(), -0.5*mf)
+	norm *= math.Pow(Sigma.Det(), -0.5*pf)
+
 	SigmaInv, err := Sigma.Inverse()
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 	OmegaInv, err := Omega.Inverse()
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 
 	return func(T *mx.DenseMatrix) (l float64) {
 		l = norm
 
 		diff, err := T.MinusDense(M)
-		if err != nil { panic(err) }
+		if err != nil {
+			panic(err)
+		}
 		inner := OmegaInv.Copy()
 		inner, _ = inner.TimesDense(diff)
 		inner, _ = inner.TimesDense(SigmaInv)
 		inner, _ = inner.TimesDense(diff.Transpose())
 
-		l *= math.Pow(inner.Det(), -0.5 * (nf + mf + pf - 1))
+		l *= math.Pow(inner.Det(), -0.5*(nf+mf+pf-1))
 
 		return
 	}
@@ -65,7 +71,7 @@ func MatrixT_PDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatrix)
 
 func MatrixT_LnPDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatrix) (ll float64) {
 	checkMatrixT(M, Omega, Sigma, n)
-	
+
 	nf := float64(n)
 	p := M.Rows()
 	pf := float64(p)
@@ -74,21 +80,27 @@ func MatrixT_LnPDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatri
 
 	var norm float64 = 0
 
-	norm += LnGammaPRatio(p, 0.5 * (nf + mf + pf - 1), 0.5 * (nf + pf - 1))
-	norm += math.Pow(math.Pi, -0.5 * mf * pf)
-	norm += math.Pow(Omega.Det(), -0.5 * mf)
-	norm += math.Pow(Sigma.Det(), -0.5 * pf)
-	
+	norm += LnGammaPRatio(p, 0.5*(nf+mf+pf-1), 0.5*(nf+pf-1))
+	norm += math.Pow(math.Pi, -0.5*mf*pf)
+	norm += math.Pow(Omega.Det(), -0.5*mf)
+	norm += math.Pow(Sigma.Det(), -0.5*pf)
+
 	SigmaInv, err := Sigma.Inverse()
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 	OmegaInv, err := Omega.Inverse()
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 
 	return func(T *mx.DenseMatrix) (ll float64) {
 		ll = norm
 
 		diff, err := T.MinusDense(M)
-		if err != nil { panic(err) }
+		if err != nil {
+			panic(err)
+		}
 		inner := OmegaInv.Copy()
 		inner, _ = inner.TimesDense(diff)
 		inner, _ = inner.TimesDense(SigmaInv)
@@ -102,7 +114,7 @@ func MatrixT_LnPDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatri
 
 func MatrixT(M, Omega, Sigma *mx.DenseMatrix, n int) func() (T *mx.DenseMatrix) {
 	checkMatrixT(M, Omega, Sigma, n)
-	
+
 	fmt.Println("M:", M)
 	fmt.Println("Sigma:", Sigma)
 	fmt.Println("Omega:", Omega)
@@ -110,8 +122,10 @@ func MatrixT(M, Omega, Sigma *mx.DenseMatrix, n int) func() (T *mx.DenseMatrix) 
 	p := M.Rows()
 	m := M.Cols()
 
-	OmegaInv, err := Omega.Inverse() 
-	if err != nil { panic(err) }
+	OmegaInv, err := Omega.Inverse()
+	if err != nil {
+		panic(err)
+	}
 
 	Sdist := Wishart(n+p-1, OmegaInv)
 
@@ -120,16 +134,24 @@ func MatrixT(M, Omega, Sigma *mx.DenseMatrix, n int) func() (T *mx.DenseMatrix) 
 	return func() (T *mx.DenseMatrix) {
 		S := Sdist()
 		Sinv, err := S.Inverse()
-		if err != nil { panic(err) }
+		if err != nil {
+			panic(err)
+		}
 		Sinvc, err := Sinv.Cholesky()
-		if err != nil { panic(err) }
+		if err != nil {
+			panic(err)
+		}
 		X := Xdist()
 		fmt.Println("Sinvc:", Sinvc)
 		fmt.Println("X:", X)
 		T, err = Sinvc.Transpose().TimesDense(X)
-		if err != nil { panic(err) }
+		if err != nil {
+			panic(err)
+		}
 		err = T.AddDense(M)
-		if err != nil { panic(err) }
+		if err != nil {
+			panic(err)
+		}
 		return
 	}
 }

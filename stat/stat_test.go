@@ -1,11 +1,11 @@
 package stat
 
 import (
-	"time"
+	"code.google.com/p/gomatrix/matrix"
+	"fmt"
 	"math"
 	"testing"
-	"fmt"
-	"gomatrix.googlecode.com/hg/matrix"
+	"time"
 )
 
 func XTestDir(t *testing.T) {
@@ -48,19 +48,19 @@ func TestLnGamma(t *testing.T) {
 	}
 	var start int64
 	Seed(10)
-	start = time.Nanoseconds()
+	start = time.Now()
 	for i := 0; i < 1e6; i++ {
 		x := NextGamma(10, 10)
 		math.Lgamma(x)
 	}
-	duration2 := float64(time.Nanoseconds()-start) / 1e9
+	duration2 := float64(time.Now().Sub(start)) / 1e9
 	Seed(10)
-	start = time.Nanoseconds()
+	start = time.Now()
 	for i := 0; i < 1e6; i++ {
 		x := NextGamma(10, 10)
 		LnΓ(x)
 	}
-	duration1 := float64(time.Nanoseconds()-start) / 1e9
+	duration1 := float64(time.Now().Sub(start)) / 1e9
 	fmt.Printf("Mine was %f\nTheirs was %f\n", duration1, duration2)
 }
 
