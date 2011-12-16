@@ -20,13 +20,13 @@ func Binom_p_ConfI(n int64, p, alpha float64) (float64, float64) {
 	if k <= 0 {
 		lCL = 0.0
 	} else {
-		lCL = 1.0 / (1.0 + (nn-k+1)*F_InvCDF_For(alpha, 2*nn-2*k+2, 2*k)/k)
+		lCL = 1.0 / (1.0 + (nn-k+1)*F_Qtl_For(alpha, 2*nn-2*k+2, 2*k)/k)
 	}
 
 	if k >= nn {
 		uCL = 1.0
 	} else {
-		uCL = 1.0 / (1.0 + (nn-k)/((k+1)*F_InvCDF_For(alpha, 2*k+2, 2*nn-2*k)))
+		uCL = 1.0 / (1.0 + (nn-k)/((k+1)*F_Qtl_For(alpha, 2*k+2, 2*nn-2*k)))
 	}
 	return lCL, uCL
 }

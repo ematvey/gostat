@@ -149,7 +149,7 @@ func Gamma_CDF_At(k, θ, x float64)  float64 {
 }
 
 // Inverse CDF (Quantile) function
-func Gamma_InvCDF(k float64, θ float64) func(x float64) float64 {
+func Gamma_Qtl(k float64, θ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		var eps, y_new, h float64
 		eps = 1e-4
@@ -173,8 +173,8 @@ func Gamma_InvCDF(k float64, θ float64) func(x float64) float64 {
 }
 
 // Value of the inverse CDF for probability p
-func Gamma_InvCDF_For(k, θ, p float64)  float64 {
-	cdf:=Gamma_InvCDF(k, θ)
+func Gamma_Qtl_For(k, θ, p float64)  float64 {
+	cdf:=Gamma_Qtl(k, θ)
 	return cdf(p)
 }
 

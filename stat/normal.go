@@ -93,8 +93,8 @@ func Normal_CDF(μ, σ float64) func(x float64) float64 {
 }
 
 // Inverse CDF of Normal distribution for probability p //// ??? only *sigma? from GSL
-func NormalInv_CDF_For(p, sigma float64) float64 {
-	return sigma * Z_InvCDF_For(p)
+func Normal_Qtl_For(p, sigma float64) float64 {
+	return sigma * Z_Qtl_For(p)
 }
 
 // Probability Density Function for the Standard Normal distribution
@@ -120,7 +120,7 @@ func Z_CDF_At(x float64) float64 {
 }
 
 // Inverse CDF of Standard Normal distribution for probability p
-func Z_InvCDF_For(p float64) float64 {
+func Z_Qtl_For(p float64) float64 {
 
 	var r, x, pp, dp float64
 

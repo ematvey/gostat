@@ -150,7 +150,7 @@ func Beta_CDF_At(α, β, x float64) float64 {
 }
 
 
-// BetaInv_CDF_For() evaluates inverse CDF of Beta distribution(α, β) for probability p
+// Beta_Qtl_For() evaluates inverse CDF of Beta distribution(α, β) for probability p
 // 
 // References:
 //
@@ -163,7 +163,7 @@ func Beta_CDF_At(α, β, x float64) float64 {
 // Cornish-Fisher type," Annals of Mathematical Statistics, volume 39,
 // number 8, August 1968, pages 1264-1273.
 /*
-func BetaInv_CDF_For(α float64, β float64, p float64) float64 {
+func Beta_Qtl_For(α float64, β float64, p float64) float64 {
 	var res float64
 	switch {
 	case (p < 0.0 || p > 1.0):
@@ -267,7 +267,7 @@ end:
 // β: Parameter of the distribution
 // A: Optional lower bound to the interval of x
 // B: Optional upper bound to the interval of x
-func BetaInv_CDF(α, β float64)  func(p float64) float64 {
+func Beta_Qtl(α, β float64)  func(p float64) float64 {
 	return func(p float64) float64 {
     var x float64 = 0
     var a float64 = 0
@@ -304,8 +304,8 @@ func BetaInv_CDF(α, β float64)  func(p float64) float64 {
 	}
 }
 
-func BetaInv_CDF_For(α, β, p float64) float64 {
-	cdf:=BetaInv_CDF(α, β)
+func Beta_Qtl_For(α, β, p float64) float64 {
+	cdf:=Beta_Qtl(α, β)
 	return cdf(p)
 }
 

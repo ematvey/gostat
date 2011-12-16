@@ -1,4 +1,4 @@
-package inf
+package bayes
 
 /*
  functions for Bayesian linear regression

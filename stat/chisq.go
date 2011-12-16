@@ -46,10 +46,10 @@ func Xsquare_CDF(n int64) func(p float64) float64 {
 
 
 //Inverse CDF (Quantile) function of the Chi-Squared distribution
-func Xsquare_InvCDF(n int64) func(p float64) float64 {
+func Xsquare_Qtl(n int64) func(p float64) float64 {
 	return func(p float64) float64 {
-		//return Gamma_InvCDF_At(n/2, 2, p)  to be implemented
-		return Gamma_InvCDF_For(float64(n)/2, 2, p)
+		//return Gamma_Qtl_At(n/2, 2, p)  to be implemented
+		return Gamma_Qtl_For(float64(n)/2, 2, p)
 	}
 }
 
