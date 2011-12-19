@@ -138,7 +138,6 @@ func BinomPi_CrI_BPriNApprox(α,  β, alpha float64, n, k int64) (float64, float
 
 	var post_mean, post_var, post_α, post_β, z, low, upp float64
 
-
 	post_α=α+float64(k)
 	post_β=β+float64(n-k)
 
@@ -151,4 +150,35 @@ func BinomPi_CrI_BPriNApprox(α,  β, alpha float64, n, k int64) (float64, float
 	return low, upp
 }
 
+// Prior
+func BinomPi_Prior(pi float64, n, k int64) float64 {
+	return Beta_PDF_At(α, β, pi)
+}
+
+// Likelihood
+func BinomPi_Like(pi float64, n, k int64) float64 {
+	return = math.Exp(pi, k)*math.Exp(1-pi, n-k)
+}
+
+// Posterior PDF, Beta prior
+func BinomPi_PDF_BPri(k, n int64, α, β, p float64) float64 {
+	if k>n {
+		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
+	}
+	if α<=0||β<=0 {
+		panic(fmt.Sprintf("The parameters of the prior must be greater than zero"))
+	}
+	return	Beta_PDF_For(α+float64(k), β+float64(n-k), p)
+}
+
+// Posterior CDF, Beta prior
+func BinomPi_CDF_BPri(k, n int64, α, β, p float64) float64 {
+	if k>n {
+		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
+	}
+	if α<=0||β<=0 {
+		panic(fmt.Sprintf("The parameters of the prior must be greater than zero"))
+	}
+	return	Beta_CDF_For(α+float64(k), β+float64(n-k), p)
+}
 
