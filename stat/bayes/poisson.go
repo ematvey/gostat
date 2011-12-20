@@ -49,7 +49,7 @@ func PoissonLambda_Qtl_GPri(y int64, r, v, prob float64) float64 {
 	return Gamma_Qtl_For(r1, 1/v1, prob)
 }
 
-/*
+
 // Likelihood of Poisson λ (rate) PDF.
 func PoissonLambda_Like_PDF(y, n int64, r, v float64) float64 {
 	var r1, v1 float64
@@ -66,7 +66,7 @@ func PoissonLambda_Like_CDF(y, n int64, r, v float64) float64 {
 	v1 = float64(n)
 	return Gamma_CDF_At(r1, 1/v1, float64(y))
 }
-*/
+
 
 // Equivalent sample size of the prior 
 // Bolstad 2007 (2e): Chapter 10, p. 187.
