@@ -144,7 +144,7 @@ func Gamma_PDF_At(k, θ, x float64)  float64 {
 
 // Value of the cumulative distribution function at x
 func Gamma_CDF_At(k, θ, x float64)  float64 {
-	cdf := Gamma_CDF(k , θ)
+	cdf := Gamma_CDFint(int64(math.Ceil(k)) , θ)
 	return cdf(x)
 }
 
@@ -152,7 +152,7 @@ func Gamma_CDF_At(k, θ, x float64)  float64 {
 func Gamma_Qtl(k float64, θ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		var eps, y_new, h float64
-		eps = 1e-4
+		eps = 1e-10
 		y := k * θ
 		y_old := y
 	L:
