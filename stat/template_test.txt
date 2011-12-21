@@ -1,0 +1,128 @@
+// Template for testing functions
+// 's/DISTRIBUTION/MyDistribution/g'
+
+package stat
+
+import (
+	"math"
+	"testing"
+	"fmt"
+)
+
+func check (x, y float64) bool {
+	const acc float64 = 1e-4	// accuracy
+	var z float64
+		if x/y > 1.00 {
+			z = y/x
+		} else {
+			z = x/y
+		}
+		if 1-z > acc  {
+			return false
+		}
+		return true
+}
+
+// test against known values
+func TestDISTRIBUTION_PDF_CDF(t *testing.T) {
+	var (
+	x, p []float64
+	i int64
+	)
+
+	fmt.Println("")
+	fmt.Println("test for DISTRIBUTION PDF and CDF")
+	fmt.Println("")
+
+	// edit the following values:  >>>
+	α=6
+	β=6
+	x=[]{0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5]
+	p=[]{0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5]
+	<<<  //
+
+	for i = 0; i < len(x); i++ {
+		prob=DISTRIBUTION_PDF_At(α, β, x[i])
+			if !check(prob, p[i]){
+				t.Error()
+			}
+		prob=DISTRIBUTION_CDF_At(α, β, x[i])
+			if !check(prob, p[i]){
+				t.Error()
+			}
+	}
+}
+
+
+
+
+
+
+
+// test for inverse CDF
+func TestDISTRIBUTIONInv_CDF_For(t *testing.T) {
+	fmt.Println("")
+	fmt.Println("test for DISTRIBUTIONInv_CDF_For(α, β, p)")
+	fmt.Println("")
+	var x, y, z, err, α, β, p float64
+	var count, tests int64
+
+	for count = 0; count < tests;  {
+		α=6*rand.Float64()+0.3
+		β=6*rand.Float64()+0.3
+		x=rand.Float64()
+		p=DISTRIBUTION_CDF_At(α, β, x)
+		y:=DISTRIBUTIONInv_CDF_For(α, β, p)
+		err=math.Abs(y - x)
+		if math.Abs(y) < 2.0 && p < 1.00 {
+			count++
+			if !check(y, x){
+				t.Error()
+				fmt.Println("α =",α , "  β =", β, "  p =", p, "  x =", x, "  err=", err, "  inv_cdf=",  y)
+			}
+		}
+	}
+}
+
+
+// test ONLY for discrete CDF
+// sums PMF up to k
+
+func TestDISTRIBUTION_CDF_For(t *testing.T) {
+	fmt.Println("")
+	fmt.Println("test for DISTRIBUTION_CDF_For")
+	fmt.Println("")
+	var acc, param1, param2, x, y, z, p float64
+	k, n, count, tests int64 
+
+	acc = 1e-4
+
+	check := func(x, y, acc float64) bool {
+		if x/y > 1.00 {
+			z = y/x
+		} else {
+			z = x/y
+		}
+		if 1-z > acc  {
+			return false
+		}
+		return true
+	}
+
+	for count = 0; count < tests;  {
+		param1=6*rand.Float64()+0.3	// adjust param limits
+		param2=6*rand.Float64()+0.3	// adjust param limits
+		k=rand.Int63n(n)		// adjust upper limit of k
+		cdf:=DISTRIBUTION_CDF(param1, param2)
+		y=cdf(k)
+		x = 0
+		for i = 0; i < k; i++;  {
+			pmf:=DISTRIBUTION_PMF(param1, param2)
+			x += pmf(i)
+		}
+		if !check(x, y, acc){
+		t.Error()
+	}
+}
+
+
