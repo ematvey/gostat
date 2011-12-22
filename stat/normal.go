@@ -92,9 +92,16 @@ func Normal_CDF(μ, σ float64) func(x float64) float64 {
 	return func(x float64) float64 { return ((1.0 / 2.0) * (1 + math.Erf((x-μ)/(σ*math.Sqrt2)))) }
 }
 
+// Cumulative Probability of the Normal distribution at x
+func Normal_CDF_At(μ, σ, x float64) float64 {
+	cdf := Normal_CDF(μ, σ)
+	return cdf(x)
+}
+
+
 // Inverse CDF of Normal distribution for probability p //// ??? only *sigma? from GSL
-func Normal_Qtl_For(p, sigma float64) float64 {
-	return sigma * Z_Qtl_For(p)
+func Normal_Qtl_For(μ, σ, p float64) float64 {
+	return σ * Z_Qtl_For(p) + μ
 }
 
 // Probability Density Function for the Standard Normal distribution
@@ -151,3 +158,19 @@ func Z_Qtl_For(p float64) float64 {
 	}
 	return x
 }
+
+// Mean
+func NormalMean(μ float64) float64 {
+	return μ
+}
+
+// Variance
+func NormalVar(σ float64) float64 {
+	return σ*σ
+}
+
+// Standard deviation
+func NormalStd(σ float64) float64 {
+	return σ
+}
+

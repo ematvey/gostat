@@ -23,7 +23,7 @@ cdf:=[]float64{0.0493685733526945114136, 0.074806392192840576172, 0.107663574861
 
 	// <<<
 
-	fmt.Println("test for NegativeBinomial PMF")
+	fmt.Println("test of NegativeBinomial PMF")
 	for i = 0; i < int64(len(k)); i++ {
 		prob=NegativeBinomial_PMF_At(ρ, n, k[i])
 			if !check(prob, pmf[i]){
@@ -33,7 +33,7 @@ cdf:=[]float64{0.0493685733526945114136, 0.074806392192840576172, 0.107663574861
 			}
 	}
 
-	fmt.Println("test for NegativeBinomial CDF")
+	fmt.Println("test of NegativeBinomial CDF")
 	for i = 0; i < int64(len(k)); i++ {
 		prob=NegativeBinomial_CDF_At(ρ, n, k[i])
 			if !check(prob, cdf[i]){

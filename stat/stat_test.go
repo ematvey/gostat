@@ -102,9 +102,9 @@ func XTestGen(t *testing.T) {
 
 
 /*
-// test for Binomial p confidence interval  // failed due to some unknown bug
+// test of Binomial p confidence interval  // failed due to some unknown bug
 func TestBinomP_CI(t *testing.T) {
-	fmt.Println("test for Binomial p confidence interval")
+	fmt.Println("test of Binomial p confidence interval")
 	var n int64
 	var k, nn, p, alpha, low, high, low2, high2 float64
 	n=30

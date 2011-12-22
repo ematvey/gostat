@@ -149,7 +149,7 @@ func Gamma_CDF_At(k, θ, x float64)  float64 {
 }
 
 // Inverse CDF (Quantile) function
-func Gamma_Qtl(k float64, θ float64) func(x float64) float64 {
+func Gamma_Qtl(k, θ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		var eps, y_new, h float64
 		eps = 1e-10
@@ -178,4 +178,18 @@ func Gamma_Qtl_For(k, θ, p float64)  float64 {
 	return cdf(p)
 }
 
+// Mean
+func GammaMean(k, θ float64) float64 {
+	return k*θ
+}
+
+// Variance
+func GammaVar(k, θ float64) float64 {
+	return k*θ*θ
+}
+
+// Standard deviation
+func GammaStd(k, θ float64) float64 {
+	return math.Sqrt(k*θ*θ)
+}
 

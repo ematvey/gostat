@@ -1,4 +1,4 @@
-// test for F_Qtl_For
+// test of F_Qtl_For
 package stat
 
 import (
@@ -8,7 +8,7 @@ import (
 
 // test against known values
 func TestF_Qtl_For(t *testing.T) {
-	fmt.Println("test for F_Qtl_For")
+	fmt.Println("test of F_Qtl_For")
 	var df1, df2, x, y, p float64
 	df1=3
 	df2=3

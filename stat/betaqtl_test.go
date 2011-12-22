@@ -1,4 +1,4 @@
-// test for Beta_Qtl_For(α, β, p)
+// test of Beta_Qtl_For(α, β, p)
 package stat
 
 import (
@@ -10,7 +10,7 @@ import (
 
 // test against known values
 func TestBeta_Qtl_For(t *testing.T) {
-	fmt.Println("test for Beta_Qtl_For")
+	fmt.Println("test of Beta_Qtl_For")
 	var x, y, err, α, β, p float64
 	var count, tests int64
 

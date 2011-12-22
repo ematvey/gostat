@@ -23,7 +23,7 @@ func TestBeta_PDF_CDF(t *testing.T) {
 
 	// <<<
 
-	fmt.Println("test for Beta PDF")
+	fmt.Println("test of Beta PDF")
 	for i = 0; i < int64(len(x)); i++ {
 		prob=Beta_PDF_At(α, β, x[i])
 			if !check(prob, pdf[i]){
@@ -33,7 +33,7 @@ func TestBeta_PDF_CDF(t *testing.T) {
 			}
 	}
 
-	fmt.Println("test for Beta CDF")
+	fmt.Println("test of Beta CDF")
 	for i = 0; i < int64(len(x)); i++ {
 		prob=Beta_CDF_At(α, β, x[i])
 			if !check(prob, cdf[i]){

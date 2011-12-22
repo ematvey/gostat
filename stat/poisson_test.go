@@ -20,7 +20,7 @@ func TestPoisson_PMF_CDF(t *testing.T) {
 	cdf:=[]float64{0.0024787522,0.0173512652,0.0619688044,0.1512038828,0.2850565003,0.4456796414,0.6063027824,0.7439797605,0.847237494,0.916075983,0.9573790764,0.9799080365,0.9911725165,0.9963715073,0.9985996462,0.9994909017,0.9998251226,0.9999430829,0.999982403,0.9999948198,0.9999985449}
 	// <<<
 
-	fmt.Println("test for Poisson PMF")
+	fmt.Println("test of Poisson PMF")
 	for i = 0; i < int64(len(k)); i++ {
 		prob=Poisson_PMF_At(α, k[i])
 			if !check(prob, pmf[i]){
@@ -29,7 +29,7 @@ func TestPoisson_PMF_CDF(t *testing.T) {
 
 			}
 	}
-	fmt.Println("test for Poisson CDF")
+	fmt.Println("test of Poisson CDF")
 	for i = 0; i < int64(len(k)); i++ {
 		prob=Poisson_CDF_At(α, k[i])
 		if !check(prob, cdf[i]){

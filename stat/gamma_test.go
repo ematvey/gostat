@@ -24,7 +24,7 @@ func TestGamma_PDF_CDF(t *testing.T) {
 	cdf:=[]float64{0,0.0002374473,0.0213634345,0.152762506,0.4074526586,0.6671803212,0.8449722182,0.9379448041,0.9780127465,0.9929439909,0.997912741,0.9994230988,0.9998494373,0.9999625849,0.9999910876,0.9999979539,0.9999995453,0.9999999018,0.9999999793,0.9999999957,0.9999999991}
 	// <<<
 
-	fmt.Println("test for Gamma PDF")
+	fmt.Println("test of Gamma PDF")
 	for i = 0; i < int64(len(x)); i++ {
 		prob=Gamma_PDF_At(α, λ, x[i])
 			if !check(prob, pdf[i]){
@@ -35,7 +35,7 @@ func TestGamma_PDF_CDF(t *testing.T) {
 	}
 
 /*
-	fmt.Println("test for Gamma CDF")
+	fmt.Println("test of Gamma CDF")
 	for i = 0; i < int64(len(x)); i++ {
 		prob=Gamma_CDF_At(α, λ, x[i])
 			if !check(prob, cdf[i]){
@@ -44,7 +44,7 @@ func TestGamma_PDF_CDF(t *testing.T) {
 			}
 	}
 */
-	fmt.Println("test for Gamma CDF with integer k")
+	fmt.Println("test of Gamma CDF with integer k")
 	for i = 0; i < int64(len(x)); i++ {
 		fn:=Gamma_CDFint(k, λ)
 		prob=fn(x[i])

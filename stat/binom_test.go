@@ -23,7 +23,7 @@ cdf:=[]float64{9.5367431640625E-007,2.00271606445312E-005,0.0002012253,0.0012884
 
 	// <<<
 
-	fmt.Println("test for Binomial PMF")
+	fmt.Println("test of Binomial PMF")
 	for i = 0; i < int64(len(k)); i++ {
 		prob=Binomial_PMF_At(α, n, k[i])
 			if !check(prob, pmf[i]){
@@ -32,7 +32,7 @@ cdf:=[]float64{9.5367431640625E-007,2.00271606445312E-005,0.0002012253,0.0012884
 
 			}
 	}
-	fmt.Println("test for Binomial CDF")
+	fmt.Println("test of Binomial CDF")
 	for i = 0; i < int64(len(k)); i++ {
 		prob=Binomial_CDF_At(α, n, k[i])
 			if !check(prob, cdf[i]){
