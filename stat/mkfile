@@ -1,4 +1,8 @@
-include $(GOROOT)/src/Make.inc
+# Copyright 2009 The Go Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+< ../../../9bootstrap.mk
 
 TARG=gostat.googlecode.com/hg/stat
 GOFILES=\
@@ -13,7 +17,6 @@ GOFILES=\
 	 f.go \
 	 gamma.go \
 	 geom.go \
-	 hypergeom.go \
 	 igamma.go \
 	 matrix_normal.go \
 	 matrix_t.go \
@@ -29,4 +32,4 @@ GOFILES=\
 	 uniform.go \
 	 wishart.go \
 
-include $(GOROOT)/src/Make.pkg
+< ../../../mk.pkg
