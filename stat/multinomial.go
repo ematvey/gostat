@@ -42,6 +42,14 @@ func Multinomial_LnPMF(θ []float64, n int64) func(x []int64) float64 {
 		return l
 	}
 }
+
+func Multinomial_PMF_At(θ []float64, n int64, x []int64) float64 {
+	pmf := Multinomial_PMF(θ , n)
+	return pmf(x)
+}
+
+
+
 func NextMultinomial(θ []float64, n int64) []int64 {
 	x := make([]int64, len(θ))
 	chooser := Choice(θ)
