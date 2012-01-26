@@ -49,23 +49,24 @@ func PoissonLambda_Qtl_GPri(y int64, r, v, prob float64) float64 {
 	return Gamma_Qtl_For(r1, 1/v1, prob)
 }
 
-
+/*
 // Likelihood of Poisson λ (rate) PDF.
 func PoissonLambda_Like_PDF(y, n int64, r, v float64) float64 {
 	var r1, v1 float64
 	r1 = float64(y) + 1.0
 	v1 = float64(n)
 	return Gamma_PDF_At(r1, 1/v1, float64(y))
-	//poisson.go:67: internal compiler error: unknown type
+	//poisson.go:60: internal compiler error: unknown type
 }
 
 // Likelihood of Poisson λ (rate) CDF.
 func PoissonLambda_Like_CDF(y, n int64, r, v float64) float64 {
-	var r1, v1, p float64
+	var r1, v1 float64
 	r1 = float64(y) + 1.0
 	v1 = float64(n)
 	return Gamma_CDF_At(r1, 1/v1, float64(y))
 }
+*/
 
 
 // Equivalent sample size of the prior 
