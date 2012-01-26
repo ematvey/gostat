@@ -49,8 +49,6 @@ func Multinomial_PMF_At(θ []float64, n int64, x []int64) float64 {
 	return pmf(x)
 }
 
-
-
 func NextMultinomial(θ []float64, n int64) []int64 {
 	x := make([]int64, len(θ))
 	chooser := Choice(θ)

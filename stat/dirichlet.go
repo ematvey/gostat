@@ -60,3 +60,10 @@ func NextDirichlet(α []float64) []float64 {
 func Dirichlet(α []float64) func() []float64 {
 	return func() []float64 { return NextDirichlet(α) }
 }
+
+func Dirichlet_PDF_At(α , θ []float64) float64 {
+	pdf := Dirichlet_PDF(α)
+	return pdf(θ)
+}
+
+

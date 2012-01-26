@@ -6,5 +6,6 @@ GOFILES=\
 	binom_p.go\
 	binom_p_diff.go\
 	poisson.go\
+	multinom_p.go\
 
 include $(GOROOT)/src/Make.pkg
