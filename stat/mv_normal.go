@@ -24,6 +24,7 @@ func MVNormal_PDF(μ *DenseMatrix, Σ *DenseMatrix) func(x *DenseMatrix) float64
 		return normalization * exp(-f/2)
 	}
 }
+
 func NextMVNormal(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
 	n := μ.Rows()
 	x := Zeros(n, 1)

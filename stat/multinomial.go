@@ -23,6 +23,7 @@ func Multinomial_PMF(θ []float64, n int64) func(x []int64) float64 {
 		return l
 	}
 }
+
 func Multinomial_LnPMF(θ []float64, n int64) func(x []int64) float64 {
 	return func(x []int64) float64 {
 		if len(x) != len(θ) {
@@ -58,6 +59,7 @@ func NextMultinomial(θ []float64, n int64) []int64 {
 	}
 	return x
 }
+
 func Multinomial(θ []float64, n int64) func() []int64 {
 	return func() []int64 {
 		return NextMultinomial(θ, n)

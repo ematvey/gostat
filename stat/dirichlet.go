@@ -23,6 +23,7 @@ func Dirichlet_PDF(α []float64) func(θ []float64) float64 {
 		return l
 	}
 }
+
 func Dirichlet_LnPDF(α []float64) func(x []float64) float64 {
 	return func(x []float64) float64 {
 		if len(x) != len(α) {
@@ -42,6 +43,7 @@ func Dirichlet_LnPDF(α []float64) func(x []float64) float64 {
 		return l
 	}
 }
+
 func NextDirichlet(α []float64) []float64 {
 	x := make([]float64, len(α))
 	sum := fZero
@@ -54,6 +56,7 @@ func NextDirichlet(α []float64) []float64 {
 	}
 	return x
 }
+
 func Dirichlet(α []float64) func() []float64 {
 	return func() []float64 { return NextDirichlet(α) }
 }
