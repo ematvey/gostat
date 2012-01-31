@@ -1,8 +1,7 @@
+// Functions for Bayesian linear regression
+
 package bayes
 
-/*
- functions for Bayesian linear regression
-*/
 
 import (
 	"fmt"

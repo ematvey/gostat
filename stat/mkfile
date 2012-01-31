@@ -1,35 +1,8 @@
-# Copyright 2009 The Go Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style
-# license that can be found in the LICENSE file.
-
-< ../../../9bootstrap.mk
+< $GOROOT/src/9bootstrap.mk
 
 TARG=gostat.googlecode.com/hg/stat
-GOFILES=\
-	 bernoulli.go \
-	 beta.go \
-	 binom_ci.go \
-	 binomial.go \
-	 chisq.go \
-	 choice.go \
-	 dirichlet.go \
-	 exp.go \
-	 f.go \
-	 gamma.go \
-	 geom.go \
-	 igamma.go \
-	 matrix_normal.go \
-	 matrix_t.go \
-	 multinomial.go \
-	 mv_normal.go \
-	 negbinom.go \
-	 normal.go \
-	 poisson.go \
-	 range.go \
-	 stat_npb.go \
-	 stat_util.go \
-	 t.go \
-	 uniform.go \
-	 wishart.go \
 
-< ../../../mk.pkg
+< GOFILES
+
+< $GOROOT/src/mk.pkg
+

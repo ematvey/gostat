@@ -35,14 +35,14 @@ func main(){
 	fmt.Println("Posterior Variance       : ", v1)
 	fmt.Println("Posterior Std. Deviation : ", s1)
 
-	fmt.Println("Posterior Mean           : ", bayes.BinomPostMean(a,  b , n, k))
-	fmt.Println("Posterior Variance       : ", bayes.BinomPostVar(a,  b , n, k))
+	fmt.Println("Posterior Mean           : ", bayes.BinomPiPostMean(a,  b , n, k))
+	fmt.Println("Posterior Variance       : ", bayes.BinomPiPostVar(a,  b , n, k))
 
 
 	fmt.Println("\nProb.\t\tQuantile \n")
 	i=0
 	for i=0; i< 9; i++ {
-			qtl = bayes.BinomBetaPriQtl(k, n, a, b, pr[i])
+			qtl = bayes.BinomPi_Qtl_BPri(k, n, a, b, pr[i])
 			fmt.Println(pr[i],"\t\t", qtl)
 	}
 	fmt.Println("\n")

@@ -9,7 +9,7 @@ import (
 )
 
 // Sample mean and unbiased (Bessel correction) variance estimates
-func SampleMeanVar([]x float64) (float64, float64) {
+func SampleMeanVar([]x float64) (μ float64, σ float64) {
 	var n int
 	var μ, σ, m, m2, delta float64
 		μ = 0.0	// sample mean
