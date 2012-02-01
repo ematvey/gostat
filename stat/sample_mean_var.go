@@ -3,15 +3,13 @@
 package stat
 
 import (
-	"fmt"
 	"math"
-	. "go-fn.googlecode.com/hg/fn"
 )
 
 // Sample mean and unbiased (Bessel correction) variance estimates
-func SampleMeanVar([]x float64) (μ float64, σ float64) {
+func SampleMeanVar(x []float64) (μ float64, σ float64) {
 	var n int
-	var μ, σ, m, m2, delta float64
+	var m, m2, delta float64
 		μ = 0.0	// sample mean
 		σ = 0.0	// sample variance unbiased
 		m = 0.0
@@ -26,6 +24,6 @@ func SampleMeanVar([]x float64) (μ float64, σ float64) {
 		}
 		σ = math.Sqrt(m2/float64(n - 1))
 		μ /= float64(len(x))
-	return μ, σ
+	return
 }
 
