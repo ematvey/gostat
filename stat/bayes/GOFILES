@@ -1,0 +1,8 @@
+GOFILES=\
+     binom_p.go\
+     binom_p_diff.go\
+     fmin.go\
+     gamma_mo_sd_2_ra_sh.go\
+     lin_reg.go\
+     multinom_p.go\
+     poisson.go\

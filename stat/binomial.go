@@ -1,3 +1,5 @@
+// Binomial distribution
+
 package stat
 
 import (
