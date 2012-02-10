@@ -3,30 +3,24 @@
 
 package bayes
 import (
-	"fmt"
-	"math"
-	. "gostat.googlecode.com/hg/stat"
+	. "gostat.googlecode.com/hg/stat/pdf"
 )
-// Auxiliary function
-func aux(α, β, credMass float64) {
-  func (x float64) { iw(α, β, credMass, x float64) }
+// Interval width
+func iw(α, β, credMass, lowTailPr float64) float64{
+      return Beta_Qtl_For(α, β, credMass + lowTailPr) - Beta_Qtl_For(α, β, lowTailPr)
 }
 
-  foo := aux(α, β, credMass)
-  f:= foo( lowTailPr )
-
-
-// Interval width
-func iw(α, β, credMass, lowTailPr float64) {
-      Beta_Qtl_For(α, β, credMass + lowTailPr) - Beta_Qtl_For(α, β, lowTailPr)
+// Interval width for fixed α, β, credMass
+func iwFix(α, β, credMass float64) func (x float64) float64{
+	return func (x float64) float64 { return iw(α, β, credMass, x)}
 }
 
 // HDI of Beta Distribution
 func HDIofBetaQtl(α, β, credMass, tol float64) (lo, hi float64) {
+	f := iwFix(α, β, credMass)
+// func fmin(f func(float64) float64, ax, bx, tol float64) float64 {
 
-fmin(ax,bx,f,tol)
-	f := iw(α, β, credMass, lowTailPr)
-	min = fmin(0 , 1.0 - credMass, f, tol)
+	min := fmin(f, 0 , 1 - credMass, tol)
 	lo = Beta_Qtl_For(α, β, min)
 	hi = Beta_Qtl_For(α, β, credMass + min)
 	return	lo, hi

@@ -5,7 +5,7 @@ package bayes
 import (
 	"fmt"
 	"math"
-	. "gostat.googlecode.com/hg/stat"
+	. "gostat.googlecode.com/hg/stat/pdf"
 )
 
 // Quantile, Flat prior 

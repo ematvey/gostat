@@ -6,7 +6,7 @@ package bayes
 import (
 	"fmt"
 	mx "gomatrix.googlecode.com/hg/matrix"
-	"gostat.googlecode.com/hg/stat"
+	"gostat.googlecode.com/hg/stat/pdf"
 )
 
 type KnownVarianceLRPosterior struct {
@@ -83,7 +83,7 @@ func (this *KnownVarianceLRPosterior) GetSampler() func () *mx.DenseMatrix {
 		Mxy, err := YXtpMPhiInv.TimesDense(Omega)
 		if err != nil { panic(err) }
 
-		this.sampler = stat.MatrixNormal(Mxy, this.Sigma, Omega)
+		this.sampler = pdf.MatrixNormal(Mxy, this.Sigma, Omega)
 	}
 	return this.sampler
 }
@@ -157,5 +157,5 @@ func KnownVariancePosterior(Y, X, Sigma, M, Phi *mx.DenseMatrix) func() (A *mx.D
 		fmt.Printf("Omega:\n%v\n", Omega)
 	}
 
-	return stat.MatrixNormal(Mxy, Sigma, Omega)
+	return pdf.MatrixNormal(Mxy, Sigma, Omega)
 }

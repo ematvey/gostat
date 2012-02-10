@@ -4,7 +4,7 @@
 package bayes
 import (
 	"fmt"
-	. "gostat.googlecode.com/hg/stat"
+	. "gostat.googlecode.com/hg/stat/pdf"
 )
 
 // Posterior PDF, Dirichlet prior

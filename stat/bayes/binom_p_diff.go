@@ -15,7 +15,7 @@ package bayes
 
 import (
 	"math"
-	. "gostat.googlecode.com/hg/stat"
+	. "gostat.googlecode.com/hg/stat/pdf"
 )
 
 // Mean of posterior distribution of unknown difference of binomial proportions, approximated by Normal distribution

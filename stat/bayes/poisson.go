@@ -5,8 +5,8 @@
 package bayes
 
 import (
-	. "gostat.googlecode.com/hg/stat"
 	"math"
+	. "gostat.googlecode.com/hg/stat/pdf"
 )
 
 //Quantile for posterior of Poisson λ (rate), using flat prior.
