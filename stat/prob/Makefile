@@ -1,6 +1,6 @@
 include $(GOROOT)/src/Make.inc
 
-TARG=gostat.googlecode.com/hg/stat/pdf
+TARG=gostat.googlecode.com/hg/stat/prob
 
 include GOFILES
 

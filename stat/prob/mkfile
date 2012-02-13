@@ -1,6 +1,6 @@
 < $GOROOT/src/9bootstrap.mk
 
-TARG=gostat.googlecode.com/hg/stat/pdf
+TARG=gostat.googlecode.com/hg/stat/prob
 
 < GOFILES
 
