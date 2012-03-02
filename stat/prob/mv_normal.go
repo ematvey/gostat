@@ -1,4 +1,4 @@
-package pdf
+package prob
 
 import (
 	. "gomatrix.googlecode.com/hg/matrix"

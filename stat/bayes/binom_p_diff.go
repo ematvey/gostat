@@ -14,8 +14,8 @@
 package bayes
 
 import (
+	. "gostat.googlecode.com/hg/stat/prob"
 	"math"
-	. "gostat.googlecode.com/hg/stat/pdf"
 )
 
 // Mean of posterior distribution of unknown difference of binomial proportions, approximated by Normal distribution
@@ -24,9 +24,9 @@ import (
 func BinomPiDiff_Mean_NApprox(a1, b1, a2, b2 float64, n1, n2, y1, y2 int64) float64 {
 
 	a1_post := a1 + float64(y1)
-	b1_post := b1 + float64(n1 -y1)
+	b1_post := b1 + float64(n1-y1)
 	a2_post := a2 + float64(y2)
-	b2_post := b2 + float64(n2 -y2)
+	b2_post := b2 + float64(n2-y2)
 
 	return a1_post/(a1_post+b1_post) - a2_post/(a2_post+b2_post)
 }
@@ -37,11 +37,11 @@ func BinomPiDiff_Mean_NApprox(a1, b1, a2, b2 float64, n1, n2, y1, y2 int64) floa
 func BinomPiDiff_Var_NApprox(a1, b1, a2, b2 float64, n1, n2, y1, y2 int64) float64 {
 
 	a1_post := a1 + float64(y1)
-	b1_post := b1 + float64(n1 -y1)
+	b1_post := b1 + float64(n1-y1)
 	a2_post := a2 + float64(y2)
-	b2_post := b2 + float64(n2 -y2)
+	b2_post := b2 + float64(n2-y2)
 
-	return a1_post*b1_post/math.Sqrt(a1_post+b1_post)*(a1_post+b1_post+1)  +  a2_post*b2_post/math.Sqrt(a2_post+b2_post)*(a2_post+b2_post+1)
+	return a1_post*b1_post/math.Sqrt(a1_post+b1_post)*(a1_post+b1_post+1) + a2_post*b2_post/math.Sqrt(a2_post+b2_post)*(a2_post+b2_post+1)
 }
 
 // Credible interval for difference between binomial proportions, approximated by Normal distribution
@@ -54,7 +54,7 @@ func BinomPiDiff_CrI(post_diff_mu, post_diff_sigma, alpha float64) (float64, flo
 	// post_diff_sigma	posterior standard deviation for difference of normal means
 	// alpha			posterior probability that the true mean lies outside the credible interval
 
-	z := Z_Qtl_For(alpha/2)
+	z := Z_Qtl_For(alpha / 2)
 	low := post_diff_mu - z*post_diff_sigma
 	high := post_diff_mu + z*post_diff_sigma
 	return low, high
@@ -79,4 +79,3 @@ func BinomDiffPropTwoSidedProb(post_diff_mu, post_diff_sigma, alpha){
 	if 0 < low || 0 > high return(REJECT) else return(ACCEPT)
 }
 */
-

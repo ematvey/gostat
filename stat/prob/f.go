@@ -1,5 +1,5 @@
 // F-distribution, alias Fisher-Snedecor distribution
-package pdf
+package prob
 
 import (
 	"fmt"

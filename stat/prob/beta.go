@@ -1,6 +1,6 @@
 // Beta distribution
 
-package pdf
+package prob
 
 import (
 	"fmt"
@@ -260,20 +260,15 @@ end:
 }
 */
 
-// Inverse of the cumulative beta probability density function for a given probability.
-//
+// Inverse of the cumulative beta probability density function (quantile).
 // p: Probability associated with the beta distribution
 // α: Parameter of the distribution
 // β: Parameter of the distribution
-// A: Optional lower bound to the interval of x
-// B: Optional upper bound to the interval of x
 func Beta_Qtl(α, β float64)  func(p float64) float64 {
 	return func(p float64) float64 {
     var x float64 = 0
     var a float64 = 0
     var b float64= 1
-    var A float64 = 0
-    var B float64= 1
     var precision float64 = 1e-9
 	if p < 0.0 {
 		panic(fmt.Sprintf("p < 0"))
@@ -297,13 +292,14 @@ func Beta_Qtl(α, β float64)  func(p float64) float64 {
         }
     }
 
-    if B > 0 && A > 0 {
-        x = x * (B - A) + A
-    }
     return x
 	}
 }
 
+// Inverse of the cumulative beta probability density function (quantile) for a given probability.
+// p: Probability associated with the beta distribution
+// α: Parameter of the distribution
+// β: Parameter of the distribution
 func Beta_Qtl_For(α, β, p float64) float64 {
 	cdf:=Beta_Qtl(α, β)
 	return cdf(p)

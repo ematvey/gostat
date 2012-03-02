@@ -4,14 +4,14 @@
 // This function computes the shape and rate parameters of the gamma distribution from a desired mode and standard deviation.
 // After http://doingbayesiandataanalysis.blogspot.com/2012/01/parameterizing-gamma-distribution-by.html
 package bayes
+
 import (
 	"math"
 )
 
 // Parameterizing a Gamma distribution by mode and standard deviation
-func GammaMSd2RS(mode, sd float64) (rate, shape float64) {
-	rate = (mode + math.Sqrt(mode*mode + 4*sd*sd)) / (2 * sd*sd)
-	shape = 1 + mode * rate
+func GammaMSParam(mode, sd float64) (rate, shape float64) {
+	rate = (mode + math.Sqrt(mode*mode+4*sd*sd)) / (2 * sd * sd)
+	shape = 1 + mode*rate
 	return
 }
-

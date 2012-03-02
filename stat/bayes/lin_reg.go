@@ -2,11 +2,10 @@
 
 package bayes
 
-
 import (
 	"fmt"
 	mx "gomatrix.googlecode.com/hg/matrix"
-	"gostat.googlecode.com/hg/stat/pdf"
+	"gostat.googlecode.com/hg/stat/prob"
 )
 
 type KnownVarianceLRPosterior struct {
@@ -38,12 +37,12 @@ func NewKnownVarianceLRPosterior(M, Sigma, Phi *mx.DenseMatrix) (this *KnownVari
 	if Phi.Rows() != Phi.Cols() {
 		panic("Phi is not square")
 	}
-	this = &KnownVarianceLRPosterior {
-		M: M,
+	this = &KnownVarianceLRPosterior{
+		M:     M,
 		Sigma: Sigma,
-		Phi: Phi,
-		XXt: mx.Zeros(Phi.Cols(), Phi.Cols()),
-		YXt: mx.Zeros(Sigma.Cols(), Phi.Cols()),
+		Phi:   Phi,
+		XXt:   mx.Zeros(Phi.Cols(), Phi.Cols()),
+		YXt:   mx.Zeros(Sigma.Cols(), Phi.Cols()),
 	}
 
 	return
@@ -60,30 +59,42 @@ func (this *KnownVarianceLRPosterior) Remove(x, y *mx.DenseMatrix) {
 	xxt, _ := x.TimesDense(x.Transpose())
 	this.XXt.Subtract(xxt)
 	yxt, _ := y.TimesDense(x.Transpose())
-	this.YXt.Subtract(yxt)	
+	this.YXt.Subtract(yxt)
 }
 
-func (this *KnownVarianceLRPosterior) GetSampler() func () *mx.DenseMatrix {
+func (this *KnownVarianceLRPosterior) GetSampler() func() *mx.DenseMatrix {
 	if this.sampler == nil {
 		PhiInv, err := this.Phi.Inverse()
-		if err != nil { panic(err) }
+		if err != nil {
+			panic(err)
+		}
 
 		XXtpPhiInv, err := this.XXt.PlusDense(PhiInv)
-		if err != nil { panic(err) }
+		if err != nil {
+			panic(err)
+		}
 
 		Omega, err := XXtpPhiInv.Inverse()
-		if err != nil { panic(err) }
+		if err != nil {
+			panic(err)
+		}
 
 		MPhiInv, err := this.M.TimesDense(PhiInv)
-		if err != nil { panic(err) }
+		if err != nil {
+			panic(err)
+		}
 
 		YXtpMPhiInv, err := this.YXt.PlusDense(MPhiInv)
-		if err != nil { panic(err) }
+		if err != nil {
+			panic(err)
+		}
 
 		Mxy, err := YXtpMPhiInv.TimesDense(Omega)
-		if err != nil { panic(err) }
+		if err != nil {
+			panic(err)
+		}
 
-		this.sampler = pdf.MatrixNormal(Mxy, this.Sigma, Omega)
+		this.sampler = prob.MatrixNormal(Mxy, this.Sigma, Omega)
 	}
 	return this.sampler
 }
@@ -91,8 +102,6 @@ func (this *KnownVarianceLRPosterior) GetSampler() func () *mx.DenseMatrix {
 func (this *KnownVarianceLRPosterior) Sample() (A *mx.DenseMatrix) {
 	return this.GetSampler()()
 }
-
-
 
 /*
 	If Y ~ N(AX, Sigma, I)
@@ -128,28 +137,44 @@ func KnownVariancePosterior(Y, X, Sigma, M, Phi *mx.DenseMatrix) func() (A *mx.D
 	Xt := X.Transpose()
 
 	PhiInv, err := Phi.Inverse()
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 
 	XXt, err := X.TimesDense(Xt)
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 
 	XXtpPhiInv, err := XXt.PlusDense(PhiInv)
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 
 	Omega, err := XXtpPhiInv.Inverse()
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 
 	YXtpMPhiInv, err := Y.TimesDense(Xt)
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 
 	MPhiInv, err := M.TimesDense(PhiInv)
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 
 	err = YXtpMPhiInv.AddDense(MPhiInv)
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 
 	Mxy, err := YXtpMPhiInv.TimesDense(Omega)
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 
 	if false {
 		fmt.Printf("Mxy:\n%v\n", Mxy)
@@ -157,5 +182,5 @@ func KnownVariancePosterior(Y, X, Sigma, M, Phi *mx.DenseMatrix) func() (A *mx.D
 		fmt.Printf("Omega:\n%v\n", Omega)
 	}
 
-	return pdf.MatrixNormal(Mxy, Sigma, Omega)
+	return prob.MatrixNormal(Mxy, Sigma, Omega)
 }

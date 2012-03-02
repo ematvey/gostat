@@ -1,6 +1,6 @@
 // Inverse Gamma distribution (not to be confused with Inverse CDF of Gamma distribution)
 
-package pdf
+package prob
 
 import (
 	"math"

@@ -5,8 +5,8 @@
 package bayes
 
 import (
+	. "gostat.googlecode.com/hg/stat/prob"
 	"math"
-	. "gostat.googlecode.com/hg/stat/pdf"
 )
 
 //Quantile for posterior of Poisson λ (rate), using flat prior.
@@ -67,7 +67,6 @@ func PoissonLambda_Like_CDF(y, n int64, r, v float64) float64 {
 	return Gamma_CDF_At(r1, 1/v1, float64(y))
 }
 */
-
 
 // Equivalent sample size of the prior 
 // Bolstad 2007 (2e): Chapter 10, p. 187.

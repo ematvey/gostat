@@ -1,4 +1,5 @@
 Bolstad WM 2007: Introduction to Bayesian Statistics, 2nd Edition. Wiley. ISBN: 978-0-470-14115-1.
+Bolstad WM 2009: Understanding Computational Bayesian Statistics. John Wiley & Sons ISBN 978-0470046098
 Kruschke J 2011: Doing Bayesian Data Analysis: A Tutorial Introduction with R and BUGS. Elsevier / Academic Press. ISBN: 978-0-12-381485-2.
-
+Aitkin M 2007: Statistical Inference: An Integrated Bayesian/Likelihood Approach (Chapman & Hall/CRC Monographs on Statistics & Applied Probability)  ISBN-10: 1420093436  | ISBN-13: 978-1420093438
 

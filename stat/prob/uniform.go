@@ -1,6 +1,6 @@
 // Uniform (Flat) distribution
 
-package pdf
+package prob
 import (
 	"math/rand"
 )

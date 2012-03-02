@@ -1,6 +1,6 @@
 // Sample mean and variance (unbiased estimator)
 
-package pdf
+package prob
 
 import (
 	"math"

@@ -2,7 +2,7 @@
 // k > 0		shape parameter
 // θ (Theta) > 0	scale parameter
 
-package pdf
+package prob
 import (
 	"fmt"
 	"math"

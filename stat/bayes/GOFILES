@@ -1,8 +1,11 @@
 GOFILES=\
+     HDIofQtl.go\
      binom_p.go\
      binom_p_diff.go\
+     ecdf.go\
      fmin.go\
-     gamma_mo_sd_2_ra_sh.go\
+     gamma_reparam.go\
      lin_reg.go\
      multinom_p.go\
+     p_null_smp.go\
      poisson.go\

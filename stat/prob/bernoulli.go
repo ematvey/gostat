@@ -1,4 +1,4 @@
-package pdf
+package prob
 
 func Bernoulli_PMF(ρ float64) func(k int64) float64 {
 	return func(k int64) float64 {

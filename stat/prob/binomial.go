@@ -1,6 +1,6 @@
 // Binomial distribution
 
-package pdf
+package prob
 
 import (
 	. "go-fn.googlecode.com/hg/fn"
