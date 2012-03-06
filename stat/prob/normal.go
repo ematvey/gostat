@@ -98,8 +98,7 @@ func Normal_CDF_At(μ, σ, x float64) float64 {
 	return cdf(x)
 }
 
-
-// Inverse CDF of Normal distribution for probability p //// ??? only *sigma? from GSL
+// Inverse CDF (= quantile) of Normal distribution for probability p //// ??? only *sigma? from GSL
 func Normal_Qtl_For(μ, σ, p float64) float64 {
 	return σ * Z_Qtl_For(p) + μ
 }

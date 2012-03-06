@@ -168,6 +168,11 @@ func BinomPi_Like(pi float64, n, k int64) float64 {
 	return math.Pow(pi, float64(k)) * math.Pow(1-pi, float64(n-k))
 }
 
+// Deviance 
+func BinomPi_Deviance(pi float64, n, k int64) float64 {
+	return -2*math.Log(BinomPi_Like(pi, n, k))
+}
+
 // Posterior PDF, Beta prior
 func BinomPi_PDF_BPri(k, n int64, α, β, p float64) float64 {
 	if k > n {

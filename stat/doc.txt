@@ -1,0 +1,253 @@
+PACKAGE
+
+package bayes
+    import "gostat.googlecode.com/hg/stat/bayes"
+
+    Empirical CDF
+
+
+    Credible interval for a sample from a posterior density
+
+    Empirical quantile from a sample from a PDF | PMF.
+
+    Parameterizing a Gamma distribution by mode and sd. It is more intuitive
+    to start with the mode and standard deviation, instead of the mean and
+    standard deviation as used in the Kruschke (2011) book. The reason is
+    that the gamma distribution is typically very skewed, and therefore the
+    location of the mean is not very intuitive. This function computes the
+    shape and rate parameters of the gamma distribution from a desired mode
+    and standard deviation. After
+    http://doingbayesiandataanalysis.blogspot.com/2012/01/parameterizing-gamma-distribution-by.html
+
+    Probability of a one sided null hypothesis from a sample from a
+    posterior density.
+
+FUNCTIONS
+
+func BinomPiDiff_CrI(post_diff_mu, post_diff_sigma, alpha float64) (float64, float64)
+    Credible interval for difference between binomial proportions,
+    approximated by Normal distribution Bolstad 2007 (2e): 248, eq. 13.13
+    post_diff_mu = binom_diff_prop_norm_approx_mu() post_diff_sigma =
+    sqrt(binom_diff_prop_norm_approx_var()) untested ...
+
+func BinomPiDiff_Mean_NApprox(a1, b1, a2, b2 float64, n1, n2, y1, y2 int64) float64
+    Mean of posterior distribution of unknown difference of binomial
+    proportions, approximated by Normal distribution Bolstad 2007 (2e): 248.
+    untested ...
+
+func BinomPiDiff_OneSidedP(post_diff_mu, post_diff_sigma float64) float64
+
+func BinomPiDiff_Var_NApprox(a1, b1, a2, b2 float64, n1, n2, y1, y2 int64) float64
+    Variance of posterior distribution of unknown difference of binomial
+    proportions, approximated by Normal distribution Bolstad 2007 (2e): 248.
+    untested ...
+
+func BinomPiEqvSize(α, β float64) int64
+    Equivalent sample size of the prior
+
+func BinomPiPMS(α, β float64, n, k, which_pi int64) float64
+
+	Posterior mean square of p
+    Bolstad 2007 (2e): 152-153, eq. 8.7
+
+func BinomPiPostMean(α, β float64, n, k int64) float64
+    Posterior mean
+
+func BinomPiPostMedian(α, β float64, n, k int64) float64
+    Posterior median
+
+func BinomPiPostModus(α, β float64, n, k int64) float64
+    Posterior modus
+
+func BinomPiPostVar(α, β float64, n, k int64) float64
+    Posterior variance Bolstad 2007 (2e): 151, eq. 8.5
+
+func BinomPi_CDF_BPri(k, n int64, α, β, p float64) float64
+    Posterior CDF, Beta prior
+
+func BinomPi_CrI_BP(α, β, alpha float64, n, k int64) (float64, float64)
+
+func BinomPi_CrI_BPriNApprox(α, β, alpha float64, n, k int64) (float64, float64)
+
+func BinomPi_Deviance(pi float64, n, k int64) float64
+    Deviance
+
+func BinomPi_Like(pi float64, n, k int64) float64
+    Likelihood
+
+func BinomPi_PDF_BPri(k, n int64, α, β, p float64) float64
+    Posterior PDF, Beta prior
+
+func BinomPi_Qtl_BPri(k, n int64, α, β, p float64) float64
+    Quantile, Beta prior, general
+
+func BinomPi_Qtl_FPri(k, n int64, p float64) float64
+    Quantile, Flat prior
+
+func BinomPi_Qtl_HPri(k, n int64, p float64) float64
+    Quantile, Haldane prior see Aitkin 2010: 143 for cautions
+
+func BinomPi_Qtl_JPri(k, n int64, p float64) float64
+    Quantile, Jeffreys prior see Aitkin 2010: 143 for cautions
+
+func ECrI(𝛩 []float64, width float64) (lo, hi float64)
+    Credible interval for a sample from a posterior density
+
+func GammaMSParam(mode, sd float64) (rate, shape float64)
+    Parameterizing a Gamma distribution by mode and standard deviation
+
+func HDIofBetaQtl(α, β, credMass, tol float64) (lo, hi float64)
+    HDI of Beta Distribution
+
+func KnownVariancePosterior(Y, X, Sigma, M, Phi *mx.DenseMatrix) func() (A *mx.DenseMatrix)
+    If Y ~ N(AX, Sigma, I) and A ~ N(M, Sigma, Phi) this returns a sampler
+    for P(A|X,Y,Sigma,M,Phi)
+
+func MultinomPi_PDF_DirPri(α, x []float64) float64
+    Posterior PDF, Dirichlet prior for Haldane improper prior, use α[i] = 0
+    Ericson 1969 recommends prior with sum(α[i]) small, of the order of 1
+    Aitkin 2010:96-107
+
+func NextBinomPi_CDF_BPri(k, n int64, α, β float64) float64
+    Sampling from posterior, Beta prior
+
+func NextMultinomPi(α, x []float64) []float64
+    Sampling from posterior, Dirichlet prior Returns an array of sampled
+    Multinomial Pi's
+
+func NormMuPostMean(n int, samp_mean, pri_mu, pri_sigma, sigma float64) float64
+    Posterior mean for unknown Normal mean Bolstad 2007 (2e): 209, eq. 11.6
+    pri_mu prior mean pri_sigma prior standard deviation n size of sample ==
+    number of measurements sigma standard deviation of population, assumed
+    to be known (alternatively, use an estimate) untested ...
+
+func NormMuPostStd(n int, pri_mu, pri_sigma, sigma float64) float64
+    Posterior standard deviation for unknown Normal mean Bolstad 2007 (2e):
+    209, eq. 11.6 pri_mu prior mean pri_sigma prior standard deviation n
+    size of sample == number of measurements sigma standard deviation of
+    population, assumed to be known (alternatively, use an estimate)
+    untested ...
+
+func NormMuSingle_Qtl_FPri(y, sigma, p float64) float64
+    Quantile for posterior distribution of unknown Normal mean, with known
+    sigma, and flat prior (Jeffrey's prior), for single observation Bolstad
+    2007 (2e): 206 y single observation taken from Normal distribution sigma
+    standard deviation of population, assumed to be known p probability for
+    which the quantile will be returned untested ...
+
+func NormMuSingle_Qtl_NPri(y, sigma, pri_mu, pri_sigma, p float64) float64
+    Quantile for posterior distribution of unknown Normal mean, with known
+    sigma, and normal prior, for single observation Bolstad 2007 (2e): 208,
+    eq. 11.4 y single observation taken from Normal distribution sigma
+    standard deviation of population, assumed to be known pri_mu Normal
+    prior mean pri_sigma Normal prior standard deviation p probability for
+    which the quantile will be returned untested ...
+
+func NormMu_CrI_FPriKnown(n int, samp_mean, sigma, alpha float64) (lo, hi float64)
+    Credible interval for unknown Normal mean, with KNOWN sigma, and flat
+    prior Bolstad 2007 (2e): 212, eq. 11.7 untested ... samp_mean sample
+    mean of observations taken from Normal dist. with known sigma sigma
+    standard deviation of population, assumed to be known n number of
+    observations alpha posterior probability that the true mean lies outside
+    the credible interval
+
+func NormMu_CrI_NPriKnown(n int, samp_mean, sigma, pri_mu, pri_sigma, alpha float64) (lo, hi float64)
+
+func NormMu_Qtl_FPri(n int, samp_mean, sigma, p float64) float64
+    Quantile for posterior distribution of unknown Normal mean, with known
+    sigma, and flat prior (Jeffrey's prior), for sample Bolstad 2007 (2e):
+    207 samp_mean sample mean of observations taken from Normal dist. with
+    known sigma sigma standard deviation of population, assumed to be known
+    n number of observations p probability for which the quantile will be
+    returned
+
+func NormMu_Qtl_NPri(n int, samp_mean, sigma, pri_mu, pri_sigma, p float64) float64
+    Quantile for posterior distribution of unknown Normal mean, with known
+    sigma, and normal prior, for sample Bolstad 2007 (2e): 209, eq. 11.5,
+    11.6 samp_mean sample mean of observations taken from Normal dist. with
+    known sigma sigma standard deviation of population, assumed to be known
+    n number of observations pri_mu Normal prior mean pri_sigma Normal prior
+    standard deviation p probability for which the quantile will be returned
+    untested ...
+
+func PNullSmpLowT(𝛩 []float64, 𝛩0 float64) float64
+    Lower tail probability of a one sided null hypothesis from a sample from
+    a posterior density.
+
+func PNullSmpUppT(𝛩 []float64, 𝛩0 float64) float64
+    Upper tail probability of a one sided null hypothesis from a sample from
+    a posterior density.
+
+func PoissonLambdaEqvSize(v float64) float64
+    Equivalent sample size of the prior Bolstad 2007 (2e): Chapter 10, p.
+    187.
+
+func PoissonLambdaIQR(y int64, r, v float64) float64
+    posterior interquartile range of λ Bolstad 2007 (2e): Chapter 10, p.
+    189.
+
+func PoissonLambdaMSE(r, v, λ float64) float64
+    Mean Squared Error of λ Bolstad 2007 (2e): Chapter 10, p. 191.
+
+func PoissonLambdaPostMean(y, n int64, r, v float64) float64
+    Posterior mean Bolstad 2007 (2e): Chapter 10, p. 190-191.
+
+func PoissonLambdaPostMeanBias(r, v, λ float64) float64
+    Posterior mean bias Bolstad 2007 (2e): Chapter 10, p. 191.
+
+func PoissonLambdaPostVar(r, v, λ float64) float64
+    Posterior variance Bolstad 2007 (2e): Chapter 10, p. 191.
+
+func PoissonLambda_CrI_GPri(y int64, r, v, α float64) (float64, float64)
+    Credible interval for unknown Poisson rate λ, and gamma prior, equal
+    tail area Bolstad 2007 (2e): 192-193. untested ...
+
+func PoissonLambda_OneSidedOdds(y int64, r, v, λ0 float64) float64
+    One-sided odds ratio for Poisson rate λ Bolstad 2007 (2e): 193. H0: λ <=
+    λ0 vs H1: λ > λ0 Note: The alternative is in the direction we wish to
+    detect.
+
+func PoissonLambda_OneSidedP(y int64, r, v, λ0 float64) float64
+    One-sided test for Poisson rate λ Bolstad 2007 (2e): 193. H0: λ <= λ0 vs
+    H1: λ > λ0 Note: The alternative is in the direction we wish to detect.
+
+func PoissonLambda_Qtl_FPri(y int64, prob float64) float64
+    Quantile for posterior of Poisson λ (rate), using flat prior.
+
+func PoissonLambda_Qtl_GPri(y int64, r, v, prob float64) float64
+    Quantile for posterior of Poisson λ (rate), using gamma prior. Use
+    r=m^2/s^2, and v=m/s^2, if you summarize your prior belief with mean ==
+    m, and std == s.
+
+func PoissonLambda_Qtl_JPri(y int64, prob float64) float64
+    Quantile for posterior of Poisson λ (rate), using Jeffreys' prior.
+
+
+TYPES
+
+type KnownVarianceLRPosterior struct {
+    Sigma, M, Phi *mx.DenseMatrix
+
+    XXt, YXt *mx.DenseMatrix
+    // contains filtered or unexported fields
+}
+
+func NewKnownVarianceLRPosterior(M, Sigma, Phi *mx.DenseMatrix) (this *KnownVarianceLRPosterior)
+    M is r x c, o x i Sigma is r x r, o x o Phi is c x c, i x i
+
+    Sigma matches Y o x 1 output dimension Phi matches X i x 1 input
+    dimension
+
+func (this *KnownVarianceLRPosterior) GetSampler() func() *mx.DenseMatrix
+
+func (this *KnownVarianceLRPosterior) Insert(x, y *mx.DenseMatrix)
+
+func (this *KnownVarianceLRPosterior) Remove(x, y *mx.DenseMatrix)
+
+func (this *KnownVarianceLRPosterior) Sample() (A *mx.DenseMatrix)
+
+
+SUBDIRECTORIES
+
+	BiP
+
