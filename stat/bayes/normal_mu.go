@@ -9,14 +9,17 @@ import (
 	"math"
 )
 
-// CDF of the posterior distribution of unknown Normal mean, with KNOWN sigma, and discrete prior, for single observation
+// PMF of the posterior distribution of unknown Normal mean, with KNOWN sigma, and discrete prior, for single observation
 // Bolstad 2007 (2e): 200-201
 // y		single observation taken from Normal distribution
 // sigma	standard deviation of population, assumed to be known
 // p		probability for which the quantile will be returned
-// untested ...
-func NormMuSingle_CDF_DPri(y, sigma float64, mu, prior []float64, p float64) (post []float64) {
-	n := len(prior)
+func NormMuSingle_PMF_DPri(y, sigma float64, mu []float64, prior []float64) (post []float64) {
+	n := len(mu)
+	if len(prior) != n {
+		panic(fmt.Sprintf("Discrete means and their priors must be vectors of the same length"))
+	}
+	post = make([]float64, n)
 	sum := 0.0
 	for i := 0; i< n; i++ {
 		z := (y-mu[i])/sigma
