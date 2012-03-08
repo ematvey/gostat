@@ -111,7 +111,7 @@ func NormalMuDiff_CrI_NPriUn(nObs1, nObs2 int, ȳ1, ȳ2, s1, s2, μ1Pri, σ1Pri,
 	//difference posterior is Normal with params:
 	μdPost := μ1Post-μ2Post
 	nu := satterthwaite_nu(s1*s1, nObs1, s2*s2, nObs2)
-	t := StudentsT_PDF(nu)
+	t := StudentsT_Qtl(nu)
 	lo = μdPost - t(α/2)* math.Sqrt(σ1Post*σ1Post+σ2Post*σ2Post)
 	hi = μdPost + t(α/2)* math.Sqrt(σ1Post*σ1Post+σ2Post*σ2Post)
 	return
@@ -129,7 +129,7 @@ func NormalMuDiff_CrI_FPriUn(nObs1, nObs2 int, ȳ1, ȳ2, s1, s2, μ1Pri, σ1Pri,
 	//difference posterior is Normal with params:
 	μdPost := μ1Post-μ2Post
 	nu := satterthwaite_nu(s1*s1, nObs1, s2*s2, nObs2)
-	t := StudentsT_PDF(nu)
+	t := StudentsT_Qtl(nu)
 	lo = μdPost - t(α/2)* math.Sqrt(s1*s1+s2*s2)
 	hi = μdPost + t(α/2)* math.Sqrt(s1*s1+s2*s2)
 	return
