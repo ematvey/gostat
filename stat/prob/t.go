@@ -16,7 +16,7 @@ func StudentsT_LnPDF(ν float64) func(x float64) float64 {
 		return normalization + log(1+x*x/ν)*-(ν+1)/2
 	}
 }
-//StudentsT(ν) => N(0, 1)*sqrt(ν/NextGamma(ν/2, 2))
+// StudentsT(ν) => N(0, 1)*sqrt(ν/NextGamma(ν/2, 2))
 func NextStudentsT(ν float64) float64 {
 	return NextNormal(0, 1) * sqrt(ν/NextGamma(ν/2, 2))
 }

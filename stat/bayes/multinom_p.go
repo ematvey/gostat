@@ -11,8 +11,8 @@ import (
 
 // Posterior PDF, Dirichlet prior
 // for Haldane improper prior, use α[i] = 0
-// Ericson 1969 recommends prior with sum(α[i]) small, of the order of 1
-// Aitkin 2010:96-107
+// Ericson 1969 recommends prior with sum(α[i]) small, of the order of 1, e.g., 1/len(α)
+// Aitkin 2010: 96-107
 func MultinomPi_PDF_DirPri(α, x []float64) float64 {
 	// if α == nil, use Haldane
 	if α == nil {

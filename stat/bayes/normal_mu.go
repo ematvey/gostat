@@ -1,4 +1,4 @@
-// Bayesian inference about the params (mu, sigma) of Normal (Gaussian) distribution.
+// Bayesian inference about the params (μ, σ) of Normal (Gaussian) distribution.
 // Bolstad 2007 (2e): Chapter 11, p. 199 and further.
 
 package bayes
@@ -9,207 +9,240 @@ import (
 	"math"
 )
 
-// PMF of the posterior distribution of unknown Normal mean, with KNOWN sigma, and discrete prior, for single observation
-// Bolstad 2007 (2e): 200-201
-// y		single observation taken from Normal distribution
-// sigma	standard deviation of population, assumed to be known
-// p		probability for which the quantile will be returned
-func NormMuSingle_PMF_DPri(y, sigma float64, mu []float64, prior []float64) (post []float64) {
-	n := len(mu)
-	if len(prior) != n {
-		panic(fmt.Sprintf("Discrete means and their priors must be vectors of the same length"))
+// PMF of the posterior distribution of unknown Normal μ, with KNOWN σ, and discrete prior, for single observation. 
+// Bolstad 2007 (2e): 200-201.
+func NormMuSingle_PMF_DPri(y, σ float64, μ []float64, μPri []float64) (post []float64) {
+// y	single observation taken from Normal distribution
+// σ	standard deviation of population, assumed to be known
+// μ	array of possible discrete values of μ
+// μPri	array of associated prior probability masses
+	nPoss := len(μ)
+	if len(μPri) != nPoss {
+		panic(fmt.Sprintf("len(μ) != len(μPri)"))
 	}
-	post = make([]float64, n)
+	post = make([]float64, nPoss)
 	sum := 0.0
-	for i := 0; i< n; i++ {
-		z := (y-mu[i])/sigma
+	for i := 0; i< nPoss; i++ {
+		z := (y-μ[i])/σ
 		like := Z_PDF_At(z)
-		post[i] = prior[i] * like
+		post[i] = μPri[i] * like
 		sum += post[i]
 	}
-	for i := 0; i< n; i++ {
+	for i := 0; i< nPoss; i++ {
 		post[i] /= sum
 	}
 	return
 }
 
-// Posterior mean for unknown Normal mean, with KNOWN sigma. 
-// Bolstad 2007 (2e): 209, eq. 11.6
-func NormMuPostMean(n int, samp_mean, sigma, pri_mu, pri_sigma float64) float64 {
-	// pri_mu		prior mean
-	// pri_sigma		prior standard deviation
-	// n			size of sample == number of measurements
-	// sigma		standard deviation of population, assumed to be known (alternatively, use an estimate)
-	σ2 := sigma * sigma
-	nn := float64(n)
-	pri_var := pri_sigma * pri_sigma
-	post_mu := (pri_mu/pri_var)/(nn/σ2+1/pri_var) + samp_mean*(nn/σ2)/(nn/σ2+1/pri_var)
-	return (post_mu)
+// PMF of the posterior distribution of unknown Normal μ, with KNOWN σ, and discrete prior, for sample
+// Bolstad 2007 (2e): 203, eq. 11.2
+func NormMu_PMF_DPri(nObs int, ȳ, σ float64, μ []float64, μPri []float64) (post []float64) {
+// nObs		number of observations in the sample (= length of the samle array)
+// ȳ		sample mean of the observed values
+// σ		standard deviation of population, assumed to be known
+// μ		array of possible discrete values of μ
+// μPri		array of associated prior probability masses
+	nPoss := len(μ)	// number of possible values of the parameter μ
+	if len(μPri) != nPoss {
+		panic(fmt.Sprintf("len(μ) != len(μPri)"))
+	}
+	post = make([]float64, nPoss)
+	n := float64(nObs)
+	sum := 0.0
+	for i := 0; i< nPoss; i++ {
+		σ2 := σ * σ
+		ẟ:=ȳ-μ[i]
+		like := math.Exp(-1/(2*σ2/n)*ẟ*ẟ)
+		post[i] = μPri[i] * like
+		sum += post[i]
+	}
+	for i := 0; i< nPoss; i++ {
+		post[i] /= sum
+	}
+	return
 }
 
-// Posterior standard deviation for unknown Normal mean, with KNOWN sigma. 
+// Posterior mean for unknown Normal μ, with KNOWN σ. 
 // Bolstad 2007 (2e): 209, eq. 11.6
-func NormMuPostStd(n int, sigma, pri_mu, pri_sigma float64) float64 {
-	// pri_mu		prior mean
-	// pri_sigma		prior standard deviation
-	// n			size of sample == number of measurements
-	// sigma		standard deviation of population, assumed to be known (alternatively, use an estimate)
-	σ2 := sigma * sigma
-	nn := float64(n)
-	pri_var := pri_sigma * pri_sigma
-	post_var := (σ2 * pri_var) / (σ2 + float64(nn)*pri_var)
-	post_sigma := math.Sqrt(post_var)
-	return (post_sigma)
+func NormMuPostMean(nObs int, ȳ, σ, μPri, σPri float64) float64 {
+	// μPri		prior mean
+	// σPri		prior standard deviation
+	// nObs			size of sample == number of measurements
+	// σ		standard deviation of population, assumed to be known (alternatively, use an estimate)
+	σ2 := σ * σ
+	n := float64(nObs)
+	σ2Pri := σPri * σPri
+	μPost := (μPri/σ2Pri)/(n/σ2+1/σ2Pri) + ȳ*(n/σ2)/(n/σ2+1/σ2Pri)
+	return (μPost)
 }
 
-// Quantile for posterior distribution of unknown Normal mean, with KNOWN sigma, and flat prior (Jeffrey's prior), for single observation
+// Posterior standard deviation for unknown Normal μ, with KNOWN σ. 
+// Bolstad 2007 (2e): 209, eq. 11.5
+func NormMuPostStd(nObs int, σ, μPri, σPri float64) float64 {
+	// μPri		prior mean
+	// σPri		prior standard deviation
+	// nObs		size of sample == number of measurements
+	// σ		standard deviation of population, assumed to be known (alternatively, use an estimate)
+	σ2 := σ * σ
+	n := float64(nObs)
+	σ2Pri := σPri * σPri
+	σ2Post := (σ2 * σ2Pri) / (σ2 + n*σ2Pri)
+	σPost := math.Sqrt(σ2Post)
+	return (σPost)
+}
+
+// Quantile for posterior distribution of unknown Normal μ, with KNOWN σ, and flat prior (Jeffrey's prior), for single observation
 // Bolstad 2007 (2e): 206
+func NormMuSingle_Qtl_FPri(y, σ, p float64) float64 {
 // y		single observation taken from Normal distribution
-// sigma	standard deviation of population, assumed to be known
+// σ		standard deviation of population, assumed to be known
 // p		probability for which the quantile will be returned
 // untested ...
-func NormMuSingle_Qtl_FPri(y, sigma, p float64) float64 {
-	post_mu := y
-	post_sigma := sigma
-	qtl := Normal_Qtl_For(post_mu, post_sigma, p)
+	μPost := y
+	σPost := σ
+	qtl := Normal_Qtl_For(μPost, σPost, p)
 	return (qtl)
 }
 
-// Quantile for posterior distribution of unknown Normal mean, with KNOWN sigma, and flat prior (Jeffrey's prior), for sample
+// Quantile for posterior distribution of unknown Normal μ, with KNOWN σ, and flat prior (Jeffrey's prior), for sample
 // Bolstad 2007 (2e): 207
-// samp_mean		sample mean of observations taken from Normal distribution
-// sigma		standard deviation of population, assumed to be known
-// n			number of observations
-// p			probability for which the quantile will be returned
-func NormMu_Qtl_FPri(n int, samp_mean, sigma, p float64) float64 {
-	// check params
-	if sigma <= 0 {
+func NormMu_Qtl_FPri(nObs int, ȳ, σ, p float64) float64 {
+// ȳ		sample mean of observations taken from Normal distribution
+// σ		standard deviation of population, assumed to be known
+// nObs		number of observations
+// p		probability for which the quantile will be returned
+
+	if σ <= 0 {
 		panic(fmt.Sprintf("Prior standard deviation must be greater than zero"))
 	}
 
-	nn := float64(n)
-	σ2 := sigma * sigma
-	post_mu := samp_mean
-	post_var := σ2 / nn
-	post_sigma := math.Sqrt(post_var)
-	return Normal_Qtl_For(post_mu, post_sigma, p)
+	n := float64(nObs)
+	σ2 := σ * σ
+	μPost := ȳ
+	σ2Post := σ2 / n
+	σPost := math.Sqrt(σ2Post)
+	return Normal_Qtl_For(μPost, σPost, p)
 }
 
-// Quantile for posterior distribution of unknown Normal mean, with KNOWN sigma, and normal prior, for single observation
+// Quantile for posterior distribution of unknown Normal μ, with KNOWN σ, and Normal prior, for single observation
 // Bolstad 2007 (2e): 208, eq. 11.4
+func NormMuSingle_Qtl_NPri(y, σ, μPri, σPri, p float64) float64 {
 // y		single observation taken from Normal distribution
-// sigma	standard deviation of population, assumed to be known
-// pri_mu	Normal prior mean
-// pri_sigma	Normal prior standard deviation
+// σ	standard deviation of population, assumed to be known
+// μPri	Normal prior mean
+// σPri	Normal prior standard deviation
 // p		probability for which the quantile will be returned
 // untested ...
-func NormMuSingle_Qtl_NPri(y, sigma, pri_mu, pri_sigma, p float64) float64 {
-	σ2 := sigma * sigma
-	pri_var := pri_sigma * pri_sigma
-	post_mu := (σ2*pri_mu + pri_var*y) / (σ2 + pri_var)
-	post_var := (σ2 * pri_var) / (σ2 + pri_var)
-	post_sigma := math.Sqrt(post_var)
-	return Normal_Qtl_For(post_mu, post_sigma, p)
+	if σ <= 0 {
+		panic(fmt.Sprintf("Prior standard deviation must be greater than zero"))
+	}
+
+	σ2 := σ * σ
+	σ2Pri := σPri * σPri
+	μPost := (σ2*μPri + σ2Pri*y) / (σ2 + σ2Pri)
+	σ2Post := (σ2 * σ2Pri) / (σ2 + σ2Pri)
+	σPost := math.Sqrt(σ2Post)
+	return Normal_Qtl_For(μPost, σPost, p)
 }
 
-// Quantile for posterior distribution of unknown Normal mean, with KNOWN sigma, and normal prior, for sample
+// Quantile for posterior distribution of unknown Normal μ, with KNOWN σ, and Normal prior, for sample
 // Bolstad 2007 (2e): 209, eq. 11.5, 11.6
-// samp_mean		sample mean of observations taken from Normal dist
-// sigma		standard deviation of population, assumed to be known
-// n			number of observations
-// pri_mu		Normal prior mean
-// pri_sigma		Normal prior standard deviation
+func NormMu_Qtl_NPri(nObs int, ȳ, σ, μPri, σPri, p float64) float64 {
+// ȳ		sample mean of observations taken from Normal dist
+// σ		standard deviation of population, assumed to be known
+// nObs			number of observations
+// μPri		Normal prior mean
+// σPri		Normal prior standard deviation
 // p			probability for which the quantile will be returned
-func NormMu_Qtl_NPri(n int, samp_mean, sigma, pri_mu, pri_sigma, p float64) float64 {
-	nn := float64(n)
-	σ2 := sigma * sigma
-	pri_var := pri_sigma * pri_sigma
-	post_var := (σ2 * pri_var) / (σ2 + nn*pri_var)
-	post_mu := (pri_mu/pri_var)/(nn/σ2+1/pri_var) + samp_mean*(nn/σ2)/(nn/σ2+1/pri_var)
-	post_sigma := math.Sqrt(post_var)
-	return Normal_Qtl_For(post_mu, post_sigma, p)
+	n := float64(nObs)
+	σ2 := σ * σ
+	σ2Pri := σPri * σPri
+	σ2Post := (σ2 * σ2Pri) / (σ2 + n*σ2Pri)
+	μPost := (μPri/σ2Pri)/(n/σ2+1/σ2Pri) + ȳ*(n/σ2)/(n/σ2+1/σ2Pri)
+	σPost := math.Sqrt(σ2Post)
+	return Normal_Qtl_For(μPost, σPost, p)
 }
 
-// Credible interval for unknown Normal mean, with KNOWN sigma, and normal prior
+// Credible interval for unknown Normal μ, with KNOWN σ, and Normal prior
 // Bolstad 2007 (2e): 212, eq. 11.7
-func NormMu_CrI_NPriKnown(n int, samp_mean, sigma, pri_mu, pri_sigma, alpha float64) (lo, hi float64) {
-	// samp_mean		sample mean of observations taken from Normal distribution
-	// sigma		standard deviation of population, assumed to be known
-	// n			number of observations
-	// pri_mu		Normal prior mean
-	// pri_sigma		Normal prior standard deviation
-	// alpha		posterior probability that the true mean lies outside the credible interval
-	nn := float64(n)
-	σ2 := sigma * sigma
-	pri_var := pri_sigma * pri_sigma
-	post_var := (σ2 * pri_var) / (σ2 + nn*pri_var)
-	post_mu := (pri_mu/pri_var)/(nn/σ2+1/pri_var) + samp_mean*(nn/σ2)/(nn/σ2+1/pri_var)
-//	post_mu := (pri_mu/pri_var)/(nn*samp_mean/σ2+1/pri_var) + ((nn / σ2) / (nn/σ2 + 1/pri_var))
-	post_sigma := math.Sqrt(post_var)
-	lo = Normal_Qtl_For(post_mu, post_sigma, alpha/2)
-	hi = Normal_Qtl_For(post_mu, post_sigma, 1-alpha/2)
+func NormMu_CrI_NPriKnown(nObs int, ȳ, σ, μPri, σPri, α float64) (lo, hi float64) {
+	// ȳ		sample mean of observations taken from Normal distribution
+	// σ		standard deviation of population, assumed to be known
+	// nObs			number of observations
+	// μPri		Normal prior mean
+	// σPri		Normal prior standard deviation
+	// α		posterior probability that the true μ lies outside the credible interval
+	n := float64(nObs)
+	σ2 := σ * σ
+	σ2Pri := σPri * σPri
+	σ2Post := (σ2 * σ2Pri) / (σ2 + n*σ2Pri)
+	μPost := (μPri/σ2Pri)/(n/σ2+1/σ2Pri) + ȳ*(n/σ2)/(n/σ2+1/σ2Pri)
+//	μPost := (μPri/σ2Pri)/(n*ȳ/σ2+1/σ2Pri) + ((n / σ2) / (n/σ2 + 1/σ2Pri))
+	σPost := math.Sqrt(σ2Post)
+	lo = Normal_Qtl_For(μPost, σPost, α/2)
+	hi = Normal_Qtl_For(μPost, σPost, 1-α/2)
 	return lo, hi
 }
 
 /* waiting for StudentsT_Qtl_For() to be implemented
-// Credible interval for unknown Normal mean, with UNKNOWN sigma, and normal prior, equal tail area
+// Credible interval for unknown Normal μ, with UNKNOWN σ, and Normal prior, equal tail area
 // Bolstad 2007 (2e): 212, eq. 11.8
-// n			number of observations
-// samp_mean		sample mean of observations taken from Normal distribution
-// samp_sigma	standard deviation of the sample
-// pri_mu		Normal prior mean
-// pri_sigma		Normal prior standard deviation
-// alpha		posterior probability that the true mean lies outside the credible interval
+func NormMu_CrI_NPriUnkn(nObs int, ȳ, samp_σ, μPri, σPri, α float64) (lo, hi float64) {
+// nObs			number of observations
+// ȳ		sample mean of observations taken from Normal distribution
+// samp_σ	standard deviation of the sample
+// μPri		Normal prior mean
+// σPri		Normal prior standard deviation
+// α		posterior probability that the true μ lies outside the credible interval
 // untested ...
-func NormMu_CrI_NPriUnkn(n int, samp_mean, samp_sigma, pri_mu, pri_sigma, alpha float64) (lo, hi float64) {
-	nn := float64(n)
-	nu := float64(n - 1)
-	samp_var := samp_sigma * samp_sigma
-	pri_var := pri_sigma * pri_sigma
-	post_var := (samp_var * pri_var) / (samp_var + nn*pri_var)
-	post_mu := (pri_mu/pri_var)/(nn*samp_mean/samp_var+1/pri_var) + ((nn / samp_var) / (nn/samp_var + 1/pri_var))
-	post_sigma := math.Sqrt(post_var)
-	t := StudentsT_Qtl_For(alpha/2, nu)
-	lo = post_mu - t*post_sigma
-	hi = post_mu + t*post_sigma
+	n := float64(nObs)
+	nu := float64(nObs - 1)
+	samp_var := samp_σ * samp_σ
+	σ2Pri := σPri * σPri
+	σ2Post := (samp_var * σ2Pri) / (samp_var + n*σ2Pri)
+	μPost := (μPri/σ2Pri)/(n*ȳ/samp_var+1/σ2Pri) + ((n / samp_var) / (n/samp_var + 1/σ2Pri))
+	σPost := math.Sqrt(σ2Post)
+	t := StudentsT_Qtl_For(α/2, nu)
+	lo = μPost - t*σPost
+	hi = μPost + t*σPost
 	return lo, hi
 }
 */
 
-// Credible interval for unknown Normal mean, with KNOWN sigma, and flat prior
+// Credible interval for unknown Normal μ, with KNOWN σ, and flat prior
 // Bolstad 2007 (2e): 212, eq. 11.7
+func NormMu_CrI_FPriKnown(nObs int, ȳ, σ, α float64) (lo, hi float64) {
 // untested ...
-// samp_mean		sample mean of observations taken from Normal distribution
-// sigma		standard deviation of population, assumed to be known
-// n			number of observations
-// alpha		posterior probability that the true mean lies outside the credible interval
-func NormMu_CrI_FPriKnown(n int, samp_mean, sigma, alpha float64) (lo, hi float64) {
-	nn := float64(n)
-	post_mu := samp_mean
-	post_var := (sigma * sigma / nn)
-	post_sigma := math.Sqrt(post_var)
-	lo = Normal_Qtl_For(post_mu, post_sigma, alpha/2)
-	hi = Normal_Qtl_For(post_mu, post_sigma, 1-alpha/2)
+// ȳ		sample mean of observations taken from Normal distribution
+// σ		standard deviation of population, assumed to be known
+// nObs		number of observations
+// α		posterior probability that the true μ lies outside the credible interval
+	n := float64(nObs)
+	μPost := ȳ
+	σ2Post := (σ * σ / n)
+	σPost := math.Sqrt(σ2Post)
+	lo = Normal_Qtl_For(μPost, σPost, α/2)
+	hi = Normal_Qtl_For(μPost, σPost, 1-α/2)
 	return lo, hi
 }
 
 /* waiting for StudentsT_Qtl_For() to be implemented
-// Credible interval for unknown Normal mean, with UNKNOWN sigma, and flat prior
+// Credible interval for unknown Normal μ, with UNKNOWN σ, and flat prior
 // Bolstad 2007 (2e): 212, eq. 11.8
-// samp_mean		sample mean of observations taken from Normal distribution
-// sigma		standard deviation of population, unknown
-// n			number of observations
-// alpha		posterior probability that the true mean lies outside the credible interval
+func NormMu_CrI_FPriUnkn(nObs int, ȳ, σ, α float64) (lo, hi float64) {
+// ȳ		sample mean of observations taken from Normal distribution
+// σ		standard deviation of population, unknown
+// nObs		number of observations
+// α		posterior probability that the true μ lies outside the credible interval
 // untested ...
-func NormMu_CrI_FPriUnkn(n int, samp_mean, sigma, alpha float64) (lo, hi float64) {
-	nn := float64(n)
-	nu := float64(n - 1)
-	post_mu := samp_mean
-	post_var := (sigma * sigma / nn)
-	post_sigma := math.Sqrt(post_var)
-	t := StudentsT_Qtl_For(alpha/2, nu)
-	lo = post_mu - t*post_sigma
-	hi = post_mu + t*post_sigma
+	n := float64(nObs)
+	nu := float64(nObs - 1)
+	μPost := ȳ
+	σ2Post := (σ * σ / n)
+	σPost := math.Sqrt(σ2Post)
+	t := StudentsT_Qtl_For(α/2, nu)
+	lo = μPost - t*σPost
+	hi = μPost + t*σPost
 	return lo, hi
 }
 */
