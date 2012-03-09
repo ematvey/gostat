@@ -92,3 +92,25 @@ func copyFloat64(x []float64, n int64) []float64 {
 	}
 	return newx
 }
+
+func expm1(x float64 ) float64 {
+	var y float64
+	a := math.Abs(x)
+	if a < math.SmallestNonzeroFloat64 {
+		y= x
+	} else if a > 0.697 { 
+		y = exp(x) - 1  /* negligible cancellation */
+	} else {
+		if (a > 1e-8) {
+			y = exp(x) - 1
+    		} else {/* Taylor expansion, more accurate in this range */
+			y = (x / 2 + 1) * x
+		}
+		/* Newton step for solving   log(1 + y) = x   for y : */
+		/* WARNING: does not work for y ~ -1: bug in 1.5.0 */
+		y -= (1 + y) * (math.Log1p(y) - x)
+	} //else
+	return y
+}
+
+
