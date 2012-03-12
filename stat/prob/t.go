@@ -37,9 +37,38 @@ func StudentsT(ν float64) func() float64 {
 // Student's t distribution: cumulative density function
 func StudentsT_CDF(ν float64) func(x float64) float64 {
 	return func(x float64) float64 {
-		// to be implemented
+		var p float64
+		if ν <= 0 {
+			panic("ν <= 0")
+		}
 
-		return x + ν // just for the moment, to make compiler satisfied ;-) I need this placeholder for the "bayes" pkg
+		nx := 1 + (x/ν)*x
+		if nx > 1e100 { /* <==>  x*x > 1e100 * ν  */
+			/* Danger of underflow. So use Abramowitz & Stegun 26.5.4
+			   pbeta(z, a, b) ~ z^a(1-z)^b / aB(a,b) ~ z^a / aB(a,b),
+			   with z = 1/nx,  a = ν/2,  b= 1/2 :
+			*/
+			p = -0.5*ν*(2*math.Log(math.Abs(x))-math.Log(ν)) - LnB(0.5*ν, 0.5) - math.Log(0.5*ν)
+			p = math.Exp(p)
+		} else {
+			if ν > x*x {
+				α := 0.5
+				β := ν / 2
+				pbeta := Beta_CDF(α, β)
+				p = 1 - pbeta(x*x/(ν+x*x))
+			} else {
+				α := ν / 2
+				β := 0.5
+				pbeta := Beta_CDF(α, β)
+				p = pbeta (1 / nx)
+			}
+		}
+
+		p /= 2
+		if x > 0 {
+			p = 1-p
+		}
+		return p
 	}
 }
 
@@ -51,17 +80,13 @@ func StudentsT_CDF(ν float64) func(x float64) float64 {
 // Improved formula for decision when 1 < df < 2
 func StudentsT_Qtl(ν float64) func(p float64) float64 {
 	return func(p float64) float64 {
-
-		//, int lower_tail, int log_p)
 		const eps = 1.e-12
 		var q float64
 		neg := false
 		p_ok := false
 
-		//    R_Q_P01_boundaries(p, ML_NEGINF, ML_POSINF);
-
-		if ν <= 0 {
-			panic("ν <= 0")
+		if ν <= 0 || p <0 || p > 1 {
+			panic("bad params")
 		}
 
 		/*
@@ -188,3 +213,6 @@ func StudentsT_Qtl(ν float64) func(p float64) float64 {
 		return q
 	}
 }
+
+
+
