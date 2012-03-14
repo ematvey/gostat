@@ -42,7 +42,7 @@ func NormalMuDiff_CDF_NPriKn(nObs1, nObs2 int, ȳ1, ȳ2, σ1, σ2, μ1Pri, σ1Pr
 
 // Posterior quantile of the difference of two means (μ1-μ2) of Normal distributions with KNOWN variances, and NORMAL priors
 // Bolstad 2007:245-246
-func NormalMuDiff_Qtl_NPriKn(nObs1, nObs2 int, ȳ1, ȳ2, σ1, σ2, μ1Pri, σ1Pri, μ2Pri, σ2Pri float64) func(x float64) float64 {
+func NormalMuDiff_Qtl_NPriKn(nObs1, nObs2 int, ȳ1, ȳ2, σ1, σ2, μ1Pri, σ1Pri, μ2Pri, σ2Pri float64) func(p float64) float64 {
 	// for independent samples, use independent priors for both means
 	// posteriors are Normal with params from eqs. 11.5 and 11.6
 	μ1Post := NormMuPostMean(nObs1, ȳ1, σ1, μ1Pri, σ1Pri)
@@ -166,6 +166,7 @@ func NormalMuDiff_CrI_FPriUn(nObs1, nObs2 int, ȳ1, ȳ2, s1, s2, μ1Pri, σ1Pri,
 }
 
 // Posterior moments
+// Mean = modus = median; standard deviation; skewness = 0; kurtosis = 0;
 
 // Posterior moments of the difference of two means (μ1-μ2) of Normal distributions with KNOWN variances, and NORMAL priors
 // Bolstad 2007:245-246

@@ -8,60 +8,148 @@ import (
 	. "gostat.googlecode.com/hg/stat/prob"
 	"math"
 )
-
-// Quantile, Flat prior 
-func BinomPi_Qtl_FPri(k, n int64, p float64) float64 {
-	var α, β float64
+// Binomial proportion, posterior PDF, Flat prior.
+func BinomPi_PDF_FPri(k, n int64) func(x float64) float64  {
 	if k > n {
 		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
 	}
-
-	α = 1.0
-	β = 1.0
-	return Beta_Qtl_For(α+float64(k), β+float64(n-k), p)
+	α := 1.0
+	β := 1.0
+	return Beta_PDF(α+float64(k), β+float64(n-k))
 }
 
-// Quantile, Jeffreys prior
+// Binomial proportion, posterior PDF, Jeffreys prior.
 // see Aitkin 2010: 143 for cautions
-func BinomPi_Qtl_JPri(k, n int64, p float64) float64 {
+func BinomPi_PDF_JPri(k, n int64) func(x float64) float64  {
 	var α, β float64
 	α = 0.5
 	β = 0.5
 	if k > n {
 		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
 	}
-	return Beta_Qtl_For(α+float64(k), β+float64(n-k), p)
+	return Beta_PDF(α+float64(k), β+float64(n-k))
 }
 
-// Quantile, Haldane prior
+// Binomial proportion, posterior PDF, Haldane prior.
 // see Aitkin 2010: 143 for cautions
-func BinomPi_Qtl_HPri(k, n int64, p float64) float64 {
+func BinomPi_PDF_HPri(k, n int64) func(x float64) float64  {
 	var α, β float64
 	α = 0.0
 	β = 0.0
 	if k > n {
 		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
 	}
-	return Beta_Qtl_For(α+float64(k), β+float64(n-k), p)
+	return Beta_PDF(α+float64(k), β+float64(n-k))
 }
 
-// Quantile, Beta prior, general
-func BinomPi_Qtl_BPri(k, n int64, α, β, p float64) float64 {
+// Binomial proportion, posterior PDF, general Beta prior.
+func BinomPi_PDF_BPri(k, n int64, α, β float64) func(x float64) float64  {
 	if k > n {
 		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
 	}
 	if α < 0 || β < 0 {
 		panic(fmt.Sprintf("The parameters of the prior must be non-negative"))
 	}
-	return Beta_Qtl_For(α+float64(k), β+float64(n-k), p)
+	return Beta_PDF(α+float64(k), β+float64(n-k))
 }
 
-// Equivalent sample size of the prior
+// Binomial proportion, posterior CDF, Flat prior.
+func BinomPi_CDF_FPri(k, n int64) func(x float64) float64  {
+	if k > n {
+		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
+	}
+	α := 1.0
+	β := 1.0
+	return Beta_CDF(α+float64(k), β+float64(n-k))
+}
+
+// Binomial proportion, posterior CDF, Jeffreys prior.
+// see Aitkin 2010: 143 for cautions
+func BinomPi_CDF_JPri(k, n int64) func(x float64) float64  {
+	var α, β float64
+	α = 0.5
+	β = 0.5
+	if k > n {
+		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
+	}
+	return Beta_CDF(α+float64(k), β+float64(n-k))
+}
+
+// Binomial proportion, posterior CDF, Haldane prior.
+// see Aitkin 2010: 143 for cautions
+func BinomPi_CDF_HPri(k, n int64) func(x float64) float64  {
+	var α, β float64
+	α = 0.0
+	β = 0.0
+	if k > n {
+		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
+	}
+	return Beta_CDF(α+float64(k), β+float64(n-k))
+}
+
+// Binomial proportion, posterior CDF, general Beta prior.
+func BinomPi_CDF_BPri(k, n int64, α, β float64) func(x float64) float64  {
+	if k > n {
+		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
+	}
+	if α < 0 || β < 0 {
+		panic(fmt.Sprintf("The parameters of the prior must be non-negative"))
+	}
+	return Beta_CDF(α+float64(k), β+float64(n-k))
+}
+
+
+// Binomial proportion, posterior quantile function, Flat prior.
+func BinomPi_Qtl_FPri(k, n int64) func(p float64) float64  {
+	if k > n {
+		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
+	}
+	α := 1.0
+	β := 1.0
+	return Beta_Qtl(α+float64(k), β+float64(n-k))
+}
+
+// Binomial proportion, posterior quantile function, Jeffreys prior.
+// see Aitkin 2010: 143 for cautions
+func BinomPi_Qtl_JPri(k, n int64) func(p float64) float64  {
+	var α, β float64
+	α = 0.5
+	β = 0.5
+	if k > n {
+		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
+	}
+	return Beta_Qtl(α+float64(k), β+float64(n-k))
+}
+
+// Binomial proportion, posterior quantile function, Haldane prior.
+// see Aitkin 2010: 143 for cautions
+func BinomPi_Qtl_HPri(k, n int64) func(p float64) float64  {
+	var α, β float64
+	α = 0.0
+	β = 0.0
+	if k > n {
+		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
+	}
+	return Beta_Qtl(α+float64(k), β+float64(n-k))
+}
+
+// Binomial proportion, posterior quantile function, general Beta prior.
+func BinomPi_Qtl_BPri(k, n int64, α, β float64) func(p float64) float64  {
+	if k > n {
+		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
+	}
+	if α < 0 || β < 0 {
+		panic(fmt.Sprintf("The parameters of the prior must be non-negative"))
+	}
+	return Beta_Qtl(α+float64(k), β+float64(n-k))
+}
+
+// Binomial proportion, Equivalent sample size of the prior
 func BinomPiEqvSize(α, β float64) int64 {
 	return int64(math.Floor(α + β + 1))
 }
 
-// Posterior modus
+// Binomial proportion, Posterior modus
 func BinomPiPostModus(α, β float64, n, k int64) float64 {
 	var post_α, post_β float64
 	post_α = α + float64(k)
@@ -69,7 +157,7 @@ func BinomPiPostModus(α, β float64, n, k int64) float64 {
 	return (post_α - 1) / (post_α + post_β - 2.0)
 }
 
-//  Posterior mean
+// Binomial proportion, Posterior mean
 func BinomPiPostMean(α, β float64, n, k int64) float64 {
 	var post_α, post_β float64
 	post_α = α + float64(k)
@@ -77,12 +165,12 @@ func BinomPiPostMean(α, β float64, n, k int64) float64 {
 	return ((post_α) / (post_α + post_β))
 }
 
-//  Posterior median
+// Binomial proportion, Posterior median
 func BinomPiPostMedian(α, β float64, n, k int64) float64 {
 	return 0 // to be implemented
 }
 
-// Posterior variance
+// Binomial proportion, Posterior variance
 // Bolstad 2007 (2e): 151, eq. 8.5
 func BinomPiPostVar(α, β float64, n, k int64) float64 {
 	var post_α, post_β float64
@@ -91,7 +179,7 @@ func BinomPiPostVar(α, β float64, n, k int64) float64 {
 	return (post_α * post_β) / ((post_α + post_β) * (post_α + post_β) * (post_α + post_β + 1.0))
 }
 
-//  Posterior mean square of p
+// Binomial proportion, Posterior mean square of p
 // Bolstad 2007 (2e): 152-153, eq. 8.7
 func BinomPiPMS(α, β float64, n, k, which_pi int64) float64 {
 	const (
@@ -116,7 +204,7 @@ func BinomPiPMS(α, β float64, n, k, which_pi int64) float64 {
 	return post_var + (post_mean-pi_hat)*(post_mean-pi_hat)
 }
 
-// Credible interval for unknown binomial proportion, and beta prior, equal tail area
+// Binomial proportion, credible interval, beta prior, equal tail area
 // Bolstad 2007 (2e): 153
 // untested ...
 
@@ -135,7 +223,7 @@ func BinomPi_CrI_BP(α, β, alpha float64, n, k int64) (float64, float64) {
 	return low, upp
 }
 
-// Credible interval for unknown binomial proportion, and beta prior, equal tail area, normal approximation
+// Binomial proportion, credible interval, beta prior, equal tail area, normal approximation
 // Bolstad 2007 (2e): 154-155, eq. 8.8
 // untested ...
 
@@ -163,39 +251,17 @@ func BinomPi_CrI_BPriNApprox(α, β, alpha float64, n, k int64) (float64, float6
 }
 
 
-// Likelihood
+// Binomial proportion, Likelihood
 func BinomPi_Like(pi float64, n, k int64) float64 {
 	return math.Pow(pi, float64(k)) * math.Pow(1-pi, float64(n-k))
 }
 
-// Deviance 
+// Binomial proportion, Deviance 
 func BinomPi_Deviance(pi float64, n, k int64) float64 {
 	return -2*math.Log(BinomPi_Like(pi, n, k))
 }
 
-// Posterior PDF, Beta prior
-func BinomPi_PDF_BPri(k, n int64, α, β, p float64) float64 {
-	if k > n {
-		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
-	}
-	if α < 0 || β < 0 {
-		panic(fmt.Sprintf("The parameters of the prior must be non-negative"))
-	}
-	return Beta_PDF_At(α+float64(k), β+float64(n-k), p)
-}
-
-// Posterior CDF, Beta prior
-func BinomPi_CDF_BPri(k, n int64, α, β, p float64) float64 {
-	if k > n {
-		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
-	}
-	if α < 0 || β < 0 {
-		panic(fmt.Sprintf("The parameters of the prior must be non-negative"))
-	}
-	return Beta_CDF_At(α+float64(k), β+float64(n-k), p)
-}
-
-// Sampling from posterior, Beta prior
+// Binomial proportion, Sampling from posterior, Beta prior
 func NextBinomPi_CDF_BPri(k, n int64, α, β float64) float64 {
 	if k > n {
 		panic(fmt.Sprintf("The number of observed successes (k) must be <= number of trials (n)"))
@@ -206,7 +272,7 @@ func NextBinomPi_CDF_BPri(k, n int64, α, β float64) float64 {
 	return NextBeta(α+float64(k), β+float64(n-k))
 }
 
-// Deviance difference of a point null hypothesis pi = p against general alternative pi != p
+// Binomial proportion, Deviance difference of a point null hypothesis pi = p against general alternative pi != p
 // Aitkin 2010:143-144.
 func binomPi_PointDevDiff(k, n int64, α, β, p, pi float64) float64 {
 	nn := float64(n)

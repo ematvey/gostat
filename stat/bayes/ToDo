@@ -1,3 +1,4 @@
+remove / replace all _For| At functions and update testfiles accordingly 
 rejection sampling: Link & Barker, 2010: 56
 sampling from posterior (both analytic and empiric)
 
