@@ -25,7 +25,7 @@ func NormalMuDiff_PDF_NPriKn(nObs1, nObs2 int, ȳ1, ȳ2, σ1, σ2, μ1Pri, σ1Pr
 	return Normal_PDF(μdPost, σdPost)
 }
 
-// Posterior CDF of the difference of two means (μ1-μ2) of Normal distributions with KNOWN UNEQUAL variances, and NORMAL priors
+// Posterior CDF of the difference of two means (μ1-μ2) of Normal distributions with KNOWN variances, and NORMAL priors
 // Bolstad 2007:245-246
 func NormalMuDiff_CDF_NPriKn(nObs1, nObs2 int, ȳ1, ȳ2, σ1, σ2, μ1Pri, σ1Pri, μ2Pri, σ2Pri float64) func(x float64) float64 {
 	// for independent samples, use independent priors for both means
@@ -40,7 +40,7 @@ func NormalMuDiff_CDF_NPriKn(nObs1, nObs2 int, ȳ1, ȳ2, σ1, σ2, μ1Pri, σ1Pr
 	return Normal_CDF(μdPost, σdPost)
 }
 
-// Posterior quantile of the difference of two means (μ1-μ2) of Normal distributions with KNOWN UNEQUAL variances, and NORMAL priors
+// Posterior quantile of the difference of two means (μ1-μ2) of Normal distributions with KNOWN variances, and NORMAL priors
 // Bolstad 2007:245-246
 func NormalMuDiff_Qtl_NPriKn(nObs1, nObs2 int, ȳ1, ȳ2, σ1, σ2, μ1Pri, σ1Pri, μ2Pri, σ2Pri float64) func(x float64) float64 {
 	// for independent samples, use independent priors for both means
@@ -163,6 +163,23 @@ func NormalMuDiff_CrI_FPriUn(nObs1, nObs2 int, ȳ1, ȳ2, s1, s2, μ1Pri, σ1Pri,
 	hi = μdPost + t(α/2)* math.Sqrt(s1*s1+s2*s2)
 	return
 	}
+}
+
+// Posterior moments
+
+// Posterior moments of the difference of two means (μ1-μ2) of Normal distributions with KNOWN variances, and NORMAL priors
+// Bolstad 2007:245-246
+func NormalMuDiff_Moments_NPriKn(nObs1, nObs2 int, ȳ1, ȳ2, σ1, σ2, μ1Pri, σ1Pri, μ2Pri, σ2Pri float64) (μ, σ float64) {
+	// for independent samples, use independent priors for both means
+	// posteriors are Normal with params from eqs. 11.5 and 11.6
+	μ1Post := NormMuPostMean(nObs1, ȳ1, σ1, μ1Pri, σ1Pri)
+	σ1Post := NormMuPostStd(nObs1, σ1, μ1Pri, σ1Pri)
+	μ2Post := NormMuPostMean(nObs2, ȳ2, σ2, μ2Pri, σ2Pri)
+	σ2Post := NormMuPostStd(nObs2, σ2, μ2Pri, σ2Pri)
+	//difference posterior is Normal with params:
+	μdPost := μ1Post-μ2Post
+	σdPost := math.Sqrt(σ1Post*σ1Post+σ2Post*σ2Post)
+	return μdPost, σdPost
 }
 
 
