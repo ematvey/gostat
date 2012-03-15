@@ -6,30 +6,28 @@ package bayes
 
 import (
 	. "gostat.googlecode.com/hg/stat/prob"
+	. "go-fn.googlecode.com/hg/fn"
 	"math"
 )
 
 // Poisson λ, posterior PDF, flat prior.
 func PoissonLambda_PDF_FPri(y int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
-	var r1, v1 float64
 	if y < 0 {
 		panic("y must be a positive integer")
 	}
-	r1 = float64(y) + 1.0
-	v1 = 1
+	r1 := float64(y) + 1.0
+	v1 := 1.0
 	return Gamma_PDF(r1, 1/v1)
 }
-
 // Poisson λ, posterior PDF, Jeffreys' prior.
 func PoissonLambda_PDF_JPri(y int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
-	var r1, v1 float64
 	if y < 0 {
 		panic("y must be a positive integer")
 	}
-	r1 = float64(y) + 0.5
-	v1 = 1
+	r1 := float64(y) + 0.5
+	v1 := 1.0
 	return Gamma_PDF(r1, 1/v1)
 }
 
@@ -37,39 +35,36 @@ func PoissonLambda_PDF_JPri(y int64) func(p float64) float64 {
 // Use r=m^2/s^2, and v=m/s^2, if you summarize your prior belief with mean == m, and std == s.
 func PoissonLambda_PDF_GPri(y int64, r, v float64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
-	var r1, v1 float64
 	if y < 0 {
 		panic("y must be a positive integer")
 	}
 	if r < 0 || v < 0 {
 		panic("Shape parameter r and rate parameter v must be greater than or equal to zero")
 	}
-	r1 = r + float64(y)
-	v1 = v + 1
+	r1 := r + float64(y)
+	v1 := v + 1.0
 	return Gamma_PDF(r1, 1/v1)
 }
 
 // Poisson λ, posterior CDF, flat prior.
 func PoissonLambda_CDF_FPri(y int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
-	var r1, v1 float64
 	if y < 0 {
 		panic("y must be a positive integer")
 	}
-	r1 = float64(y) + 1.0
-	v1 = 1
+	r1 := float64(y) + 1.0
+	v1 := 1.0
 	return Gamma_CDF(r1, 1/v1)
 }
 
 // Poisson λ, posterior CDF, Jeffreys' prior.
 func PoissonLambda_CDF_JPri(y int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
-	var r1, v1 float64
 	if y < 0 {
 		panic("y must be a positive integer")
 	}
-	r1 = float64(y) + 0.5
-	v1 = 1
+	r1 := float64(y) + 0.5
+	v1 := 1.0
 	return Gamma_CDF(r1, 1/v1)
 }
 
@@ -77,39 +72,36 @@ func PoissonLambda_CDF_JPri(y int64) func(p float64) float64 {
 // Use r=m^2/s^2, and v=m/s^2, if you summarize your prior belief with mean == m, and std == s.
 func PoissonLambda_CDF_GPri(y int64, r, v float64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
-	var r1, v1 float64
 	if y < 0 {
 		panic("y must be a positive integer")
 	}
 	if r < 0 || v < 0 {
 		panic("Shape parameter r and rate parameter v must be greater than or equal to zero")
 	}
-	r1 = r + float64(y)
-	v1 = v + 1
+	r1 := r + float64(y)
+	v1 := v + 1.0
 	return Gamma_CDF(r1, 1/v1)
 }
 
 // Poisson λ, posterior quantile function, flat prior.
 func PoissonLambda_Qtl_FPri(y int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
-	var r1, v1 float64
 	if y < 0 {
 		panic("y must be a positive integer")
 	}
-	r1 = float64(y) + 1.0
-	v1 = 1
+	r1 := float64(y) + 1.0
+	v1 := 1.0
 	return Gamma_Qtl(r1, 1/v1)
 }
 
 // Poisson λ, posterior quantile function, Jeffreys' prior.
 func PoissonLambda_Qtl_JPri(y int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
-	var r1, v1 float64
 	if y < 0 {
 		panic("y must be a positive integer")
 	}
-	r1 = float64(y) + 0.5
-	v1 = 1
+	r1 := float64(y) + 0.5
+	v1 := 1.0
 	return Gamma_Qtl(r1, 1/v1)
 }
 
@@ -117,34 +109,23 @@ func PoissonLambda_Qtl_JPri(y int64) func(p float64) float64 {
 // Use r=m^2/s^2, and v=m/s^2, if you summarize your prior belief with mean == m, and std == s.
 func PoissonLambda_Qtl_GPri(y int64, r, v float64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
-	var r1, v1 float64
 	if y < 0 {
 		panic("y must be a positive integer")
 	}
 	if r < 0 || v < 0 {
 		panic("Shape parameter r and rate parameter v must be greater than or equal to zero")
 	}
-	r1 = r + float64(y)
-	v1 = v + 1
+	r1 := r + float64(y)
+	v1 := v + 1.0
 	return Gamma_Qtl(r1, 1/v1)
 }
 
 
-// Likelihood of Poisson λ (rate) PDF.
-func PoissonLambda_Like_PDF(y, n int64, r, v float64) func(x float64) float64 {
-	r1 := float64(y) + 1.0
-	v1 := float64(n)
-	return Gamma_PDF(r1, 1/v1)
-	//poisson.go:60: internal compiler error: unknown type
+// Likelihood of Poisson λ.
+// Bolstad 2007 (2e): Chapter 10, p. 184.
+func PoissonLambda_Like(y int64, λ float64) float64 {
+	return math.Pow(λ, float64(y)) * math.Exp(float64(-y)) / float64(Fact(y))
 }
-
-// Likelihood of Poisson λ (rate) CDF.
-func PoissonLambda_Like_CDF(y, n int64, r, v float64) func(x float64) float64 {
-	r1 := float64(y) + 1.0
-	v1 := float64(n)
-	return Gamma_CDF(r1, 1/v1)
-}
-
 
 // Equivalent sample size of the prior 
 // Bolstad 2007 (2e): Chapter 10, p. 187.
@@ -154,9 +135,9 @@ func PoissonLambdaEqvSize(v float64) float64 {
 
 // Posterior mean 
 // Bolstad 2007 (2e): Chapter 10, p. 190-191.
-func PoissonLambdaPostMean(y, n int64, r, v float64) float64 {
+func PoissonLambdaPostMean(y int64, r, v float64) float64 {
 	r1 := float64(y) + 1.0
-	v1 := float64(n)
+	v1 := 1.0
 	return r1 / v1
 }
 
