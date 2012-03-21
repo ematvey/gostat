@@ -106,4 +106,28 @@ func LnPoisson_CDF_a (λ float64) func(k int64) float64 { 	// analytic solution,
 	}
 }
 
+func Poisson_CDF_Mean(λ float64, k int64) float64 {
+	return λ
+}
+
+func Poisson_CDF_Variance(λ float64, k int64) float64 {
+	return λ
+}
+
+func Poisson_CDF_Skewnes(λ float64, k int64) float64 {
+	return math.Pow(λ, -0.5)
+}
+
+func Poisson_CDF_ExKurtosis(λ float64, k int64) float64 {
+	return 1/λ
+}
+
+func Poisson_CDF_MedianApprox(λ float64, k int64) float64 {
+	return math.Floor(λ + 1/3 - 0.02*λ)
+}
+
+func Poisson_CDF_Modus(λ float64, k int64) float64 {
+	return math.Ceil(λ) -1
+}
+
 
