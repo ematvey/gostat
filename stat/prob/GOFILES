@@ -26,3 +26,5 @@ GOFILES=\
      t.go\
      uniform.go\
      wishart.go\
+     zipf-mandelbrot.go\
+     zipf.go\
