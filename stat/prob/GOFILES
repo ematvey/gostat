@@ -18,6 +18,7 @@ GOFILES=\
      mv_normal.go\
      negbinom.go\
      normal.go\
+     planck.go\
      poisson.go\
      range.go\
      sample_mean_var.go\
@@ -26,5 +27,6 @@ GOFILES=\
      t.go\
      uniform.go\
      wishart.go\
+     yule.go\
+     zeta.go\
      zipf-mandelbrot.go\
-     zipf.go\
