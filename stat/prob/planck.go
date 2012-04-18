@@ -10,7 +10,7 @@ import (
 )
 
 
-// ζ() waiting for implementation
+// ζ() waiting for better implementation
 // Probability Density Function for the Planck distribution
 func Planck_PDF(a, b float64) func(x float64) float64 {
 	ζ := RiemannZeta

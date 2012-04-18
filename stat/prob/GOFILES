@@ -18,6 +18,8 @@ GOFILES=\
      mv_normal.go\
      negbinom.go\
      normal.go\
+     pareto.go\
+     pareto_II.go\
      planck.go\
      poisson.go\
      range.go\
