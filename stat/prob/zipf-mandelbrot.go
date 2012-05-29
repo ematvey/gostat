@@ -1,4 +1,5 @@
 // Zipf-Mandelbrot distribution
+// For q == 0 it reduces to Zipf distribution.
 
 package prob
 

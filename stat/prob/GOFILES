@@ -20,6 +20,9 @@ GOFILES=\
      normal.go\
      pareto.go\
      pareto_II.go\
+     pareto_gen.go\
+     pareto_single.go\
+     pareto_tap.go\
      planck.go\
      poisson.go\
      range.go\

@@ -3,7 +3,7 @@
 // θ > 0.0 (scale)
 // α > 0.0 (shape)
 // support: x >= θ
-
+// inspired by R:actuar
 
 package prob
 
@@ -12,6 +12,22 @@ import (
 	"math/rand"
 	. "go-fn.googlecode.com/hg/fn"
 )
+
+func ParetoII_ChkParams(θ, α float64) bool {
+	ok := true
+	if α <= 0 || θ <= 0  {
+		ok = false
+	}
+	return ok
+}
+
+func ParetoII_ChkSupport(x float64) bool {
+	ok := true
+	if x < 0 {
+		ok = false
+	}
+	return ok
+}
 
 func ParetoII_PDF(θ, α float64) func(x float64) float64 {
 	// We work with the density expressed as
@@ -54,13 +70,20 @@ func ParetoII_CDF_At(θ, α, q, x float64) float64 {
 }
 
 
+// Inverse of the cumulative Pareto Type II probability density function (quantile).
 func ParetoII_Qtl(θ, α float64) func(p float64) float64 {
 	return func(p float64) float64 {
 		if p < 0 || p > 1 {
-			panic("bad param")
+			panic("probability out of range 0..1")
 		}
 		return θ * (math.Pow((0.5 - (p) + 0.5), -1.0 / α) - 1.0)
 	}
+}
+
+// Inverse of the cumulative Pareto Type II probability density function (quantile) for given probability.
+func ParetoII_Qtl_For(θ, α, p float64) float64 {
+	cdf := Pareto_Qtl(θ, α)
+	return cdf(p)
 }
 
 func NextParetoII(θ, α float64) float64 {

@@ -29,7 +29,7 @@ func Planck_PDF(a, b float64) func(x float64) float64 {
 // Devroye, L. 1986: Non-Uniform Random Variate Generation. Springer-Verlag, New York. ISBN 0-387-96305-7.
 
 func NextPlanck(a, b float64) (x float64) {
-	g := NextGamma(a+1, 1) // <<<  ??? OK ??
+	g := NextGamma(a+1, 1) // OK, consulted with Luc Devroye
 	z := float64(NextZeta(a+1))
         return g/(b*z)
 }

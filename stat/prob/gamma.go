@@ -1,6 +1,8 @@
 // Gamma distribution
-// k > 0		shape parameter
-// θ (Theta) > 0	scale parameter
+// k > 0.0		shape parameter, 
+// θ (Theta) > 0.0	scale parameter. 
+// Alternatively, shape parameter α = k and an inverse scale parameter β = 1⁄θ, is called a rate parameter.
+// If k is an integer, then the distribution represents an Erlang distribution; i.e., the sum of k  independent exponentially-distributed random variables, each of which has a mean of θ (which is equivalent to a rate parameter of 1/θ). Equivalently, if α is an integer, then the distribution again represents an Erlang distribution, i.e. the sum of α independent exponentially-distributed random variables, each of which has a mean of 1/β (which is equivalent to a rate parameter of β).
 
 package prob
 import (
