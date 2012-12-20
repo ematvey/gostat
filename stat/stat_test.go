@@ -1,12 +1,12 @@
 package stat
 
 import (
-	"time"
+	. "code.google.com/p/go-fn/fn"
+	"fmt"
 	"math"
 	"math/rand"
 	"testing"
-	"fmt"
-	. "go-fn.googlecode.com/hg/fn"
+	"time"
 )
 
 var Seed func(int64) = rand.Seed
@@ -56,7 +56,7 @@ func TestLnGamma(t *testing.T) {
 		x := NextGamma(10, 10)
 		math.Lgamma(x)
 	}
-	now:=time.Now()
+	now := time.Now()
 	duration2 := float64(now.Sub(start)) / 1e9
 
 	//duration2 := float64(time.Now()-start) / 1e9
@@ -66,7 +66,7 @@ func TestLnGamma(t *testing.T) {
 		x := NextGamma(10, 10)
 		LnΓ(x)
 	}
-	now=time.Now()
+	now = time.Now()
 	duration1 := float64(now.Sub(start)) / 1e9
 	fmt.Printf("Mine was %f\nTheirs was %f\n", duration1, duration2)
 }
@@ -89,17 +89,13 @@ func XTestGen(t *testing.T) {
 	fmt.Printf("NextNegativeBinomial => %d\n", NextNegativeBinomial(.5, 10))
 	fmt.Printf("NextStudentsT => %f\n", NextStudentsT(7))
 	fmt.Printf("NextF => %f\n", NextF(7, 3))
-/*	fmt.Printf("NextWishart => %v\n",
+	/*	fmt.Printf("NextWishart => %v\n",
 
-		NextWishart(100, matrix.MakeDenseMatrixStacked([][]float64{[]float64{1, 0}, []float64{0, 1}})))
-	fmt.Printf("NextInverseWishart => %v\n",
-		NextInverseWishart(100, matrix.MakeDenseMatrixStacked([][]float64{[]float64{1, 0}, []float64{0, 1}})))
-*/
+			NextWishart(100, matrix.MakeDenseMatrixStacked([][]float64{[]float64{1, 0}, []float64{0, 1}})))
+		fmt.Printf("NextInverseWishart => %v\n",
+			NextInverseWishart(100, matrix.MakeDenseMatrixStacked([][]float64{[]float64{1, 0}, []float64{0, 1}})))
+	*/
 }
-
-
-
-
 
 /*
 // test for Binomial p confidence interval  // failed due to some unknown bug
@@ -119,4 +115,3 @@ func TestBinomP_CI(t *testing.T) {
 	fmt.Println(low, " = ", low2, "\t", high, " = ",  high2)
 }
 */
-

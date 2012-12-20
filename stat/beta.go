@@ -3,9 +3,9 @@
 package stat
 
 import (
+	. "code.google.com/p/go-fn/fn"
 	"fmt"
 	"math"
-	. "go-fn.googlecode.com/hg/fn"
 )
 
 func bisect(x, p, a, b, xtol, ptol float64) float64 {
@@ -149,7 +149,6 @@ func Beta_CDF_At(α, β, x float64) float64 {
 	return res
 }
 
-
 // BetaInv_CDF_For() evaluates inverse CDF of Beta distribution(α, β) for probability p
 // 
 // References:
@@ -267,45 +266,44 @@ end:
 // β: Parameter of the distribution
 // A: Optional lower bound to the interval of x
 // B: Optional upper bound to the interval of x
-func BetaInv_CDF(α, β float64)  func(p float64) float64 {
+func BetaInv_CDF(α, β float64) func(p float64) float64 {
 	return func(p float64) float64 {
-    var x float64 = 0
-    var a float64 = 0
-    var b float64= 1
-    var A float64 = 0
-    var B float64= 1
-    var precision float64 = 1e-9
-	if p < 0.0 {
-		panic(fmt.Sprintf("p < 0"))
-	}
-	if p > 1.0 {
-		panic(fmt.Sprintf("p > 1.0"))
-	}
-	if α < 0.0 {
-		panic(fmt.Sprintf("α < 0.0"))
-	}
-	if β < 0.0 {
-		panic(fmt.Sprintf("β < 0.0"))
-	}
+		var x float64 = 0
+		var a float64 = 0
+		var b float64 = 1
+		var A float64 = 0
+		var B float64 = 1
+		var precision float64 = 1e-9
+		if p < 0.0 {
+			panic(fmt.Sprintf("p < 0"))
+		}
+		if p > 1.0 {
+			panic(fmt.Sprintf("p > 1.0"))
+		}
+		if α < 0.0 {
+			panic(fmt.Sprintf("α < 0.0"))
+		}
+		if β < 0.0 {
+			panic(fmt.Sprintf("β < 0.0"))
+		}
 
-    for (b - a) > precision {
-        x = (a + b) / 2
-        if BetaIncReg(α, β, x) > p {
-           b = x
-        } else {
-            a = x
-        }
-    }
+		for (b - a) > precision {
+			x = (a + b) / 2
+			if BetaIncReg(α, β, x) > p {
+				b = x
+			} else {
+				a = x
+			}
+		}
 
-    if B > 0 && A > 0 {
-        x = x * (B - A) + A
-    }
-    return x
+		if B > 0 && A > 0 {
+			x = x*(B-A) + A
+		}
+		return x
 	}
 }
 
 func BetaInv_CDF_For(α, β, p float64) float64 {
-	cdf:=BetaInv_CDF(α, β)
+	cdf := BetaInv_CDF(α, β)
 	return cdf(p)
 }
-

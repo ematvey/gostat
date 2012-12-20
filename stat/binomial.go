@@ -1,7 +1,7 @@
 package stat
 
 import (
-	. "go-fn.googlecode.com/hg/fn"
+	. "code.google.com/p/go-fn/fn"
 )
 
 // Probability Mass Function for the Binomial distribution
@@ -17,7 +17,6 @@ func Binomial_PMF_At(ρ float64, n, k int64) float64 {
 	pmf := Binomial_PMF(ρ, n)
 	return pmf(k)
 }
-
 
 // Natural logarithm of Probability Mass Function for the Binomial distribution
 func Binomial_LnPMF(ρ float64, n int64) func(i int64) float64 {
@@ -44,10 +43,10 @@ func Binomial_CDF_trivial(ρ float64, n int64) func(k int64) float64 {
 	return func(k int64) float64 {
 		var p float64 = 0
 		var i int64
-		pmf:=Binomial_PMF(ρ , n)
-			for i = 0; i<=k; i++ {
-				p+=pmf(i)
-			}
+		pmf := Binomial_PMF(ρ, n)
+		for i = 0; i <= k; i++ {
+			p += pmf(i)
+		}
 		return p
 	}
 }
@@ -55,7 +54,7 @@ func Binomial_CDF_trivial(ρ float64, n int64) func(k int64) float64 {
 // Cumulative Distribution Function for the Binomial distribution
 func Binomial_CDF(ρ float64, n int64) func(k int64) float64 {
 	return func(k int64) float64 {
-		p:= Beta_CDF_At((float64)(n-k), (float64)(k+1), 1-ρ)
+		p := Beta_CDF_At((float64)(n-k), (float64)(k+1), 1-ρ)
 		return p
 	}
 }
@@ -64,5 +63,3 @@ func Binomial_CDF_At(ρ float64, n, k int64) float64 {
 	cdf := Binomial_CDF(ρ, n)
 	return cdf(k)
 }
-
-

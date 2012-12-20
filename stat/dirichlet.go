@@ -1,7 +1,7 @@
 package stat
 
 import (
-	. "go-fn.googlecode.com/hg/fn"
+	. "code.google.com/p/go-fn/fn"
 )
 
 func Dirichlet_PDF(α []float64) func(θ []float64) float64 {

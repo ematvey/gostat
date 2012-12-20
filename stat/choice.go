@@ -53,4 +53,3 @@ func LogChoice(lws []float64) func() int64 {
 	}
 	return Choice(ws)
 }
-

@@ -3,8 +3,8 @@
 package stat
 
 import (
+	. "code.google.com/p/go-fn/fn"
 	"math"
-	. "go-fn.googlecode.com/hg/fn"
 )
 
 /* 
@@ -18,16 +18,14 @@ func NegativeBinomial_PMF(ρ float64, r int64) func(i int64) float64 {
 
 func NegativeBinomial_PMF(ρ float64, r int64) func(k int64) float64 {
 	return func(k int64) float64 {
-		return BinomCoeff(k + r - 1, k) * math.Pow(1-ρ, float64(r)) * math.Pow(ρ, float64(k))
+		return BinomCoeff(k+r-1, k) * math.Pow(1-ρ, float64(r)) * math.Pow(ρ, float64(k))
 	}
 }
 
-func NegativeBinomial_PMF_At(ρ float64, r, k int64)  float64 {
-	pmf := NegativeBinomial_PMF(ρ, r) 
+func NegativeBinomial_PMF_At(ρ float64, r, k int64) float64 {
+	pmf := NegativeBinomial_PMF(ρ, r)
 	return pmf(k)
 }
-
-
 
 func NegativeBinomial_LnPMF(ρ float64, r int64) func(i int64) float64 {
 	return func(k int64) float64 {
@@ -53,14 +51,12 @@ func NegativeBinomial(ρ float64, r int64) func() int64 {
 
 func NegativeBinomial_CDF(ρ float64, r int64) func(k int64) float64 {
 	return func(k int64) float64 {
-		Ip:=Beta_CDF_At(float64(k+1), float64(r), ρ)
-		return 1-Ip
+		Ip := Beta_CDF_At(float64(k+1), float64(r), ρ)
+		return 1 - Ip
 	}
 }
 
-func NegativeBinomial_CDF_At(ρ float64, r, k int64)  float64 {
-	cdf := NegativeBinomial_CDF(ρ, r) 
+func NegativeBinomial_CDF_At(ρ float64, r, k int64) float64 {
+	cdf := NegativeBinomial_CDF(ρ, r)
 	return cdf(k)
 }
-
-

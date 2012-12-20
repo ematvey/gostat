@@ -1,7 +1,7 @@
 package stat
 
 import (
-	. "go-fn.googlecode.com/hg/fn"
+	. "code.google.com/p/go-fn/fn"
 )
 
 func Multinomial_PMF(θ []float64, n int64) func(x []int64) float64 {
@@ -55,5 +55,3 @@ func Multinomial(θ []float64, n int64) func() []int64 {
 		return NextMultinomial(θ, n)
 	}
 }
-
-

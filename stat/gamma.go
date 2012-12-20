@@ -3,10 +3,11 @@
 // θ (Theta) > 0	scale parameter
 
 package stat
+
 import (
+	. "code.google.com/p/go-fn/fn"
 	"fmt"
 	"math"
-	. "go-fn.googlecode.com/hg/fn"
 )
 
 /* did not pass test, so commented out
@@ -131,20 +132,15 @@ func Gamma_CDF(k float64, θ float64) func(x float64) float64 {
 }
 */
 
-
-
-
-
-
 // Value of the probability density function at x
-func Gamma_PDF_At(k, θ, x float64)  float64 {
-	pdf := Gamma_PDF(k , θ)
+func Gamma_PDF_At(k, θ, x float64) float64 {
+	pdf := Gamma_PDF(k, θ)
 	return pdf(x)
 }
 
 // Value of the cumulative distribution function at x
-func Gamma_CDF_At(k, θ, x float64)  float64 {
-	cdf := Gamma_CDF(k , θ)
+func Gamma_CDF_At(k, θ, x float64) float64 {
+	cdf := Gamma_CDF(k, θ)
 	return cdf(x)
 }
 
@@ -173,9 +169,7 @@ func Gamma_InvCDF(k float64, θ float64) func(x float64) float64 {
 }
 
 // Value of the inverse CDF for probability p
-func Gamma_InvCDF_For(k, θ, p float64)  float64 {
-	cdf:=Gamma_InvCDF(k, θ)
+func Gamma_InvCDF_For(k, θ, p float64) float64 {
+	cdf := Gamma_InvCDF(k, θ)
 	return cdf(p)
 }
-
-

@@ -3,8 +3,8 @@
 package stat
 
 import (
+	. "code.google.com/p/go-fn/fn"
 	"math"
-	. "go-fn.googlecode.com/hg/fn"
 )
 
 // Inverse Gamma distribution: probability density function
@@ -37,8 +37,6 @@ func InvGamma_CDF(a, b float64) func(x float64) float64 {
 
 // Inverse Gamma distribution: value of the cumulative distribution function at x
 func InvGamma_CDF_At(a, b, x float64) float64 {
-	cdf:=InvGamma_CDF(a, b)
+	cdf := InvGamma_CDF(a, b)
 	return cdf(x)
 }
-
-

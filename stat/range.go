@@ -22,5 +22,3 @@ func Range(n int64) func() int64 {
 		return NextRange(n)
 	}
 }
-
-

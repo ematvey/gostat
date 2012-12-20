@@ -2,8 +2,8 @@
 package stat
 
 import (
+	. "code.google.com/p/go-fn/fn"
 	"fmt"
-	. "go-fn.googlecode.com/hg/fn"
 )
 
 func F_PDF(d1 float64, d2 float64) func(x float64) float64 {
@@ -35,37 +35,34 @@ func F_CDF(df1, df2 float64) func(x float64) float64 {
 	}
 }
 
-
 // Value of CDF of F-distribution at x
 func F_CDF_At(df1, df2, x float64) float64 {
-	cdf:=F_CDF(df1, df2)
+	cdf := F_CDF(df1, df2)
 	return cdf(x)
 }
 
 // Inverse CDF (Quantile) function of F-distribution
 func F_InvCDF(df1, df2 float64) func(p float64) float64 {
 	return func(p float64) float64 {
-	if p < 0.0 {
-		panic(fmt.Sprintf("p < 0"))
-	}
-	if p > 1.0 {
-		panic(fmt.Sprintf("p > 1.0"))
-	}
-	if df1 < 1.0 {
-		panic(fmt.Sprintf("df1 < 1"))
-	}
-	if df2 < 1.0 {
-		panic(fmt.Sprintf("df2 < 1"))
-	}
+		if p < 0.0 {
+			panic(fmt.Sprintf("p < 0"))
+		}
+		if p > 1.0 {
+			panic(fmt.Sprintf("p > 1.0"))
+		}
+		if df1 < 1.0 {
+			panic(fmt.Sprintf("df1 < 1"))
+		}
+		if df2 < 1.0 {
+			panic(fmt.Sprintf("df2 < 1"))
+		}
 
-	return ((1 / BetaInv_CDF_For(df2 / 2, df1 / 2, 1 - p) - 1) * df2 / df1);
+		return ((1/BetaInv_CDF_For(df2/2, df1/2, 1-p) - 1) * df2 / df1)
 	}
 }
 
 // Value of the inverse CDF of F-distribution for probability p
 func F_InvCDF_For(df1, df2, p float64) float64 {
-	cdf:=F_InvCDF(df1, df2)
+	cdf := F_InvCDF(df1, df2)
 	return cdf(p)
 }
-
-

@@ -1,7 +1,7 @@
 package stat
 
 import (
-	. "gomatrix.googlecode.com/hg/matrix"
+	. "github.com/skelterjohn/go.matrix"
 )
 
 func MVNormal_PDF(μ *DenseMatrix, Σ *DenseMatrix) func(x *DenseMatrix) float64 {
@@ -52,4 +52,3 @@ func MVNormal(μ *DenseMatrix, Σ *DenseMatrix) func() *DenseMatrix {
 		return MCx
 	}
 }
-

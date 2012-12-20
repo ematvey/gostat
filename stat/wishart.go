@@ -1,8 +1,8 @@
 package stat
 
 import (
-	m "gomatrix.googlecode.com/hg/matrix"
-	. "go-fn.googlecode.com/hg/fn"
+	. "code.google.com/p/go-fn/fn"
+	m "github.com/skelterjohn/go.matrix"
 )
 
 func Wishart_PDF(n int, V *m.DenseMatrix) func(W *m.DenseMatrix) float64 {
@@ -19,7 +19,7 @@ func Wishart_PDF(n int, V *m.DenseMatrix) func(W *m.DenseMatrix) float64 {
 	}
 }
 func Wishart_LnPDF(n int, V *m.DenseMatrix) func(W *m.DenseMatrix) float64 {
-	
+
 	p := V.Rows()
 	Vdet := V.Det()
 	Vinv, _ := V.Inverse()

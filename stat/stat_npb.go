@@ -1,7 +1,7 @@
 package stat
 
 import (
-	. "go-fn.googlecode.com/hg/fn"
+	. "code.google.com/p/go-fn/fn"
 )
 
 func CRP_PMF(α float64) func(x []int64) float64 {
@@ -52,6 +52,7 @@ func CRP_LnPMF(α float64) func(x []int64) float64 {
 		return ll
 	}
 }
+
 /*
 func CRP_LnPMF2(α float64) func(x []int64) float64 {
 	return func(x []int64) float64 {

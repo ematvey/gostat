@@ -3,7 +3,7 @@
 package stat
 
 import (
-	. "go-fn.googlecode.com/hg/fn"
+	. "code.google.com/p/go-fn/fn"
 )
 
 func Xsquare_PDF(n int64) func(x float64) float64 {
@@ -44,7 +44,6 @@ func Xsquare_CDF(n int64) func(p float64) float64 {
 	}
 }
 
-
 //Inverse CDF (Quantile) function of the Chi-Squared distribution
 func Xsquare_InvCDF(n int64) func(p float64) float64 {
 	return func(p float64) float64 {
@@ -52,6 +51,3 @@ func Xsquare_InvCDF(n int64) func(p float64) float64 {
 		return Gamma_InvCDF_For(float64(n)/2, 2, p)
 	}
 }
-
-
-

@@ -1,6 +1,7 @@
 // Uniform (Flat) distribution
 
 package stat
+
 import (
 	"math/rand"
 )
@@ -26,5 +27,3 @@ func Uniform_LnPDF() func(x float64) float64 {
 var NextUniform func() float64 = rand.Float64
 
 func Uniform() func() float64 { return NextUniform }
-
-
