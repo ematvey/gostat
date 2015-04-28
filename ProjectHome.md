@@ -1,0 +1,1 @@
+A statistics library for the go language
