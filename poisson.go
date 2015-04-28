@@ -3,8 +3,9 @@
 package stat
 
 import (
-	. "code.google.com/p/go-fn/fn"
 	"math"
+
+	. "code.google.com/p/go-fn/fn"
 )
 
 /*
@@ -89,7 +90,7 @@ func Poisson_CDF(λ float64) func(k int64) float64 {
 
 func Poisson_CDF_a(λ float64) func(k int64) float64 { // analytic solution, less precision
 	return func(k int64) float64 {
-		p := math.Exp(math.Log(IΓint(k+1, λ)) - (LnFact(k)))
+		p := math.Exp(math.Log(IΓint(k+1, λ)) - (LnFact(float64(k))))
 		return p
 	}
 }
@@ -102,6 +103,6 @@ func Poisson_CDF_At(λ float64, k int64) float64 {
 func LnPoisson_CDF_a(λ float64) func(k int64) float64 { // analytic solution, less precision
 	return func(k int64) float64 {
 		k1 := (float64)(k + 1)
-		return log(IΓ(k1, λ)) - LnFact(k)
+		return log(IΓ(k1, λ)) - LnFact(float64(k))
 	}
 }
