@@ -5,9 +5,10 @@
 package stat
 
 import (
-	. "code.google.com/p/go-fn/fn"
 	"fmt"
 	"math"
+
+	. "github.com/ematvey/go-fn/fn"
 )
 
 /* did not pass test, so commented out

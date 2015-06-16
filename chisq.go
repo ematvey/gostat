@@ -3,7 +3,7 @@
 package stat
 
 import (
-	. "code.google.com/p/go-fn/fn"
+	. "github.com/ematvey/go-fn/fn"
 )
 
 func Xsquare_PDF(n int64) func(x float64) float64 {

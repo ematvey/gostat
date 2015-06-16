@@ -5,7 +5,7 @@ package stat
 import (
 	"math"
 
-	. "code.google.com/p/go-fn/fn"
+	. "github.com/ematvey/go-fn/fn"
 )
 
 /*

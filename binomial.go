@@ -1,7 +1,7 @@
 package stat
 
 import (
-	. "code.google.com/p/go-fn/fn"
+	. "github.com/ematvey/go-fn/fn"
 )
 
 // Probability Mass Function for the Binomial distribution

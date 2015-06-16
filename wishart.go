@@ -1,7 +1,7 @@
 package stat
 
 import (
-	. "code.google.com/p/go-fn/fn"
+	. "github.com/ematvey/go-fn/fn"
 	m "github.com/skelterjohn/go.matrix"
 )
 

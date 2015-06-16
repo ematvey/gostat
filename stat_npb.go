@@ -1,7 +1,7 @@
 package stat
 
 import (
-	. "code.google.com/p/go-fn/fn"
+	. "github.com/ematvey/go-fn/fn"
 )
 
 func CRP_PMF(α float64) func(x []int64) float64 {

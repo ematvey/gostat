@@ -3,9 +3,10 @@
 package stat
 
 import (
-	. "code.google.com/p/go-fn/fn"
 	"fmt"
 	"math"
+
+	. "github.com/ematvey/go-fn/fn"
 )
 
 func bisect(x, p, a, b, xtol, ptol float64) float64 {
@@ -150,7 +151,7 @@ func Beta_CDF_At(α, β, x float64) float64 {
 }
 
 // BetaInv_CDF_For() evaluates inverse CDF of Beta distribution(α, β) for probability p
-// 
+//
 // References:
 //
 // Roger W. Abernathy and Robert P. Smith. "Applying Series Expansion
@@ -195,15 +196,15 @@ func cdf_beta_Pinv(α float64, β float64, p float64) float64 {
 
 	mean = α / (α + β)
 	if p < 0.1 {
-		 // small x 
+		 // small x
 
 		lg_ab = LnΓ(α + β)
 		lg_a = LnΓ(α)
 		lg_b = LnΓ(β)
 		lx = (math.Log(α) + lg_a + lg_b - lg_ab + math.Log(p)) / α
 		if lx <= 0 {
-			x = math.Exp(lx)              // first approximation 
-			x *= math.Pow(1-x, -(β-1)/α)  // second approximation 
+			x = math.Exp(lx)              // first approximation
+			x *= math.Pow(1-x, -(β-1)/α)  // second approximation
 		} else {
 			x = mean
 		}
@@ -212,11 +213,11 @@ func cdf_beta_Pinv(α float64, β float64, p float64) float64 {
 			x = mean
 		}
 	} else {
-		 // Use expected value as first guess 
+		 // Use expected value as first guess
 		x = mean
 	}
 
-	 // Do bisection to get closer 
+	 // Do bisection to get closer
 	x = bisect(x, p, α, β, 0.01, 0.01)
 
 	step0 = 999999

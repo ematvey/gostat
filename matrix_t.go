@@ -1,10 +1,11 @@
 package stat
 
 import (
-	. "code.google.com/p/go-fn/fn"
 	"fmt"
-	mx "github.com/skelterjohn/go.matrix"
 	"math"
+
+	. "github.com/ematvey/go-fn/fn"
+	mx "github.com/skelterjohn/go.matrix"
 )
 
 func checkMatrixT(M, Omega, Sigma *mx.DenseMatrix, n int) {

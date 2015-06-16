@@ -3,8 +3,9 @@
 package stat
 
 import (
-	. "code.google.com/p/go-fn/fn"
 	"math"
+
+	. "github.com/ematvey/go-fn/fn"
 )
 
 // Inverse Gamma distribution: probability density function

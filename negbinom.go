@@ -3,11 +3,12 @@
 package stat
 
 import (
-	. "code.google.com/p/go-fn/fn"
 	"math"
+
+	. "github.com/ematvey/go-fn/fn"
 )
 
-/* 
+/*
 // Does not pass the test, so commented out
 func NegativeBinomial_PMF(ρ float64, r int64) func(i int64) float64 {
 	return func(k int64) float64 {
