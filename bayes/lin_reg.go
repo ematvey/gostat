@@ -1,4 +1,4 @@
-package inf
+package bayes
 
 /*
  functions for Bayesian linear regression
@@ -6,6 +6,8 @@ package inf
 
 import (
 	"fmt"
+
+	"github.com/ematvey/gostat"
 
 	mx "gomatrix.googlecode.com/hg/matrix"
 )
