@@ -6,8 +6,8 @@ package stat
 func Binom_p_ConfI(n int64, p, alpha float64) (float64, float64) {
 
 	/*
-		Alpha	100(1-alpha) is the confidence 
-		n	Sample size	
+		Alpha	100(1-alpha) is the confidence
+		n	Sample size
 		p	Observed proportion
 		lCL	Lower confidence limit
 		uCL	Upper confidence limit
@@ -25,7 +25,7 @@ func Binom_p_ConfI(n int64, p, alpha float64) (float64, float64) {
 	if k >= nn {
 		uCL = 1.0
 	} else {
-		uCL = 1.0 / (1.0 + (nn-k)/((k+1)*F_InvCDF_For(2*k+2, 2*nn-2*k, alpla)))
+		uCL = 1.0 / (1.0 + (nn-k)/((k+1)*F_InvCDF_For(2*k+2, 2*nn-2*k, alpha)))
 	}
 	return lCL, uCL
 }
